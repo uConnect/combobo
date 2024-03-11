@@ -16,6 +16,7 @@ import attrs from './lib/attributes';
 import wrapMatch from './lib/utils/wrap-match';
 import configuration from './lib/config';
 import announceActive from './lib/announce-active';
+import rndid from './lib/utils/rndid';
 
 /**
  * /////////////////////////
@@ -40,8 +41,24 @@ module.exports = class Combobo {
 
     // merge user config with default config
     this.config = configuration(config);
+
+    // Checks if config.input is a class selector, then initializes Combobo instances for each matching element
+    if(this.config.input.startsWith('.')){
+      const inputs = elHandler(this.config.input, true);
+      if (inputs.length > 1) {
+        let combobos = {};
+        inputs.forEach((input)=>{
+          input.id = input.id || rndid();
+          this.config.input = `#${input.id}`;
+          combobos[input.id]= new Combobo(this.config); 
+        })
+        return combobos;
+      }
+    }
+
     this.input = elHandler(this.config.input);
-    this.list = elHandler(this.config.list);
+    // The list should be within the parent of Input.
+    this.list = elHandler(this.config.list, false, this.input.parentNode);
     this.cachedOpts = this.currentOpts = elHandler((this.config.options), true, this.list);
 
     // initial state
@@ -53,7 +70,6 @@ module.exports = class Combobo {
     this.autoFilter = this.config.autoFilter;
     this.optionsWithEventHandlers = new Set();
     this.optionsWithKeyEventHandlers = new Set();
-
 
     // option groups
     if (this.config.groups) {
