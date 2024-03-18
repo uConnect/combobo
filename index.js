@@ -55,20 +55,8 @@ module.exports = class Combobo {
     if (!this.config.internalCall) {
       let combobos = {};
       const selectElements = elHandler(this.config.select, true);
-      if ( selectElements && selectElements.length) {
-        selectElements.forEach((selectElement)=>{
-          selectElement.id = selectElement.id || rndid();
-          const transformData = this.transformSelectElement(selectElement);
-          selectElement.parentNode.insertBefore(transformData.comboElement, selectElement.nextSibling);
-          let config = Object.assign({}, this.config);
-          config.input = transformData.input;
-          config.internalCall = true;
-          selectElement.style.display = "none";
-          combobos[transformData.input.id] = new Combobo(config); 
-        });
-      }
       const inputElements = elHandler(this.config.input, true);
-      if (inputElements && inputElements.length) {
+      if (inputElements && inputElements.length && !this.config.select.startsWith('#')) {
         inputElements.forEach((input)=>{
           let config = Object.assign({}, this.config);
           input.id = input.id || rndid();
@@ -77,7 +65,22 @@ module.exports = class Combobo {
           combobos[input.id]= new Combobo(config); 
         })
       }
+      if ( selectElements && selectElements.length && !this.config.input.startsWith('#')) {
+        selectElements.forEach((selectElement)=>{
+          selectElement.id = selectElement.id || rndid();
+          const transformData = this.transformSelectElement(selectElement);
+          selectElement.parentNode.insertBefore(transformData.comboElement, selectElement.nextSibling);
+          let config = Object.assign({}, this.config);
+          config.input = transformData.input;
+          config.internalCall = true;
+          selectElement.style.display = "none";
+          combobos[selectElement.id] = new Combobo(config); 
+        });
+      }
       if (Object.keys(combobos).length) {
+        if (Object.keys(combobos).length == 1) {
+          return combobos[Object.keys(combobos)[0]];
+        }
         return combobos;
       }
     }
@@ -553,7 +556,7 @@ module.exports = class Combobo {
     const input = document.createElement('input');
     input.type = 'text';
     input.className = this.config.inputClass;
-    input.id = rndid();
+    input.id = selectElement.id ? `${selectElement.id}-input` : rndid();
     comboElement.appendChild(input);
   
     // Create the toggle button

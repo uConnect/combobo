@@ -157,7 +157,7 @@ The class added below will be applied to the corresponding elements during the t
 
 ```js
 var combobo = new Combobo({
-  input: '.combobox',
+  input: '.combobox', // Or select: 'select.combobo'
   list: '.listbox',
   options: '.option', // qualified within `list`
   groups: null, // qualified within `list`
@@ -176,6 +176,30 @@ var combobo = new Combobo({
   filter: 'contains' // 'starts-with', 'equals', or funk,
   autoFilter: true // 'true' or 'false' default true
 });
+```
+
+Initiating Combobo will result in either a single Combobo instance or a collection of them. These instances allow for direct interaction with the comboboxes on the page.
+
+If there is only one combobox field enhanced by this setup, when there is only one input or select element that match the selector, you will get back a single Combobo instance. You can directly interact with this instance to get or set its value, like `combobo.value()`.
+
+If there are multiple combobox fields enhanced, you will receive an object where each Combobo instance is accessible via its ID. To interact with a specific instance, use `combobo['ID'].value()`.
+
+Note: When initialized from the required HTML containing an input element, the ID will match the input's ID or be randomly generated if the input elements do not have an ID. If initialized from a `<select>` element, the input ID will be the ID of the `<select>` element. If the `<select>` element lacks an ID, it will also receive a random ID.
+
+```
+<select id="color"><option/><option/>....</select>
+var combobo = new Combobo({select = '#color'});
+// retrive selected values
+combobo.value();
+```
+
+```
+<select class="combobo" id="color"><option/><option/>....</select>
+<select class="combobo"><option/><option/>....</select>
+var combobo = new Combobo();
+// Retrive selected values
+combobo['combobo'].value();
+combobo['GENERATED-RANDOM-ID'].value();
 ```
 
 ## Events
