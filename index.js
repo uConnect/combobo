@@ -542,6 +542,17 @@ module.exports = class Combobo {
     noResultsHandler(this.list, this.currentOpts, this.config.noResultsText);
   }
 
+  value() {
+    let selected = null;
+    if (this.selected.length) {
+      selected = [];
+      this.selected.forEach(selectedElm => {
+        selected.push(selectedElm.dataset.value || selectedElm.innerText);
+      })
+    }
+    return (selected && selected.length == 1) ? selected[0] : selected;
+  }
+
   transformSelectElement(selectElement) {
   
     // Create the wrapping div element
@@ -591,6 +602,7 @@ module.exports = class Combobo {
           const opt = document.createElement('div');
           opt.className = this.config.optionsClass;
           opt.textContent = option.textContent;
+          opt.dataset.value = option.value;
           optgroup.appendChild(opt);
         });
   

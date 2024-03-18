@@ -223,6 +223,7 @@ combobo
 ```
 
 ## Methods
+* `value`: Returns the value(s) of selected items, as a single string or an array of strings. For options originating from a select element, this refers to the value attribute of the options. For options not based on a select element, it uses the data-value attribute of the options if available; otherwise, it defaults to the text content of the options.
 * `goTo`: accepts 1 argument which is either a *String* ('prev' or 'next'), which as it sounds will navigate Combobo to the previous or next option, or the index (*Number*) of the option to be traversed to.  NOTE: This method does not select the option but rather highlights it as if the option is hovered or arrowed to.
 * `select`: selects the currently highlighted option
 * `getOptIndex`: returns the index (within the currently visible options) of the currently selected option.
