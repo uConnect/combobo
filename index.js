@@ -543,14 +543,17 @@ module.exports = class Combobo {
   }
 
   value() {
-    let selected = null;
-    if (this.selected.length) {
-      selected = [];
-      this.selected.forEach(selectedElm => {
-        selected.push(selectedElm.dataset.value || selectedElm.innerText);
-      })
+    let selected = [];
+
+    this.selected.forEach(selectedElm => {
+      selected.push(selectedElm.dataset.value || selectedElm.innerText);
+    })
+
+    if (!this.config.multiselect) {
+      return (selected && selected.length) ? selected[0] : null
     }
-    return (selected && selected.length == 1) ? selected[0] : selected;
+
+    return selected;
   }
 
   transformSelectElement(selectElement) {
