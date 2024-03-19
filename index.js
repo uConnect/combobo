@@ -45,6 +45,7 @@ module.exports = class Combobo {
     // initial state
     this.isOpen = false;
     this.currentOption = null;
+    this.selectElm = null;
     this.selected = [];
     this.groups = [];
     this.isHovering = false;
@@ -72,6 +73,7 @@ module.exports = class Combobo {
           selectElement.parentNode.insertBefore(transformData.comboElement, selectElement.nextSibling);
           let config = Object.assign({}, this.config);
           config.input = transformData.input;
+          config.select = selectElement;
           config.internalCall = true;
           selectElement.style.display = "none";
           combobos[selectElement.id] = new Combobo(config); 
@@ -86,6 +88,7 @@ module.exports = class Combobo {
     }
 
     this.input = elHandler(this.config.input);
+    this.selectElm = elHandler(this.config.select);
     // The list should be within the parent of Input.
     this.list = elHandler(this.config.list, false, this.input.parentNode);
     this.cachedOpts = this.currentOpts = elHandler((this.config.options), true, this.list);
@@ -406,6 +409,17 @@ module.exports = class Combobo {
     if (!this.config.multiselect) {
       this.closeList();
       this.input.select();
+    }
+
+    if ( this.selectElm ) {
+      const values = this.value();
+      for (const option of this.selectElm.options) {
+        if (this.config.multiselect) {
+          option.selected = values.indexOf(option.value) !== -1;
+        } else {
+          option.selected = option.value === values;
+        }
+      }
     }
 
     return this;
