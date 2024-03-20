@@ -42,25 +42,6 @@ module.exports = class Combobo {
     // merge user config with default config
     this.config = configuration(config);
 
-    // Checks if config.input is a class selector, then initializes Combobo instances for each matching element
-    if(this.config.input.startsWith('.')){
-      const inputs = elHandler(this.config.input, true);
-      if (inputs.length > 1) {
-        let combobos = {};
-        inputs.forEach((input)=>{
-          input.id = input.id || rndid();
-          this.config.input = `#${input.id}`;
-          combobos[input.id]= new Combobo(this.config); 
-        })
-        return combobos;
-      }
-    }
-
-    this.input = elHandler(this.config.input);
-    // The list should be within the parent of Input.
-    this.list = elHandler(this.config.list, false, this.input.parentNode);
-    this.cachedOpts = this.currentOpts = elHandler((this.config.options), true, this.list);
-
     // initial state
     this.isOpen = false;
     this.currentOption = null;
@@ -70,6 +51,44 @@ module.exports = class Combobo {
     this.autoFilter = this.config.autoFilter;
     this.optionsWithEventHandlers = new Set();
     this.optionsWithKeyEventHandlers = new Set();
+
+    if (!this.config.internalCall) {
+      let combobos = {};
+      const selectElements = elHandler(this.config.select, true);
+      const inputElements = elHandler(this.config.input, true);
+      if (inputElements && inputElements.length && !this.config.select.startsWith('#')) {
+        inputElements.forEach((input)=>{
+          let config = Object.assign({}, this.config);
+          input.id = input.id || rndid();
+          config.input = input;
+          config.internalCall = true;
+          combobos[input.id]= new Combobo(config); 
+        })
+      }
+      if ( selectElements && selectElements.length && !this.config.input.startsWith('#')) {
+        selectElements.forEach((selectElement)=>{
+          selectElement.id = selectElement.id || rndid();
+          const transformData = this.transformSelectElement(selectElement);
+          selectElement.parentNode.insertBefore(transformData.comboElement, selectElement.nextSibling);
+          let config = Object.assign({}, this.config);
+          config.input = transformData.input;
+          config.internalCall = true;
+          selectElement.style.display = "none";
+          combobos[selectElement.id] = new Combobo(config); 
+        });
+      }
+      if (Object.keys(combobos).length) {
+        if (Object.keys(combobos).length == 1) {
+          return combobos[Object.keys(combobos)[0]];
+        }
+        return combobos;
+      }
+    }
+
+    this.input = elHandler(this.config.input);
+    // The list should be within the parent of Input.
+    this.list = elHandler(this.config.list, false, this.input.parentNode);
+    this.cachedOpts = this.currentOpts = elHandler((this.config.options), true, this.list);
 
     // option groups
     if (this.config.groups) {
@@ -81,6 +100,7 @@ module.exports = class Combobo {
         };
       });
     }
+
 
     if (!this.input || !this.list) {
       throw new Error('Unable to find required elements (list/input)');
@@ -520,6 +540,75 @@ module.exports = class Combobo {
   setNoResultFound() {
     // handle empty results whenever user perform search and if no relevant records found 
     noResultsHandler(this.list, this.currentOpts, this.config.noResultsText);
+  }
+
+  transformSelectElement(selectElement) {
+  
+    // Create the wrapping div element
+    const comboElement = document.createElement('div');
+    comboElement.className = this.config.wrapClass;
+
+    if (this.config.multiselect) {
+      comboElement.classList.add('multiselect');
+    }
+  
+    // Create the input element
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = this.config.inputClass;
+    input.id = selectElement.id ? `${selectElement.id}-input` : rndid();
+    comboElement.appendChild(input);
+  
+    // Create the toggle button
+    const toggleButton = document.createElement('i');
+    toggleButton.setAttribute('aria-hidden', 'true');
+    toggleButton.className = this.config.toggleButtonClass;
+    comboElement.appendChild(toggleButton);
+  
+    // Create the listbox
+    const listbox = document.createElement('div');
+    listbox.className = this.config.listClass;
+    comboElement.appendChild(listbox);
+  
+    let hasOptgroup = false;
+    // Process groups and options
+    Array.from(selectElement.children).forEach(group => {
+      if (group.tagName.toLowerCase() === 'optgroup') {
+        hasOptgroup = true;
+        const optgroup = document.createElement('div');
+        optgroup.className = this.config.optgroupClass;
+        optgroup.setAttribute('role', 'group');
+        const groupId = rndid();
+        optgroup.setAttribute('aria-labelledby', groupId);
+  
+        const label = document.createElement('div');
+        label.className = this.config.optgroupLabelClass;
+        label.id = groupId;
+        label.textContent = group.label;
+        optgroup.appendChild(label);
+  
+        Array.from(group.children).forEach(option => {
+          const opt = document.createElement('div');
+          opt.className = this.config.optionsClass;
+          opt.textContent = option.textContent;
+          optgroup.appendChild(opt);
+        });
+  
+        listbox.appendChild(optgroup);
+      } else {
+        // In case there are direct options without a group
+        const opt = document.createElement('div');
+        opt.className = this.config.optionsClass;
+        opt.textContent = group.textContent;
+        listbox.appendChild(opt);
+      }
+    });
+
+    if (hasOptgroup) {
+      comboElement.classList.add('has-groups');
+    }
+      
+    return {comboElement, input};
   }
 
 };

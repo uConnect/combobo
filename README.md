@@ -4,22 +4,11 @@ Accessible combobox module
 
 ## Installation
 
-```bash
-$ npm install combobo
-```
-
-## Usage
-
-### In the browser
+### In the HTML
 Just include `combobo.js` (`window.Combobo` will be set)
 
 ```html
-<body>
   <script src="./node_modules/combobo/dist/combobo.js"></script>
-  <script>
-    var combobo = new Combobo();
-  </script>
-</body>
 ```
 
 #### CDN (unpkg)
@@ -28,15 +17,74 @@ Just include `combobo.js` (`window.Combobo` will be set)
 <script src="https://unpkg.com/combobo"></script>
 ```
 
+
 ### With browserify/webpack/any bundler
+```bash
+$ npm install combobo
+```
 
 ```js
 import Combobo from 'combobo'; // or require('combobo')
+```
 
+## Usage
+
+```js
 const combobo = new Combobo();
 ```
 
+There are two ways to initialize Combobo comboboxes:
+
+### 1. From a Select Element
+
+Transform a standard HTML `select` element into an accessible combobox.
+This allows you to initialize Combobo directly on a `<select>` element, automatically transforming it into an enhanced combobox.
+
+```html
+  <select class="combobo">
+    <optgroup label="Color">
+      <option>Red</option>
+      <option>Yellow</option>
+    </optgroup>
+    <optgroup label="Molor">
+      <option>Ddd</option>
+      <option>fadfa</option>
+    </optgroup>
+  </select>
+```
+
+### 2. From Required HTML Elements for Combobo
+
+Manually create the required HTML structure for a Combobo combobox.
+
+```html
+<div class="combo-wrap">
+  <input type="text" class="combobox">
+  <i aria-hidden="true" class="fa trigger fa-caret-down"></i>
+  <div class="listbox">
+    <div class="optgroup" role="group" aria-labelledby="color">
+      <div class="optgroup-label" id="color">Color</div>
+      <div class="option selected">Red</div>
+      <div class="option">Yellow</div>
+    </div>
+    <div class="optgroup" role="group" aria-labelledby="motor">
+      <div class="optgroup-label" id="motor">Molor</div>
+      <div class="option">Ddd</div>
+      <div class="option">fadfa</div>
+    </div>
+  </div>
+</div>
+```
+
 ## Options
+
+### Selectors
+
+To inialize from select element
+* `select` (_HTMLElement|String_): The selector for the select element or the select element reference.
+  * Defaults to `select.combobo`
+
+To initialize from Required HTML Elements
 * `input` (_HTMLElement|String_): The selector for the input (combobox) element or the input element reference.
   * Defaults to `.combobox`
 * `list` (_HTMLElement|String_): The selector for the list element or the list element reference.
@@ -44,12 +92,33 @@ const combobo = new Combobo();
 * `options` (_Array|String_): An array of HTMLElements or a string selector (to be qualified within the list element).
   * Defaults to `.option`
 * `groups` (_Array|String_): An array of HTMLElements or a string selector (to be qualified within the list element)
+
+### Class names
 * `openClass` (_String_): Class name that gets added when list is open.
   * Defaults to `open`
 * `activeClass` (_String_): Class name that gets added when active is triggered
   * Defaults to `active`
 * `selectedClass` (_String_): Class name that gets added when list item is selected
   * Defaults to `selectedClass`
+
+The class added below will be applied to the corresponding elements during the transformation of the `<select>` element into an enhanced combobox.
+* `wrapClass` (String): Class name for the wrapper of the combobox.
+  * Defaults to `combo-wrap`.
+* `inputClass` (String): Class name for the input element.
+  * Defaults to `combobox`.
+* `listClass` (String): Class name for the list element. 
+  * Defaults to `listbox`.
+* `toggleButtonClass` (String): Class name for the toggle button. 
+  * Defaults to `fa trigger fa-caret-down`.
+* `optgroupClass` (String): Class name for option groups within the list.
+  * Defaults to `optgroup`.
+* `optgroupLabelClass` (String): Class name for labels of option groups.
+  * Defaults to `optgroup-label`.
+* `optionsClass` (String): Class name for options within the list.
+  * Defaults to `option`.
+
+
+### Other options
 * `allowEmpty` (_Boolean_): If completely clear selection should be allowed (if field is required, `false` is probably what you want).
   * Defaults to `true`
 * `useLiveRegion` (_Boolean_): Determines whether or not to use Live Region (due to spotty AT support, `aria-activedescendant` will be used also).  As of right now, it is recommended that you leave `useLiveRegion` on due to VoiceOver's lack of support for `aria-activedescendant`.
@@ -88,7 +157,7 @@ const combobo = new Combobo();
 
 ```js
 var combobo = new Combobo({
-  input: '.combobox',
+  input: '.combobox', // Or select: 'select.combobo'
   list: '.listbox',
   options: '.option', // qualified within `list`
   groups: null, // qualified within `list`
@@ -107,6 +176,30 @@ var combobo = new Combobo({
   filter: 'contains' // 'starts-with', 'equals', or funk,
   autoFilter: true // 'true' or 'false' default true
 });
+```
+
+Initiating Combobo will result in either a single Combobo instance or a collection of them. These instances allow for direct interaction with the comboboxes on the page.
+
+If there is only one combobox field enhanced by this setup, when there is only one input or select element that match the selector, you will get back a single Combobo instance. You can directly interact with this instance to get or set its value, like `combobo.value()`.
+
+If there are multiple combobox fields enhanced, you will receive an object where each Combobo instance is accessible via its ID. To interact with a specific instance, use `combobo['ID'].value()`.
+
+Note: When initialized from the required HTML containing an input element, the ID will match the input's ID or be randomly generated if the input elements do not have an ID. If initialized from a `<select>` element, the input ID will be the ID of the `<select>` element. If the `<select>` element lacks an ID, it will also receive a random ID.
+
+```
+<select id="color"><option/><option/>....</select>
+var combobo = new Combobo({select = '#color'});
+// retrive selected values
+combobo.value();
+```
+
+```
+<select class="combobo" id="color"><option/><option/>....</select>
+<select class="combobo"><option/><option/>....</select>
+var combobo = new Combobo();
+// Retrive selected values
+combobo['combobo'].value();
+combobo['GENERATED-RANDOM-ID'].value();
 ```
 
 ## Events
