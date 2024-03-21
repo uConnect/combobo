@@ -84,7 +84,7 @@ Manually create the required HTML structure for a Combobo combobox.
 
 ### Selectors
 
-To inialize from select element
+To initialize from `select` element
 * `select` (_HTMLElement|String_): The selector for the select element or the select element reference.
   * Defaults to `select.combobo`
 
