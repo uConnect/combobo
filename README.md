@@ -123,7 +123,7 @@ The class added below will be applied to the corresponding elements during the t
   * Defaults to `true`
 * `useLiveRegion` (_Boolean_): Determines whether or not to use Live Region (due to spotty AT support, `aria-activedescendant` will be used also).  As of right now, it is recommended that you leave `useLiveRegion` on due to VoiceOver's lack of support for `aria-activedescendant`.
   * Defaults to `true`
-* `multiselect` (_Boolean_): Determines whether or not to enable multiselect features
+* `multiselect` (_Boolean_): Determines whether or not to enable multiselect features. If the combobox originates from a `<select>` element, the `multiple` attribute of that element overrides this setting.
   * Defaults to `false`
 * `noResultsText` (_String_): Sets text for when there are no matches
 * `selectionValue` (_Function_): A function that should return what the desired value of the input should be upon selection (this is especially useful for multiselect in that you can configure custom input values like `{3 Items Selected}`). An array of the selected options is passed as the one argument to the function.

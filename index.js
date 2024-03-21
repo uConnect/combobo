@@ -74,6 +74,7 @@ module.exports = class Combobo {
           let config = Object.assign({}, this.config);
           config.input = transformData.input;
           config.select = selectElement;
+          config.multiselect = selectElement.multiple;
           config.internalCall = true;
           selectElement.style.display = "none";
           combobos[selectElement.id] = new Combobo(config); 
@@ -116,6 +117,15 @@ module.exports = class Combobo {
     }
 
     this.initEvents();
+
+    // Initialize the selected based on the selected options.
+    for (const option of this.currentOpts) {
+      if (option.classList.contains(this.config.selectedClass)) {
+        this.currentOption = option;
+        this.select();
+      }
+    }
+    
   }
 
   initEvents() {
@@ -576,7 +586,7 @@ module.exports = class Combobo {
     const comboElement = document.createElement('div');
     comboElement.className = this.config.wrapClass;
 
-    if (this.config.multiselect) {
+    if (selectElement.multiple) {
       comboElement.classList.add('multiselect');
     }
   
@@ -620,6 +630,9 @@ module.exports = class Combobo {
           opt.className = this.config.optionsClass;
           opt.textContent = option.textContent;
           opt.dataset.value = option.value;
+          if (option.hasAttribute('selected')) {
+            opt.classList.add(this.config.selectedClass);
+          }
           optgroup.appendChild(opt);
         });
   
@@ -630,6 +643,9 @@ module.exports = class Combobo {
         opt.className = this.config.optionsClass;
         opt.textContent = child.textContent;
         opt.dataset.value = child.value;
+        if (child.hasAttribute('selected')) {
+          opt.classList.add(this.config.selectedClass);
+        }
         listbox.appendChild(opt);
       }
     });
