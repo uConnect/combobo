@@ -4,7 +4,7 @@ const assert = require('chai').assert;
 const rndid = require('../../lib/utils/rndid');
 
 describe('lib/utils/rndid', () => {
-  it('should generate a random id defaults to 8', () => {
+  it('should generate a random 8-character id', () => {
     const a = rndid();
     assert.equal(a.length, 8);
   });
