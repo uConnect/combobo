@@ -91,7 +91,9 @@ module.exports = class Combobo {
     this.input = elHandler(this.config.input);
     this.selectElm = elHandler(this.config.select);
     // The list should be within the parent of Input.
-    this.list = elHandler(this.config.list, false, this.input.parentNode);
+    if (this.input && this.input.parentNode) {
+      this.list = elHandler(this.config.list, false, this.input.parentNode);
+    }
     this.cachedOpts = this.currentOpts = elHandler((this.config.options), true, this.list);
 
     // option groups
