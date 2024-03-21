@@ -572,7 +572,12 @@ module.exports = class Combobo {
     let selected = [];
 
     this.selected.forEach(selectedElm => {
-      selected.push(selectedElm.dataset.value || selectedElm.innerText);
+      if (selectedElm.hasAttribute('data-value')) {
+        selected.push(selectedElm.dataset.value);
+      } else {
+        selected.push(selectedElm.innerText);
+      }
+      
     })
 
     if (!this.config.multiselect) {
@@ -628,27 +633,13 @@ module.exports = class Combobo {
         optgroup.appendChild(label);
   
         Array.from(child.children).forEach(option => {
-          const opt = document.createElement('div');
-          opt.className = this.config.optionsClass;
-          opt.textContent = option.textContent;
-          opt.dataset.value = option.value;
-          if (option.hasAttribute('selected')) {
-            opt.classList.add(this.config.selectedClass);
-          }
-          optgroup.appendChild(opt);
+          optgroup.appendChild(this.createOptionElement(option));
         });
   
         listbox.appendChild(optgroup);
       } else {
         // In case there are direct options without a group
-        const opt = document.createElement('div');
-        opt.className = this.config.optionsClass;
-        opt.textContent = child.textContent;
-        opt.dataset.value = child.value;
-        if (child.hasAttribute('selected')) {
-          opt.classList.add(this.config.selectedClass);
-        }
-        listbox.appendChild(opt);
+        listbox.appendChild(this.createOptionElement(child));
       }
     });
 
@@ -657,6 +648,20 @@ module.exports = class Combobo {
     }
       
     return {comboElement, input};
+  }
+
+  createOptionElement(originalOptionElm) {
+    const opt = document.createElement('div');
+    opt.className = this.config.optionsClass;
+    opt.textContent = originalOptionElm.textContent;
+    opt.dataset.value = originalOptionElm.value;
+    if (originalOptionElm.hasAttribute('selected')) {
+      opt.classList.add(this.config.selectedClass);
+    }
+    if (originalOptionElm.hasAttribute('disabled')) {
+      opt.classList.add('disabled');
+    }
+    return opt;
   }
 
 };
