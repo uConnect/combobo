@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title>combination-box fixture</title>
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body id="demo">
@@ -28,7 +27,7 @@
         <label for="combobox-single">Choose Band</label>
         <div class="combo-wrap">
           <input type="text" class="combobox" id="combobox-single">
-          <i aria-hidden="true" class="fa trigger fa-caret-down" data-trigger="single"></i>
+          <span aria-hidden="true" class="trigger" data-trigger="single"></span>
           <div class="listbox">
             <div class="option">Ween</div>
             <div class="option">Frank Zappa</div>
@@ -52,7 +51,7 @@
         <label for="combobox-single-with-groups">Choose Category</label>
         <div class="combo-wrap">
           <input type="text" class="combobox" id="combobox-single-with-groups">
-          <i aria-hidden="true" class="fa trigger fa-caret-down" data-trigger="single-with-groups"></i>
+          <span aria-hidden="true" class="trigger" data-trigger="single-with-groups"></span>
           <div class="listbox" aria-labelledby='combobox-single-with-groups'>
             <div class="optgroup" role="group" aria-labelledby='clothing'>
               <div class="optgroup-label" id='clothing'>Clothing</div>
@@ -83,7 +82,7 @@
         <label for="combobox-multiselect">Choose Favorite Foods</label>
         <div class="combo-wrap">
           <input type="text" class="combobox" id="combobox-multiselect">
-          <i aria-hidden="true" class="fa trigger fa-caret-down" data-trigger="multiselect"></i>
+          <span aria-hidden="true" class="trigger" data-trigger="multiselect"></span>
           <div class="listbox">
             <div class="option">Pizza</div>
             <div class="option">Sushi</div>
@@ -107,7 +106,7 @@
         <label for="combobox-multiselect-with-groups">Choose car options</label>
         <div class="combo-wrap">
           <input type="text" class="combobox" id="combobox-multiselect-with-groups">
-          <i aria-hidden="true" class="fa trigger fa-caret-down" data-trigger="multiselect-with-groups"></i>
+          <span aria-hidden="true" class="trigger" data-trigger="multiselect-with-groups"></span>
           <div class="listbox">
             <div class="optgroup" role="group" aria-labelledby="color">
               <div class="optgroup-label" id="color">Color</div>

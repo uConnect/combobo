@@ -60,7 +60,7 @@ Manually create the required HTML structure for a Combobo combobox.
 ```html
 <div class="combo-wrap">
   <input type="text" class="combobox">
-  <i aria-hidden="true" class="fa trigger fa-caret-down"></i>
+  <span aria-hidden="true" class="trigger"></span>
   <div class="listbox">
     <div class="optgroup" role="group" aria-labelledby="color">
       <div class="optgroup-label" id="color">Color</div>
@@ -109,7 +109,7 @@ The class added below will be applied to the corresponding elements during the t
 * `listClass` (String): Class name for the list element. 
   * Defaults to `listbox`.
 * `toggleButtonClass` (String): Class name for the toggle button. 
-  * Defaults to `fa trigger fa-caret-down`.
+  * Defaults to `trigger`.
 * `optgroupClass` (String): Class name for option groups within the list.
   * Defaults to `optgroup`.
 * `optgroupLabelClass` (String): Class name for labels of option groups.
