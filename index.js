@@ -542,6 +542,20 @@ module.exports = class Combobo {
     noResultsHandler(this.list, this.currentOpts, this.config.noResultsText);
   }
 
+  value() {
+    let selected = [];
+
+    this.selected.forEach(selectedElm => {
+      selected.push(selectedElm.dataset.value || selectedElm.innerText);
+    })
+
+    if (!this.config.multiselect) {
+      return (selected && selected.length) ? selected[0] : null
+    }
+
+    return selected;
+  }
+
   transformSelectElement(selectElement) {
   
     // Create the wrapping div element
@@ -572,8 +586,8 @@ module.exports = class Combobo {
   
     let hasOptgroup = false;
     // Process groups and options
-    Array.from(selectElement.children).forEach(group => {
-      if (group.tagName.toLowerCase() === 'optgroup') {
+    Array.from(selectElement.children).forEach(child => {
+      if (child.tagName.toLowerCase() === 'optgroup') {
         hasOptgroup = true;
         const optgroup = document.createElement('div');
         optgroup.className = this.config.optgroupClass;
@@ -584,13 +598,14 @@ module.exports = class Combobo {
         const label = document.createElement('div');
         label.className = this.config.optgroupLabelClass;
         label.id = groupId;
-        label.textContent = group.label;
+        label.textContent = child.label;
         optgroup.appendChild(label);
   
-        Array.from(group.children).forEach(option => {
+        Array.from(child.children).forEach(option => {
           const opt = document.createElement('div');
           opt.className = this.config.optionsClass;
           opt.textContent = option.textContent;
+          opt.dataset.value = option.value;
           optgroup.appendChild(opt);
         });
   
@@ -599,7 +614,8 @@ module.exports = class Combobo {
         // In case there are direct options without a group
         const opt = document.createElement('div');
         opt.className = this.config.optionsClass;
-        opt.textContent = group.textContent;
+        opt.textContent = child.textContent;
+        opt.dataset.value = child.value;
         listbox.appendChild(opt);
       }
     });
