@@ -149,9 +149,12 @@ The class added below will be applied to the corresponding elements during the t
     ```
 * `filter` (_String|Function_): A filter-type string (`'contains'`, `'starts-with'`, or `'equals'`) or a function that returns a array of filtered options.
   * Defaults to `'contains'`
-* `autoFilter` (_Boolean_): To enable / disable filterng options on front end. If the developer wants to filter options from the server, then it should be false
+* `autoFilter` (_Boolean_): To enable / disable filtering options on front end. If the developer wants to filter options from the server, then it should be false
   * Defaults to `'true'`
-
+* `toggleButtonIcon` (_String_): Text or HTML that gets inserted into the toggle button element.
+  * Examples: `▼`, `<svg ...>`, `<i class="fa fa-chevron-down"></i>`, `<img src...>`, etc.
+  * If `null`, no icon is inserted and the class `default-icon` is added to the `toggleButtonClass`. The demo CSS uses this class with an `::after` pseudo-element make a CSS triangle.
+  * Defaults to `null`.
 
 ### Example Combobo call with options
 

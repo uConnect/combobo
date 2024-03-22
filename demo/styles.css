@@ -98,8 +98,11 @@ button:active {
   justify-content: center;
 }
 
-/* CSS triangle; it will be twice as wide as the `border-width */
-.trigger::before {
+/*
+CSS triangle; it will be twice as wide as the `border-width.
+This is only applied if a custom toggleButtonIcon is not provided in the config.
+*/
+.trigger.default-icon::before {
   content: '';
   width: 0;
   height: 0;

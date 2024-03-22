@@ -604,7 +604,15 @@ module.exports = class Combobo {
     toggleButton.setAttribute('aria-hidden', 'true');
     toggleButton.className = this.config.toggleButtonClass;
     comboElement.appendChild(toggleButton);
-  
+
+    // If a custom toggle icon is set, add it within the toggle button.
+    // Otherwise, add a class on the toggle button to use the default icon.
+    if (this.config.toggleButtonIcon) {
+      toggleButton.innerHTML = this.config.toggleButtonIcon;
+    } else {
+      toggleButton.classList.add('default-icon');
+    }
+
     // Create the listbox
     const listbox = document.createElement('div');
     listbox.className = this.config.listClass;

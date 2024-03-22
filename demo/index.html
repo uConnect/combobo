@@ -27,7 +27,7 @@
         <label for="combobox-single">Choose Band</label>
         <div class="combo-wrap">
           <input type="text" class="combobox" id="combobox-single">
-          <span aria-hidden="true" class="trigger" data-trigger="single"></span>
+          <span aria-hidden="true" class="trigger default-icon" data-trigger="single"></span>
           <div class="listbox">
             <div class="option">Ween</div>
             <div class="option">Frank Zappa</div>
@@ -51,7 +51,7 @@
         <label for="combobox-single-with-groups">Choose Category</label>
         <div class="combo-wrap">
           <input type="text" class="combobox" id="combobox-single-with-groups">
-          <span aria-hidden="true" class="trigger" data-trigger="single-with-groups"></span>
+          <span aria-hidden="true" class="trigger default-icon" data-trigger="single-with-groups"></span>
           <div class="listbox" aria-labelledby='combobox-single-with-groups'>
             <div class="optgroup" role="group" aria-labelledby='clothing'>
               <div class="optgroup-label" id='clothing'>Clothing</div>
@@ -82,7 +82,7 @@
         <label for="combobox-multiselect">Choose Favorite Foods</label>
         <div class="combo-wrap">
           <input type="text" class="combobox" id="combobox-multiselect">
-          <span aria-hidden="true" class="trigger" data-trigger="multiselect"></span>
+          <span aria-hidden="true" class="trigger default-icon" data-trigger="multiselect"></span>
           <div class="listbox">
             <div class="option">Pizza</div>
             <div class="option">Sushi</div>
@@ -106,7 +106,7 @@
         <label for="combobox-multiselect-with-groups">Choose car options</label>
         <div class="combo-wrap">
           <input type="text" class="combobox" id="combobox-multiselect-with-groups">
-          <span aria-hidden="true" class="trigger" data-trigger="multiselect-with-groups"></span>
+          <span aria-hidden="true" class="trigger default-icon" data-trigger="multiselect-with-groups"></span>
           <div class="listbox">
             <div class="optgroup" role="group" aria-labelledby="color">
               <div class="optgroup-label" id="color">Color</div>
@@ -140,6 +140,37 @@
               <div class="option">Automatic</div>
               <div class="option">Manual</div>
             </div>
+          </div>
+        </div>
+      </div>
+      <button type="button">Submit</button>
+    </section>
+    <section class="single-with-svg-icon">
+      <div class="wrp">
+        <h2>Single select with custom toggle button icon</h2>
+        <label for="combobox-single-with-svg-icon">Pick a fruit</label>
+        <div class="combo-wrap">
+          <input type="text" class="combobox" id="combobox-single-with-svg-icon">
+          <span aria-hidden="true" class="trigger" data-trigger="single-with-svg-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14px">
+              <!--
+                Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com
+                License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.
+              -->
+              <defs>
+                <linearGradient id="gradient" x1="0" x2="448" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="yellow" />
+                  <stop offset="1" stop-color="cyan" />
+                </linearGradient>
+              </defs>
+              <path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" fill="url(#gradient)" />
+            </svg>
+          </span>
+          <div class="listbox">
+            <div class="option">Apple</div>
+            <div class="option">Banana</div>
+            <div class="option">Cherry</div>
+            <div class="option">Durian</div>
           </div>
         </div>
       </div>
@@ -205,7 +236,14 @@
             announcement: {
               groupChange: groupChangeHandler
             }
-          })
+          }),
+          'single-with-svg-icon': new Combobo({
+            input: '#combobox-single-with-svg-icon',
+            list: '.single-with-svg-icon .listbox',
+            activeClass: 'active',
+            noResultsText: 'No results found.',
+            toggleButtonIcon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14px"><!-- Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-><defs><linearGradient id="gradient" x1="0" x2="448" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="yellow" /><stop offset="1" stop-color="cyan" /></linearGradient></defs><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" fill="url(#gradient)" /></svg>',
+          }),
         };
 
         function groupChangeHandler(newGroup) {
