@@ -42,13 +42,15 @@ This allows you to initialize Combobo directly on a `<select>` element, automati
 
 ```html
   <select class="combobo">
-    <optgroup label="Color">
+    <optgroup label="Primary Colors">
+      <option>Blue</option>
       <option>Red</option>
       <option>Yellow</option>
     </optgroup>
-    <optgroup label="Molor">
-      <option>Ddd</option>
-      <option>fadfa</option>
+    <optgroup label="Secondary Colors">
+      <option>Green</option>
+      <option>Orange</option>
+      <option>Purple</option>
     </optgroup>
   </select>
 ```
@@ -62,15 +64,17 @@ Manually create the required HTML structure for a Combobo combobox.
   <input type="text" class="combobox">
   <i aria-hidden="true" class="fa trigger fa-caret-down"></i>
   <div class="listbox">
-    <div class="optgroup" role="group" aria-labelledby="color">
-      <div class="optgroup-label" id="color">Color</div>
-      <div class="option selected">Red</div>
+    <div class="optgroup" role="group" aria-labelledby="primary-colors">
+      <div class="optgroup-label" id="primary-colors">Primary Colors</div>
+      <div class="option selected">Blue</div>
+      <div class="option">Red</div>
       <div class="option">Yellow</div>
     </div>
-    <div class="optgroup" role="group" aria-labelledby="motor">
-      <div class="optgroup-label" id="motor">Molor</div>
-      <div class="option">Ddd</div>
-      <div class="option">fadfa</div>
+    <div class="optgroup" role="group" aria-labelledby="secondary-colors">
+      <div class="optgroup-label" id="secondary-colors">Secondary Colors</div>
+      <div class="option">Green</div>
+      <div class="option">Orange</div>
+      <div class="option">Purple</div>
     </div>
   </div>
 </div>
@@ -80,7 +84,7 @@ Manually create the required HTML structure for a Combobo combobox.
 
 ### Selectors
 
-To inialize from select element
+To initialize from `select` element
 * `select` (_HTMLElement|String_): The selector for the select element or the select element reference.
   * Defaults to `select.combobo`
 
