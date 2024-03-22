@@ -600,7 +600,7 @@ module.exports = class Combobo {
     comboElement.appendChild(input);
   
     // Create the toggle button
-    const toggleButton = document.createElement('i');
+    const toggleButton = document.createElement('span');
     toggleButton.setAttribute('aria-hidden', 'true');
     toggleButton.className = this.config.toggleButtonClass;
     comboElement.appendChild(toggleButton);
