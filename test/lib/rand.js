@@ -5,19 +5,34 @@ const rndid = require('../../lib/utils/rndid');
 
 describe('lib/utils/rndid', () => {
   it('should generate a random 8-character id', () => {
-    const a = rndid();
-    assert.equal(a.length, 8);
+    const generatedID = rndid();
+
+    assert.equal(generatedID.length, 8);
   });
 
   it('should not be null', () => {
-    const a = rndid();
-    assert.isNotNull(a);
+    const generatedID = rndid();
+
+    assert.isNotNull(generatedID);
   });
 
   it('should be unique', () => {
-    const a = rndid();
-    const b = rndid();
+    const generatedID = rndid();
 
-    assert.notStrictEqual(a, b);
+    const generatedSecondID = rndid();
+
+    assert.notStrictEqual(generatedID, generatedSecondID);
+  });
+
+  it('should start with a letter', () => {
+    const generatedID = rndid();
+
+    const startsWithLetterRegex = /^[A-Za-z]/;
+
+    assert.match(
+      generatedID,
+      startsWithLetterRegex,
+      `'${generatedID}' does not start with a letter`
+    );
   });
 });
