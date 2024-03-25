@@ -131,6 +131,10 @@ button:active {
   background-color: #212E59;
 }
 
+.listbox .option:first-child.disabled {
+  display: none;
+}
+
 .listbox .underline {
   text-decoration: underline;
 }
