@@ -91,8 +91,10 @@ To initialize from `select` element
 To initialize from Required HTML Elements
 * `input` (_HTMLElement|String_): The selector for the input (combobox) element or the input element reference.
   * Defaults to `.combobox`
-* `list` (_HTMLElement|String_): The selector for the list element or the list element reference.
+* `list` (_HTMLElement|String_): The selector for the list element or the list element reference. (to be qualified within the parent of input element)
   * Defaults to `.listbox`
+* `toggleButton` (_HTMLElement|String_): The selector for the toggle button element or the reference to it. (to be qualified within the parent of input element)
+  * Defaults to `.trigger`
 * `options` (_Array|String_): An array of HTMLElements or a string selector (to be qualified within the list element).
   * Defaults to `.option`
 * `groups` (_Array|String_): An array of HTMLElements or a string selector (to be qualified within the list element)
