@@ -76,6 +76,8 @@ Manually create the required HTML structure for a Combobo combobox.
 </div>
 ```
 
+Note: In order to dynamically add options and group items, you could set the `source` configuration to specify the data object that will be used to create the groups and options.
+
 ## Options
 
 ### Selectors
@@ -92,6 +94,23 @@ To initialize from Required HTML Elements
 * `options` (_Array|String_): An array of HTMLElements or a string selector (to be qualified within the list element).
   * Defaults to `.option`
 * `groups` (_Array|String_): An array of HTMLElements or a string selector (to be qualified within the list element)
+
+### Data Source
+* `source` (_Array_) Optional: An array of data that will be used to generate the options in the dropdown. The `source` array can include objects representing either individual options or groups of options (optgroups).
+
+  #### Sample Data Options
+  ```javascript
+  const dataSource = [
+    { text: 'Select an Option', value: '', selected: true , disabled: true  },
+    { text: 'Option 1', value: '1' },
+    {
+      label: 'Group',
+      options: [
+        { text: 'Option 2', value: '2' },
+        { text: 'Option 3', value: '3'}
+      ]
+    }
+  ];
 
 ### Class names
 * `openClass` (_String_): Class name that gets added when list is open.
