@@ -96,9 +96,10 @@ module.exports = class Combobo {
 
     this.input = elHandler(this.config.input);
     this.selectElm = elHandler(this.config.select);
-    // The list should be within the parent of Input.
+    // The list and toggle button should be within the parent of Input.
     if (this.input && this.input.parentNode) {
       this.list = elHandler(this.config.list, false, this.input.parentNode);
+      this.toggleButton = elHandler(this.config.toggleButton, false, this.input.parentNode);
     }
 
     if (!this.input || !this.list) {
@@ -180,6 +181,18 @@ module.exports = class Combobo {
         }
         this.input.select();
       });
+
+      if (this.toggleButton) {
+        // handle trigger clicks to toggle state of the 
+        this.toggleButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (this.isOpen) {
+            this.closeList();
+          } else {
+            this.openList();
+          }
+        });
+      }
 
       // listen for clicks outside of combobox
       document.addEventListener('click', (e) => {

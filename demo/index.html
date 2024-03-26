@@ -223,17 +223,6 @@
 
         window.box = box;
 
-        // handle trigger clicks to toggle state of its combobox
-        Array.prototype.slice.call(
-          document.querySelectorAll('.trigger')
-        ).forEach(function (trigger) {
-          var instName = trigger.getAttribute('data-trigger');
-          var inst = box[instName];
-          trigger.addEventListener('click', function (e) {
-            e.stopPropagation();
-            inst[inst.isOpen ? 'closeList' : 'openList']();
-          });
-        });
       }());
     </script>
   </body>
