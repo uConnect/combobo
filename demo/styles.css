@@ -147,6 +147,10 @@ This is only applied if a custom toggleButtonIcon is not provided in the config.
   background-color: #212E59;
 }
 
+.listbox .option:first-child.disabled {
+  display: none;
+}
+
 .listbox .underline {
   text-decoration: underline;
 }

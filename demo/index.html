@@ -29,6 +29,7 @@
           <input type="text" class="combobox" id="combobox-single">
           <span aria-hidden="true" class="trigger default-icon" data-trigger="single"></span>
           <div class="listbox">
+            <div class="option selected disabled" data-value="">select an option</div>
             <div class="option">Ween</div>
             <div class="option">Frank Zappa</div>
             <div class="option">Snarky Puppy</div>
@@ -259,17 +260,6 @@
 
         window.box = box;
 
-        // handle trigger clicks to toggle state of its combobox
-        Array.prototype.slice.call(
-          document.querySelectorAll('.trigger')
-        ).forEach(function (trigger) {
-          var instName = trigger.getAttribute('data-trigger');
-          var inst = box[instName];
-          trigger.addEventListener('click', function (e) {
-            e.stopPropagation();
-            inst[inst.isOpen ? 'closeList' : 'openList']();
-          });
-        });
       }());
     </script>
   </body>

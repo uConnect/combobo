@@ -69,6 +69,12 @@ module.exports = class Combobo {
       if ( selectElements && selectElements.length && !this.config.input.startsWith('#')) {
         selectElements.forEach((selectElement)=>{
           selectElement.id = selectElement.id || rndid();
+          // To ensure that the combobo reinitializes when initialized
+          const initializedCombobo = document.getElementById(`${selectElement.id}-combobo`)
+          if (initializedCombobo) {
+            initializedCombobo.remove();
+          }
+
           const transformData = this.transformSelectElement(selectElement);
           selectElement.parentNode.insertBefore(transformData.comboElement, selectElement.nextSibling);
           let config = Object.assign({}, this.config);
@@ -90,11 +96,44 @@ module.exports = class Combobo {
 
     this.input = elHandler(this.config.input);
     this.selectElm = elHandler(this.config.select);
-    // The list should be within the parent of Input.
+    // The list and toggle button should be within the parent of Input.
     if (this.input && this.input.parentNode) {
       this.list = elHandler(this.config.list, false, this.input.parentNode);
+      this.toggleButton = elHandler(this.config.toggleButton, false, this.input.parentNode);
     }
-    this.cachedOpts = this.currentOpts = elHandler((this.config.options), true, this.list);
+
+    if (!this.input || !this.list) {
+      throw new Error('Unable to find required elements (list/input)');
+    }
+
+    if (this.config.source && Array.isArray(this.config.source)) {
+      // First remove all child elements in the dropdown list
+      this.emptyDropdownList();
+      while (this.list.hasChildNodes()) {
+        this.list.removeChild(this.list.firstChild);
+      }
+
+      this.currentOpts = [];
+      this.config.source.forEach(option=>{
+        if (option.label && option.options) { // If option is an optgroup
+          const optgroupElm = this.createOptgroupElement(option.label);
+          option.options.forEach(opt => {
+              const optionElm = this.createOptionElement(opt.text, opt.value, opt.selected, opt.disabled);
+              optgroupElm.appendChild(optionElm); // Add option to optgroup
+              this.currentOpts.push(optionElm);
+          });
+          this.list.appendChild(optgroupElm); // Add optgroup to the list
+        } else { // If option is a standalone option
+            const optionElm = this.createOptionElement(option.text, option.value, option.selected, option.disabled);
+            this.list.appendChild(optionElm);
+            this.currentOpts.push(optionElm);
+        }
+      });
+      
+      this.cachedOpts = this.currentOpts;
+    } else {
+      this.cachedOpts = this.currentOpts = elHandler((this.config.options), true, this.list);
+    }
 
     // option groups
     if (this.config.groups) {
@@ -105,11 +144,6 @@ module.exports = class Combobo {
           options: this.cachedOpts.filter((opt) => groupEl.contains(opt))
         };
       });
-    }
-
-
-    if (!this.input || !this.list) {
-      throw new Error('Unable to find required elements (list/input)');
     }
 
     attrs(this.input, this.list, this.cachedOpts);
@@ -147,6 +181,18 @@ module.exports = class Combobo {
         }
         this.input.select();
       });
+
+      if (this.toggleButton) {
+        // handle trigger clicks to toggle state of the 
+        this.toggleButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (this.isOpen) {
+            this.closeList();
+          } else {
+            this.openList();
+          }
+        });
+      }
 
       // listen for clicks outside of combobox
       document.addEventListener('click', (e) => {
@@ -572,7 +618,12 @@ module.exports = class Combobo {
     let selected = [];
 
     this.selected.forEach(selectedElm => {
-      selected.push(selectedElm.dataset.value || selectedElm.innerText);
+      if (selectedElm.hasAttribute('data-value')) {
+        selected.push(selectedElm.dataset.value);
+      } else {
+        selected.push(selectedElm.innerText);
+      }
+      
     })
 
     if (!this.config.multiselect) {
@@ -587,6 +638,7 @@ module.exports = class Combobo {
     // Create the wrapping div element
     const comboElement = document.createElement('div');
     comboElement.className = this.config.wrapClass;
+    comboElement.id = `${selectElement.id}-combobo`;
 
     if (selectElement.multiple) {
       comboElement.classList.add('multiselect');
@@ -596,7 +648,7 @@ module.exports = class Combobo {
     const input = document.createElement('input');
     input.type = 'text';
     input.className = this.config.inputClass;
-    input.id = selectElement.id ? `${selectElement.id}-input` : rndid();
+    input.id = `${selectElement.id}-input`;
     comboElement.appendChild(input);
   
     // Create the toggle button
@@ -636,27 +688,25 @@ module.exports = class Combobo {
         optgroup.appendChild(label);
   
         Array.from(child.children).forEach(option => {
-          const opt = document.createElement('div');
-          opt.className = this.config.optionsClass;
-          opt.textContent = option.textContent;
-          opt.dataset.value = option.value;
-          if (option.hasAttribute('selected')) {
-            opt.classList.add(this.config.selectedClass);
+          const data = {
+            text: option.textContent,
+            value: option.value,
+            selected: option.hasAttribute('selected'),
+            disabled: option.hasAttribute('disabled')
           }
-          optgroup.appendChild(opt);
+          optgroup.appendChild(this.createOptionElement(data.text, data.value, data.selected, data.disabled));
         });
   
         listbox.appendChild(optgroup);
       } else {
         // In case there are direct options without a group
-        const opt = document.createElement('div');
-        opt.className = this.config.optionsClass;
-        opt.textContent = child.textContent;
-        opt.dataset.value = child.value;
-        if (child.hasAttribute('selected')) {
-          opt.classList.add(this.config.selectedClass);
+        const data = {
+          text: child.textContent,
+          value: child.value,
+          selected: child.hasAttribute('selected'),
+          disabled: child.hasAttribute('disabled')
         }
-        listbox.appendChild(opt);
+        listbox.appendChild(this.createOptionElement(data.text, data.value, data.selected, data.disabled));
       }
     });
 
@@ -665,6 +715,35 @@ module.exports = class Combobo {
     }
       
     return {comboElement, input};
+  }
+
+  createOptionElement(text, value, selected, disabled) {
+    const opt = document.createElement('div');
+    opt.className = this.config.optionsClass;
+    opt.textContent = text;
+    opt.dataset.value = value;
+    if (selected) {
+      opt.classList.add(this.config.selectedClass);
+    }
+    if (disabled) {
+      opt.classList.add('disabled');
+    }
+    return opt;
+  }
+
+  createOptgroupElement(text) {
+    const optgroup = document.createElement('div');
+    optgroup.className = this.config.optgroupClass;
+    optgroup.setAttribute('role', 'group');
+    const groupId = rndid();
+    optgroup.setAttribute('aria-labelledby', groupId);
+
+    const label = document.createElement('div');
+    label.className = this.config.optgroupLabelClass;
+    label.id = groupId;
+    label.textContent = text;
+    optgroup.appendChild(label);
+    return optgroup;
   }
 
 };

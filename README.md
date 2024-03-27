@@ -42,13 +42,15 @@ This allows you to initialize Combobo directly on a `<select>` element, automati
 
 ```html
   <select class="combobo">
-    <optgroup label="Color">
+    <optgroup label="Primary Colors">
+      <option>Blue</option>
       <option>Red</option>
       <option>Yellow</option>
     </optgroup>
-    <optgroup label="Molor">
-      <option>Ddd</option>
-      <option>fadfa</option>
+    <optgroup label="Secondary Colors">
+      <option>Green</option>
+      <option>Orange</option>
+      <option>Purple</option>
     </optgroup>
   </select>
 ```
@@ -62,36 +64,59 @@ Manually create the required HTML structure for a Combobo combobox.
   <input type="text" class="combobox">
   <span aria-hidden="true" class="trigger"></span>
   <div class="listbox">
-    <div class="optgroup" role="group" aria-labelledby="color">
-      <div class="optgroup-label" id="color">Color</div>
-      <div class="option selected">Red</div>
+    <div class="optgroup" role="group" aria-labelledby="primary-colors">
+      <div class="optgroup-label" id="primary-colors">Primary Colors</div>
+      <div class="option selected">Blue</div>
+      <div class="option">Red</div>
       <div class="option">Yellow</div>
     </div>
-    <div class="optgroup" role="group" aria-labelledby="motor">
-      <div class="optgroup-label" id="motor">Molor</div>
-      <div class="option">Ddd</div>
-      <div class="option">fadfa</div>
+    <div class="optgroup" role="group" aria-labelledby="secondary-colors">
+      <div class="optgroup-label" id="secondary-colors">Secondary Colors</div>
+      <div class="option">Green</div>
+      <div class="option">Orange</div>
+      <div class="option">Purple</div>
     </div>
   </div>
 </div>
 ```
 
+Note: In order to dynamically add options and group items, you could set the `source` configuration to specify the data object that will be used to create the groups and options.
+
 ## Options
 
 ### Selectors
 
-To inialize from select element
+To initialize from `select` element
 * `select` (_HTMLElement|String_): The selector for the select element or the select element reference.
   * Defaults to `select.combobo`
 
 To initialize from Required HTML Elements
 * `input` (_HTMLElement|String_): The selector for the input (combobox) element or the input element reference.
   * Defaults to `.combobox`
-* `list` (_HTMLElement|String_): The selector for the list element or the list element reference.
+* `list` (_HTMLElement|String_): The selector for the list element or the list element reference. (to be qualified within the parent of input element)
   * Defaults to `.listbox`
+* `toggleButton` (_HTMLElement|String_): The selector for the toggle button element or the reference to it. (to be qualified within the parent of input element)
+  * Defaults to `.trigger`
 * `options` (_Array|String_): An array of HTMLElements or a string selector (to be qualified within the list element).
   * Defaults to `.option`
 * `groups` (_Array|String_): An array of HTMLElements or a string selector (to be qualified within the list element)
+
+### Data Source
+* `source` (_Array_) Optional: An array of data that will be used to generate the options in the dropdown. The `source` array can include objects representing either individual options or groups of options (optgroups).
+
+  #### Sample Data Options
+  ```javascript
+  const dataSource = [
+    { text: 'Select an Option', value: '', selected: true , disabled: true  },
+    { text: 'Option 1', value: '1' },
+    {
+      label: 'Group',
+      options: [
+        { text: 'Option 2', value: '2' },
+        { text: 'Option 3', value: '3'}
+      ]
+    }
+  ];
 
 ### Class names
 * `openClass` (_String_): Class name that gets added when list is open.
