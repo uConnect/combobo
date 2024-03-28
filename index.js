@@ -96,10 +96,16 @@ module.exports = class Combobo {
 
     this.input = elHandler(this.config.input);
     this.selectElm = elHandler(this.config.select);
+    this.toggleButtonIcon = this.config.toggleButtonIcon;
     // The list and toggle button should be within the parent of Input.
     if (this.input && this.input.parentNode) {
       this.list = elHandler(this.config.list, false, this.input.parentNode);
       this.toggleButton = elHandler(this.config.toggleButton, false, this.input.parentNode);
+
+      // Add the toggle button icon within the toggle button; otherwise, add a class to use the default icon.
+      if (this.toggleButton) {
+        this.addToggleButtonIcon(this.toggleButton);
+      }
     }
 
     if (!this.input || !this.list) {
@@ -657,13 +663,7 @@ module.exports = class Combobo {
     toggleButton.className = this.config.toggleButtonClass;
     comboElement.appendChild(toggleButton);
 
-    // If a custom toggle icon is set, add it within the toggle button.
-    // Otherwise, add a class on the toggle button to use the default icon.
-    if (this.config.toggleButtonIcon) {
-      toggleButton.innerHTML = this.config.toggleButtonIcon;
-    } else {
-      toggleButton.classList.add('default-icon');
-    }
+    this.addToggleButtonIcon(toggleButton);
 
     // Create the listbox
     const listbox = document.createElement('div');
@@ -744,6 +744,13 @@ module.exports = class Combobo {
     label.textContent = text;
     optgroup.appendChild(label);
     return optgroup;
+  }
+
+  // If a custom toggle icon is set, add it within the toggle button.
+  addToggleButtonIcon(toggleButton) {
+    if (this.config.toggleButtonIcon) {
+      toggleButton.innerHTML = this.config.toggleButtonIcon;
+    }
   }
 
 };

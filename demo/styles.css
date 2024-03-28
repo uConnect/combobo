@@ -96,13 +96,14 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: center;
+  user-select: none;
 }
 
 /*
-CSS triangle; it will be twice as wide as the `border-width.
-This is only applied if a custom toggleButtonIcon is not provided in the config.
+CSS triangle; it will be twice as wide as the `border-width. This is only applied if a custom
+toggleButtonIcon is not provided in the config or if the toggleButton element is empty.
 */
-.trigger.default-icon::before {
+.trigger:empty::before {
   content: '';
   width: 0;
   height: 0;
