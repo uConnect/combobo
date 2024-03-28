@@ -407,9 +407,9 @@ module.exports = function () {
       this.list = (0, _elementHandler2.default)(this.config.list, false, this.input.parentNode);
       this.toggleButton = (0, _elementHandler2.default)(this.config.toggleButton, false, this.input.parentNode);
 
-      // Add the toggle button icon within the toggle button; otherwise, add a class to use the default icon.
-      if (this.toggleButton) {
-        this.addToggleButtonIcon(this.toggleButton);
+      // If there is a custom icon for the toggle button, set it
+      if (this.config.toggleButtonIcon) {
+        this.toggleButton.innerHTML = this.config.toggleButtonIcon;
       }
     }
 
@@ -1060,8 +1060,6 @@ module.exports = function () {
       toggleButton.className = this.config.toggleButtonClass;
       comboElement.appendChild(toggleButton);
 
-      this.addToggleButtonIcon(toggleButton);
-
       // Create the listbox
       var listbox = document.createElement('div');
       listbox.className = this.config.listClass;
@@ -1143,16 +1141,6 @@ module.exports = function () {
       label.textContent = text;
       optgroup.appendChild(label);
       return optgroup;
-    }
-
-    // If a custom toggle icon is set, add it within the toggle button.
-
-  }, {
-    key: 'addToggleButtonIcon',
-    value: function addToggleButtonIcon(toggleButton) {
-      if (this.config.toggleButtonIcon) {
-        toggleButton.innerHTML = this.config.toggleButtonIcon;
-      }
     }
   }]);
 
