@@ -74,6 +74,7 @@ button:active {
 
 .combobox {
   width: 250px;
+  height: 40px;
   padding: 10px 35px 10px 5px;
   border: 1px solid #fff;
   box-sizing: border-box;
