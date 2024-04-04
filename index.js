@@ -96,10 +96,16 @@ module.exports = class Combobo {
 
     this.input = elHandler(this.config.input);
     this.selectElm = elHandler(this.config.select);
+    this.toggleButtonIcon = this.config.toggleButtonIcon;
     // The list and toggle button should be within the parent of Input.
     if (this.input && this.input.parentNode) {
       this.list = elHandler(this.config.list, false, this.input.parentNode);
       this.toggleButton = elHandler(this.config.toggleButton, false, this.input.parentNode);
+
+      // If there is a custom icon for the toggle button, set it
+      if (this.config.toggleButtonIcon) {
+        this.toggleButton.innerHTML = this.config.toggleButtonIcon;
+      }
     }
 
     if (!this.input || !this.list) {
@@ -652,11 +658,11 @@ module.exports = class Combobo {
     comboElement.appendChild(input);
   
     // Create the toggle button
-    const toggleButton = document.createElement('i');
+    const toggleButton = document.createElement('span');
     toggleButton.setAttribute('aria-hidden', 'true');
     toggleButton.className = this.config.toggleButtonClass;
     comboElement.appendChild(toggleButton);
-  
+
     // Create the listbox
     const listbox = document.createElement('div');
     listbox.className = this.config.listClass;
@@ -737,7 +743,6 @@ module.exports = class Combobo {
     optgroup.appendChild(label);
     return optgroup;
   }
-
 };
 
 /**
