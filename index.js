@@ -633,7 +633,6 @@ module.exports = class Combobo {
     if (!this.config.multiselect) {
       this.closeList();
       if (!this.config.selectOnly) {
-        console.log('selecting');
         this.input.select();
       }
     }
