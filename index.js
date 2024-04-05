@@ -821,7 +821,19 @@ module.exports = class Combobo {
     input.className = this.config.inputClass;
     input.id = `${selectElement.id}-input`;
     comboElement.appendChild(input);
-  
+
+    // Rewrite the label's `for` attribute to match the new input's ID (necessary because the
+    // <select> element gets hidden). If there is no paired label, check for a previous sibling.
+    if (selectElement.labels.length) {
+      const label = selectElement.labels[0];
+      label.htmlFor = input.id;
+    } else {
+      const prevEl = selectElement.previousElementSibling;
+      if (prevEl && prevEl.tagName.toLowerCase() === 'label') {
+        prevEl.htmlFor = input.id;
+      }
+    }
+
     // Create the toggle button
     const toggleButton = document.createElement('span');
     toggleButton.setAttribute('aria-hidden', 'true');
