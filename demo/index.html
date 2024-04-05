@@ -172,11 +172,11 @@
           if (!val || str.toLowerCase().indexOf(val.toLowerCase()) === -1) {
             return str;
           }
-          var regex = new RegExp(val, 'i');
+          const regex = new RegExp(val, 'i');
           return str.replace(regex, '<span class="underline">$&</span>');
         }
 
-        var box = {
+        const box = {
           'single': new Combobo({
             input: '#combobox-single',
             list: '.bands .listbox',
@@ -191,7 +191,7 @@
             activeClass: 'active',
             noResultsText: 'No results found.',
             optionValue: function (option) {
-              var inputVal = box['single-with-groups'].input.value;
+              const inputVal = box['single-with-groups'].input.value;
               return wrapNum(option.innerText, inputVal);
             },
             announcement: {
@@ -210,7 +210,7 @@
             },
             noResultsText: 'Nothing to see here folks.',
             optionValue: function (option) {
-              var inputVal = box.multiselect.input.value;
+              const inputVal = box.multiselect.input.value;
               return wrapNum(option.innerText, inputVal)
             }
           }),
@@ -235,8 +235,8 @@
         };
 
         function groupChangeHandler(newGroup) {
-          var groupLabel = newGroup.querySelector('.optgroup-label').innerText;
-          var len = Array.prototype.slice.call(
+          const groupLabel = newGroup.querySelector('.optgroup-label').innerText;
+          const len = Array.prototype.slice.call(
             newGroup.querySelectorAll('.option')
           ).filter(function (opt) {
             return opt.style.display !== 'none';
