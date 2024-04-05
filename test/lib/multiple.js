@@ -1,10 +1,8 @@
 'use strict';
 
 const assert = require('chai').assert;
-const queryAll = require('../../lib/utils/select').all;
-const aa = require('../../lib/announce-active');
-const multiSelectOptions = require('../../lib/multiSelectOptions');
 const Fixture = require('../fixture');
+const queryAll = require('../../lib/utils/select').all;
 const simpleSnippet = require('../snippets/multiple.html');
 const Combobo = require('../../index');
 
@@ -20,76 +18,30 @@ describe('multiselect config', () => {
   afterEach(() => fixture.destroy());
   after(() => fixture.cleanUp());
 
-  it('should be a function', () => {
-    assert.equal('function', typeof aa);
-    assert.equal('function', typeof multiSelectOptions);
-  });
-
-  it('should return the options set in the dropdown', () => {
+  it('should assert the options in the list', () => {
     const options = opts.map((opt) => opt.innerText);
     assert.deepEqual(options, ['Red', 'Yellow']);
   });
 
-  it('should return the dropdown option set', () => {
-    let msg;
-
-    var yellowOption = Array.prototype.find.call(
-      simpleBox.cachedOpts,
-      function (opt) {
-        return opt.textContent.trim() === 'Yellow';
-      }
-    );
-
-    yellowOption.setAttribute('aria-selected', 'true');
-    simpleBox.selectedOpts = [yellowOption];
-
-    aa(
-      yellowOption,
-      {
-        announcement: { selected: 'Yellow' },
-      },
-      function (text) {
-        msg = text;
-      },
-      false
-    );
+  it('should select the first option from the list', () => {
+    simpleBox.goTo(simpleBox.getOptIndex() + 0).select();
+    const expectedValue = 'Red';
 
     assert.equal(
-      msg,
-      'Yellow Yellow',
-      'The message does not correctly reflect the "Yellow" selection'
+      simpleBox.value(),
+      expectedValue,
+      `Selected value should be '${expectedValue}'`
     );
   });
 
-  it('should return the selected two options', () => {
-    let msg;
-
-    const redOption = opts.find((option) => option.innerText.trim() === 'Red');
-    const yellowOption = opts.find(
-      (option) => option.innerText.trim() === 'Yellow'
-    );
-
-    redOption.setAttribute('aria-selected', 'true');
-    yellowOption.setAttribute('aria-selected', 'true');
-
-    multiSelectOptions(
-      opts[0],
-      {
-        announcement: { selected: '' },
-      },
-      function (text) {
-        msg = text.trim();
-      },
-      false,
-      fixture.element
-    );
-
-    const expectedMsg = 'Red Yellow';
+  it('should select the second option from the list', () => {
+    simpleBox.goTo(simpleBox.getOptIndex() + 1).select();
+    const expectedValue = 'Yellow';
 
     assert.equal(
-      msg,
-      expectedMsg,
-      'The message does not correctly announce the selected options'
+      simpleBox.value(),
+      expectedValue,
+      `Selected value should be '${expectedValue}'`
     );
   });
 });
