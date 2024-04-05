@@ -164,6 +164,23 @@
       </div>
       <button type="button">Submit</button>
     </section>
+    <section class="select-only">
+      <div class="wrp">
+        <h2>Select-Only</h2>
+        <label for="combobox-select-only">Pet</label>
+        <select id="combobox-select-only">
+          <option value="cat">Cat</option>
+          <option value="dog">Dog</option>
+          <option value="fish">Fish</option>
+          <option value="hamster">Hamster</option>
+          <option value="iguana">Iguana</option>
+          <option value="rabbit">Rabbit</option>
+          <option value="rock">Rock</option>
+          <option value="roly-poly">Roly-Poly Bug</option>
+          <option value="snake">Snake</option>
+        </select>
+      </div>
+    </section>
     <footer></footer>
     <script src="../dist/combobo.js" charset="utf-8"></script>
     <script>
@@ -231,6 +248,12 @@
             activeClass: 'active',
             noResultsText: 'No results found.',
             toggleButtonIcon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14px"><!-- Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. --><defs><linearGradient id="gradient" x1="0" x2="448" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="yellow" /><stop offset="1" stop-color="cyan" /></linearGradient></defs><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" fill="url(#gradient)" /></svg>',
+          }),
+          'select-only': new Combobo({
+            select: '#combobox-select-only',
+            list: '.select-only .listbox',
+            activeClass: 'active',
+            selectOnly: true,
           }),
         };
 

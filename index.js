@@ -55,11 +55,30 @@ module.exports = class Combobo {
 
     if (!this.config.internalCall) {
       let combobos = {};
+
       const selectElements = elHandler(this.config.select, true);
       const inputElements = elHandler(this.config.input, true);
+
       if (inputElements && inputElements.length && !this.config.select.startsWith('#')) {
-        inputElements.forEach((input)=>{
+        inputElements.forEach((input) => {
           let config = Object.assign({}, this.config);
+
+          // If selectOnly is true, change the <input> to a <div>.
+          // Force <select>-like behavior by overriding the `filter` and `autoFilter` options.
+          if (this.config.selectOnly) {
+            this.config.filter = 'starts-with';
+            this.config.autoFilter = false;
+            if (input.tagName.toLowerCase() === 'input') {
+              const inputDivEl = document.createElement('div');
+              [...input.attributes].forEach(attr => {
+                inputDivEl.setAttribute(attr.name, attr.value);
+              });
+              input.replaceWith(inputDivEl);
+              inputDivEl.setAttribute('tabindex', '0');
+              input = inputDivEl;
+            }
+          }
+
           input.id = input.id || rndid();
           config.input = input;
           config.internalCall = true;
@@ -86,6 +105,7 @@ module.exports = class Combobo {
           combobos[selectElement.id] = new Combobo(config); 
         });
       }
+
       if (Object.keys(combobos).length) {
         if (Object.keys(combobos).length == 1) {
           return combobos[Object.keys(combobos)[0]];
@@ -185,7 +205,9 @@ module.exports = class Combobo {
         if (this.selected.length) {
           this.input.value = this.selected.length >= 2 ? '' : this.config.selectionValue(this.selected);
         }
-        this.input.select();
+        if (!this.config.selectOnly) {
+          this.input.select();
+        }
       });
 
       if (this.toggleButton) {
@@ -283,6 +305,25 @@ module.exports = class Combobo {
     return this;
   }
 
+  getSearchString(char) {
+    if (!char) {
+      return this.searchString;
+    }
+    // Reset typing timeout and start new timeout
+    // This allows us to make multiple-letter matches, like a native <select>
+    if (typeof this.searchTimeout === 'number') {
+      window.clearTimeout(this.searchTimeout);
+    }
+
+    this.searchTimeout = window.setTimeout(() => {
+      this.searchString = '';
+    }, this.config.selectSearchTimeout);
+
+    // Add most recent letter to saved search string
+    this.searchString = this.searchString ? this.searchString + char : char;
+    return this.searchString.toLowerCase();
+  }
+
   initKeys() {
     // keydown listener
     if (this.optionsWithKeyEventHandlers.has(this.input)) {
@@ -312,11 +353,11 @@ module.exports = class Combobo {
       preventDefault: true
     }, {
       keys: ['enter'],
-      callback: (e) => {
+      callback: () => {
         if (this.isOpen) {
-          e.preventDefault();
-          e.stopPropagation();
           this.select();
+        } else {
+          this.openList();
         }
       }
     }, {
@@ -336,6 +377,74 @@ module.exports = class Combobo {
       }
     }]);
 
+    /**
+     * Stop spacebar from scrolling the page when an input is focused and/or open the list
+     */
+    keyvent.down(window, (e) => {
+      const { key } = e;
+      if (key === ' ' && e.target === this.input) {
+        if (this.config.selectOnly) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        if (!this.isOpen) {
+          this.openList();
+        }
+      }
+    });
+
+    keyvent.down(this.input, (e) => {
+      const { key, metaKey, ctrlKey, altKey } = e;
+      if ( metaKey || ctrlKey || altKey ) {
+        return;
+      }
+
+      if ( key && [' ', 'tab', 'backspace'].includes(key.toLowerCase()) && this.isOpen ) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.select();
+        this.closeList();
+      }
+    } );
+    
+    if (this.config.selectOnly) {
+      keyvent.up(this.input,
+        /**
+        * @param {KeyboardEvent} e
+        */
+        (e) => {
+          const { key, altKey, ctrlKey, metaKey } = e;
+          const alpha = new Array(26).fill(1).map((_, i) => String.fromCharCode('a'.charCodeAt(0) + i));
+
+          if (!alpha.includes(key) || key === ' ' || altKey || ctrlKey || metaKey) {
+            return;
+          }
+
+          e.preventDefault();
+          e.stopPropagation();
+
+          const searchString = this.getSearchString(key);
+
+          if (!this.isOpen) {
+            this.openList();
+          }
+
+          const searchIndex = this.searchIndex(searchString);
+          if (searchIndex > -1) {
+            this.goTo(searchIndex);
+          }
+        }
+      );
+
+      this.input.addEventListener('blur', () => {
+        this.searchString = '';
+        if (this.selected.length) {
+          
+          this.input.innerText = this.config.selectionValue(this.selected);
+        }
+      });
+    }
+
     // ignore tab, enter, escape and shift
     const ignores = [9, 13, 27, 16];
     // filter keyup listener
@@ -346,7 +455,7 @@ module.exports = class Combobo {
       }
       const filter = this.config.filter;
       const cachedVal = this.cachedInputValue;
-      if (ignores.indexOf(e.which) > -1 || !filter) { return; }
+      if (ignores.indexOf(e.which) > -1 || !filter || this.input.tagName.toLowerCase() === 'div') { return; }
 
       // Handles if there is a fresh selection
       if (this.freshSelection) {
@@ -364,6 +473,48 @@ module.exports = class Combobo {
     });
   }
 
+  // Keep track of the search string for a more <select>-like experience
+  searchIndex(searchString) {
+    const currentIndex = this.getOptIndex();
+    const queryString = searchString.trim();
+    const firstLetter = queryString[0];
+    const isRepeatedLetter = queryString === firstLetter.repeat(queryString.length) && queryString.length > 1;
+
+    // All possible matches; we'll cycle through them if the user presses the same letter multiple times.
+    const matches = this.currentOpts.filter((opt) => {
+      return opt.textContent.toLowerCase().startsWith(isRepeatedLetter ? firstLetter : queryString);
+    })
+
+    // No matches found
+    if (matches.length === 0) {
+      return -1;
+    }
+
+    // Only one match found; use that
+    if (matches.length === 1) {
+      return this.currentOpts.indexOf(matches[0]);
+    }
+
+    // If the current option is not in the matches, return the first match
+    if (currentIndex === -1) {
+      return this.currentOpts.indexOf(matches[0]);
+    }
+
+    const matchIndex = matches.indexOf(this.currentOption);
+
+    // If the query string is a repeated letter, pick the next match in the list
+    // If that option doesn't exist, pick the first match again
+    if ( isRepeatedLetter && matches.length > 1) {
+      return this.currentOpts.indexOf(matches[matchIndex + 1] || matches[0]);
+    }
+
+    if (matchIndex !== -1 && matchIndex < matches.length - 1) {
+      return this.currentOpts.indexOf(matches[0]);
+    }
+
+    return this.currentOpts.indexOf(matches[matchIndex + 1] || matches[0]);
+  }
+
   clearFilters() {
     this.cachedOpts.forEach((o) => o.style.display = '');
     this.groups.forEach((g) => g.element.style.display = '');
@@ -372,17 +523,20 @@ module.exports = class Combobo {
     return this;
   }
 
-  filter(supress) {
+  filter(suppress, value) {
+    if (!value) {
+      value = this.config.selectOnly ? this.input.innerText : this.input.value;
+    }
     const filter = this.config.filter;
     const befores = this.currentOpts;
     this.currentOpts = typeof filter === 'function' ?
-      filter(this.input.value.trim(), this.cachedOpts) :
-      filters[filter](this.input.value.trim(), this.cachedOpts);
+      filter(value.trim(), this.cachedOpts) :
+      filters[filter](value.trim(), this.cachedOpts);
     // don't let user's functions break stuff
     this.currentOpts = this.currentOpts || [];
     this.updateOpts();
     // announce count only if it has changed
-    if (!befores.every((b) => this.currentOpts.indexOf(b) > -1) && !supress) {
+    if (!befores.every((b) => this.currentOpts.indexOf(b) > -1) && !suppress) {
       this.announceCount();
     }
 
@@ -404,10 +558,9 @@ module.exports = class Combobo {
     this.cachedOpts.forEach((opt) => {
       // configure display of options based on filtering
       opt.style.display = this.currentOpts.indexOf(opt) === -1 ? 'none' : '';
-
       // configure the innerHTML of each option
       opt.innerHTML = typeof optVal === 'string' ?
-        wrapMatch(opt, this.input, optVal) :
+        wrapMatch(opt, this.input.tagName.toLowerCase() === 'div' ? this.getSearchString() : this.input.value, optVal) :
         optVal(opt);
     });
 
@@ -462,17 +615,27 @@ module.exports = class Combobo {
     }
 
     this.freshSelection = true;
-    this.input.value = this.selected.length
+
+    const value = this.selected.length
       ? this.config.selectionValue(this.selected)
       : '';
-    this.cachedInputValue = this.input.value;
+    if (this.config.selectOnly) {
+      this.input.innerText = value;
+    } else {
+      this.input.value = value;
+    }
+
+    this.cachedInputValue = value;
     this.filter(true).clearFilters()
 
     // close the list for single select
     // (leave it open for multiselect)
     if (!this.config.multiselect) {
       this.closeList();
-      this.input.select();
+      if (!this.config.selectOnly) {
+        console.log('selecting');
+        this.input.select();
+      }
     }
 
     if ( this.selectElm ) {
@@ -502,6 +665,7 @@ module.exports = class Combobo {
       Classlist(optEl).remove(this.config.activeClass);
       optEl.setAttribute('aria-selected', 'false');
     });
+    this.searchString = '';
     return this;
   }
 
@@ -528,7 +692,7 @@ module.exports = class Combobo {
     this.currentOption = newOpt;
     // show pseudo focus styles
     this.pseudoFocus(groupChange);
-    // Dectecting if element is inView and scroll to it.
+    // Detecting if element is inView and scroll to it.
     this.currentOpts.forEach((opt) => {
       if (opt.classList.contains(this.config.activeClass) && !inView(this.list, opt)) {
         scrollToElement(opt);
@@ -651,7 +815,9 @@ module.exports = class Combobo {
     }
   
     // Create the input element
-    const input = document.createElement('input');
+    const inputEl = this.config.selectOnly ? 'div' : 'input';
+    const input = document.createElement(inputEl);
+    input.setAttribute('tabindex', '0');
     input.type = 'text';
     input.className = this.config.inputClass;
     input.id = `${selectElement.id}-input`;
