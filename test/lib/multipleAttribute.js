@@ -6,12 +6,14 @@ const queryAll = require('../../lib/utils/select').all;
 const simpleSnippet = require('../snippets/multiple.html');
 const Combobo = require('../../index');
 
-describe('multiselect config', () => {
+describe('Initializing from select with multiple attribute', () => {
   let fixture, simpleBox, opts;
 
   before(() => (fixture = new Fixture()));
   beforeEach(() => {
     fixture.create(`${simpleSnippet}`);
+    // The select element has a 'multiple' attribute that overrides the 'multiselect' configuration.
+    // It initializes as a multi-select even if 'multiselect' is set to false.
     simpleBox = new Combobo({ multiselect: false });
     opts = queryAll('.combobo option', fixture.element);
   });
