@@ -47,6 +47,7 @@ module.exports = class Combobo {
     this.currentOption = null;
     this.selectElm = null;
     this.selected = [];
+    this.inputElm = null;
     this.groups = [];
     this.isHovering = false;
     this.autoFilter = this.config.autoFilter;
@@ -66,15 +67,27 @@ module.exports = class Combobo {
           // If selectOnly is true, change the <input> to a <div>.
           // Force <select>-like behavior by overriding the `filter` and `autoFilter` options.
           if (this.config.selectOnly) {
-            this.config.filter = 'starts-with';
-            this.config.autoFilter = false;
+            config.filter = 'starts-with';
+            config.autoFilter = false;
+
             if (input.tagName.toLowerCase() === 'input') {
+              config.inputElm = input;
               const inputDivEl = document.createElement('div');
+
+              // Copy attributes from the <input> to the <div>, except for `type` and `value`
               [...input.attributes].forEach(attr => {
+                if (['type', 'value'].includes(attr.name)) {
+                  return;
+                }
                 inputDivEl.setAttribute(attr.name, attr.value);
               });
-              input.replaceWith(inputDivEl);
+
+              config.inputElm.style.display = 'none';
+              config.inputElm.insertAdjacentElement('afterend', inputDivEl);
+
               inputDivEl.setAttribute('tabindex', '0');
+              inputDivEl.id = `${input.id}-combobo`; // Prevent duplicate IDs with hidden <input>
+
               input = inputDivEl;
             }
           }
@@ -299,8 +312,9 @@ module.exports = class Combobo {
     if (!this.multiselect && this.selected.length) {
       this.input.value = this.config.selectionValue(this.selected);
     }
-
-    if (selectText) { this.input.select(); }
+    if (selectText && !this.config.selectOnly) {
+      this.input.select();
+    }
     this.emit('list:close');
     return this;
   }
@@ -596,7 +610,7 @@ module.exports = class Combobo {
         this.selected.push(currentOpt);
       }
     } else {
-      this.selected = this.config.allowEmpty && wasSelected
+      this.selected = (this.config.allowEmpty && wasSelected && !this.config.selectOnly)
         ? []
         : [currentOpt]
     }
@@ -606,21 +620,26 @@ module.exports = class Combobo {
       o.setAttribute('aria-selected', this.selected.indexOf(o) > -1 ? 'true' : 'false');
     });
 
+    const value = this.selected.length
+      ? this.config.selectionValue(this.selected)
+      : '';
+
     if (wasSelected) {
       currentOpt.classList.remove(this.config.selectedClass);
-      this.emit('deselection', { text: this.input.value, option: currentOpt });
+      this.emit('deselection', { text: value, option: currentOpt });
     } else {
       currentOpt.classList.add(this.config.selectedClass)
-      this.emit('selection', { text: this.input.value, option: currentOpt });
+      this.emit('selection', { text: value, option: currentOpt });
     }
 
     this.freshSelection = true;
 
-    const value = this.selected.length
-      ? this.config.selectionValue(this.selected)
-      : '';
     if (this.config.selectOnly) {
       this.input.innerText = value;
+      // Set the value on the hidden <input> element
+      if (this.config.inputElm) {
+        this.config.inputElm.value = value;
+      }
     } else {
       this.input.value = value;
     }

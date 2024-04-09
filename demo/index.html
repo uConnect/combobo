@@ -180,6 +180,29 @@
           <option value="snake">Snake</option>
         </select>
       </div>
+      <button type="button">Submit</button>
+    </section>
+    <section class="select-only-as-input">
+      <div class="wrp">
+        <h2>Select-Only as &lt;input&gt;</h2>
+        <label for="combobox-select-only-as-input">Pet</label>
+        <div class="combo-wrap">
+          <input type="text" class="combobox" id="combobox-select-only-as-input">
+          <span aria-hidden="true" class="trigger" data-trigger="select-only-as-input"></span>
+          <div class="listbox">
+            <div class="option">Cat</div>
+            <div class="option">Dog</div>
+            <div class="option">Fish</div>
+            <div class="option">Hamster</div>
+            <div class="option">Iguana</div>
+            <div class="option">Rabbit</div>
+            <div class="option">Rock</div>
+            <div class="option">Roly-Poly Bug</div>
+            <div class="option">Snake</div>
+          </div>
+        </div>
+      </div>
+      <button type="button">Submit</button>
     </section>
     <footer></footer>
     <script src="../dist/combobo.js" charset="utf-8"></script>
@@ -252,6 +275,12 @@
           'select-only': new Combobo({
             select: '#combobox-select-only',
             list: '.select-only .listbox',
+            activeClass: 'active',
+            selectOnly: true,
+          }),
+          'select-only-as-input': new Combobo({
+            input: '#combobox-select-only-as-input',
+            list: '.select-only-as-input .listbox',
             activeClass: 'active',
             selectOnly: true,
           }),

@@ -182,8 +182,10 @@ The class added below will be applied to the corresponding elements during the t
   * Examples: `▼`, `<svg ...>`, `<i class="fa fa-chevron-down"></i>`, `<img src...>`, etc.
   * If a HTML-initialized combobox already contains text/markup and a `toggleButtonIcon` is provided, the `toggleButtonIcon` will replace the existing content.
   * Defaults to `null` (no icon inserted).
-* `selectOnly` (_Boolean_): Removes the input field and only allows selection from the dropdown list. The input becomes a `<div>` element and behaves like a `<select>` element.
+* `selectOnly` (_Boolean_): Only allows selection from the dropdown list, like a native `<select>` element. Text input is not enabled, but common keyboard behaviors (such as jumping to the first matching option when a letter is typed) are still enabled.
   * Defaults to `false`
+  * `<select>`-initialized comboboxes have their `<input>` element replaced with a `<div>` element.
+  * `<input>`-initialized comboboxes retain a hidden `<input>` element so that forms can be submitted with the selected value(s), but a `<div>` element is used for the visible input.
 * `selectSearchTimeout` (_Number_): How long to wait before resetting the search query when the user stops typing.
   * Defaults to `500`
   * Only relevant if `selectOnly` is `true`
