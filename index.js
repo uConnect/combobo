@@ -88,6 +88,9 @@ module.exports = class Combobo {
               inputDivEl.setAttribute('tabindex', '0');
               inputDivEl.id = `${input.id}-combobo`; // Prevent duplicate IDs with hidden <input>
 
+              // Rewrite the label's `for` attribute to match the new combobox <div>'s ID
+              this.reassignLabel(input, inputDivEl.id);
+
               input = inputDivEl;
             }
           }
@@ -201,6 +204,31 @@ module.exports = class Combobo {
       }
     }
     
+  }
+
+  /**
+   * Reassign the label when the original combobox markup has been transformed. This will always
+   * happen for <select> elements, but may also happen for <input> elements if the `selectOnly`
+   * option is enabled.
+   *
+   * If there is a paired <label> element whose `for` matches the `id` of the original
+   * input element, it will be reassigned to the new combobox element. Otherwise, if a <label> is a
+   * previous sibling of the original input element, the `for` attribute will be added and
+   * referenced to the new combobox element.
+   *
+   * @param {*} el The <input> or <select> element
+   * @param {*} id The ID of the newly-created or transformed combobox
+   */
+  reassignLabel(el, id) {
+    if (el.labels.length) {
+      const label = el.labels[0];
+      label.htmlFor = id;
+    } else {
+      const prevEl = el.previousElementSibling;
+      if (prevEl && prevEl.tagName.toLowerCase() === 'label') {
+        prevEl.htmlFor = id;
+      }
+    }
   }
 
   initEvents() {
@@ -842,16 +870,8 @@ module.exports = class Combobo {
     comboElement.appendChild(input);
 
     // Rewrite the label's `for` attribute to match the new input's ID (necessary because the
-    // <select> element gets hidden). If there is no paired label, check for a previous sibling.
-    if (selectElement.labels.length) {
-      const label = selectElement.labels[0];
-      label.htmlFor = input.id;
-    } else {
-      const prevEl = selectElement.previousElementSibling;
-      if (prevEl && prevEl.tagName.toLowerCase() === 'label') {
-        prevEl.htmlFor = input.id;
-      }
-    }
+    // <select> element gets hidden).
+    this.reassignLabel(selectElement, input.id);
 
     // Create the toggle button
     const toggleButton = document.createElement('span');
