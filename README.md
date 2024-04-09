@@ -174,12 +174,21 @@ The class added below will be applied to the corresponding elements during the t
     ```
 * `filter` (_String|Function_): A filter-type string (`'contains'`, `'starts-with'`, or `'equals'`) or a function that returns a array of filtered options.
   * Defaults to `'contains'`
+  * When `selectOnly` is `true`, forced to `'starts-with'`
 * `autoFilter` (_Boolean_): To enable / disable filtering options on front end. If the developer wants to filter options from the server, then it should be false
   * Defaults to `'true'`
+  * When `selectOnly` is `true`, forced to `false`
 * `toggleButtonIcon` (_String_): Text or HTML that gets inserted into the toggle button element.
   * Examples: `▼`, `<svg ...>`, `<i class="fa fa-chevron-down"></i>`, `<img src...>`, etc.
   * If a HTML-initialized combobox already contains text/markup and a `toggleButtonIcon` is provided, the `toggleButtonIcon` will replace the existing content.
   * Defaults to `null` (no icon inserted).
+* `selectOnly` (_Boolean_): Only allows selection from the dropdown list, like a native `<select>` element. Text input is not enabled, but common keyboard behaviors (such as jumping to the first matching option when a letter is typed) are still enabled.
+  * Defaults to `false`
+  * `<select>`-initialized comboboxes have their `<input>` element replaced with a `<div>` element.
+  * `<input>`-initialized comboboxes retain a hidden `<input>` element so that forms can be submitted with the selected value(s), but a `<div>` element is used for the visible input.
+* `selectSearchTimeout` (_Number_): How long to wait before resetting the search query when the user stops typing.
+  * Defaults to `500`
+  * Only relevant if `selectOnly` is `true`
 
 ### Example Combobo call with options
 

@@ -9,7 +9,7 @@ describe('lib/utils/wrap-match', () => {
     const input = document.createElement('input');
     input.value = 'oog';
     opt.innerHTML = 'boognish';
-    const html = wrapMatch(opt, input, 'accent');
+    const html = wrapMatch(opt, input.value, 'accent');
 
     assert.equal(html, 'b<span class="accent">oog</span>nish');
   });
