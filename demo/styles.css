@@ -74,6 +74,7 @@ button:active {
 
 .combobox {
   width: 250px;
+  height: 40px;
   padding: 10px 35px 10px 5px;
   border: 1px solid #fff;
   box-sizing: border-box;
@@ -83,17 +84,37 @@ button:active {
   background-color: #fff;
   color: #212E59;
   box-shadow: 0 0 5px #000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.fa-caret-down {
+.trigger {
   position: absolute;
-  font-size: 19px;
-  line-height: 40px;
+  width: 35px; /* To match padding-right on .combobox */
+  height: 100%;
   top: 0;
   right: 0;
-  padding: 0 10px;
   color: #fff;
   background-color: #212E59;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+/*
+CSS triangle; it will be twice as wide as the `border-width. This is only applied if a custom
+toggleButtonIcon is not provided in the config or if the toggleButton element is empty.
+*/
+.trigger:empty::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px;
+  border-bottom-width: 0;
+  border-color: currentColor transparent transparent transparent;
 }
 
 .listbox {
@@ -129,6 +150,10 @@ button:active {
 .listbox .option.active {
   color: #fff;
   background-color: #212E59;
+}
+
+.listbox .option:first-child.disabled {
+  display: none;
 }
 
 .listbox .underline {
