@@ -62,7 +62,7 @@ Manually create the required HTML structure for a Combobo combobox.
 ```html
 <div class="combo-wrap">
   <input type="text" class="combobox">
-  <i aria-hidden="true" class="fa trigger fa-caret-down"></i>
+  <span aria-hidden="true" class="trigger"></span>
   <div class="listbox">
     <div class="optgroup" role="group" aria-labelledby="primary-colors">
       <div class="optgroup-label" id="primary-colors">Primary Colors</div>
@@ -80,6 +80,8 @@ Manually create the required HTML structure for a Combobo combobox.
 </div>
 ```
 
+Note: In order to dynamically add options and group items, you could set the `source` configuration to specify the data object that will be used to create the groups and options.
+
 ## Options
 
 ### Selectors
@@ -91,11 +93,30 @@ To initialize from `select` element
 To initialize from Required HTML Elements
 * `input` (_HTMLElement|String_): The selector for the input (combobox) element or the input element reference.
   * Defaults to `.combobox`
-* `list` (_HTMLElement|String_): The selector for the list element or the list element reference.
+* `list` (_HTMLElement|String_): The selector for the list element or the list element reference. (to be qualified within the parent of input element)
   * Defaults to `.listbox`
+* `toggleButton` (_HTMLElement|String_): The selector for the toggle button element or the reference to it. (to be qualified within the parent of input element)
+  * Defaults to `.trigger`
 * `options` (_Array|String_): An array of HTMLElements or a string selector (to be qualified within the list element).
   * Defaults to `.option`
 * `groups` (_Array|String_): An array of HTMLElements or a string selector (to be qualified within the list element)
+
+### Data Source
+* `source` (_Array_) Optional: An array of data that will be used to generate the options in the dropdown. The `source` array can include objects representing either individual options or groups of options (optgroups).
+
+  #### Sample Data Options
+  ```javascript
+  const dataSource = [
+    { text: 'Select an Option', value: '', selected: true , disabled: true  },
+    { text: 'Option 1', value: '1' },
+    {
+      label: 'Group',
+      options: [
+        { text: 'Option 2', value: '2' },
+        { text: 'Option 3', value: '3'}
+      ]
+    }
+  ];
 
 ### Class names
 * `openClass` (_String_): Class name that gets added when list is open.
@@ -113,7 +134,7 @@ The class added below will be applied to the corresponding elements during the t
 * `listClass` (String): Class name for the list element. 
   * Defaults to `listbox`.
 * `toggleButtonClass` (String): Class name for the toggle button. 
-  * Defaults to `fa trigger fa-caret-down`.
+  * Defaults to `trigger`.
 * `optgroupClass` (String): Class name for option groups within the list.
   * Defaults to `optgroup`.
 * `optgroupLabelClass` (String): Class name for labels of option groups.
@@ -153,9 +174,21 @@ The class added below will be applied to the corresponding elements during the t
     ```
 * `filter` (_String|Function_): A filter-type string (`'contains'`, `'starts-with'`, or `'equals'`) or a function that returns a array of filtered options.
   * Defaults to `'contains'`
-* `autoFilter` (_Boolean_): To enable / disable filterng options on front end. If the developer wants to filter options from the server, then it should be false
+  * When `selectOnly` is `true`, forced to `'starts-with'`
+* `autoFilter` (_Boolean_): To enable / disable filtering options on front end. If the developer wants to filter options from the server, then it should be false
   * Defaults to `'true'`
-
+  * When `selectOnly` is `true`, forced to `false`
+* `toggleButtonIcon` (_String_): Text or HTML that gets inserted into the toggle button element.
+  * Examples: `▼`, `<svg ...>`, `<i class="fa fa-chevron-down"></i>`, `<img src...>`, etc.
+  * If a HTML-initialized combobox already contains text/markup and a `toggleButtonIcon` is provided, the `toggleButtonIcon` will replace the existing content.
+  * Defaults to `null` (no icon inserted).
+* `selectOnly` (_Boolean_): Only allows selection from the dropdown list, like a native `<select>` element. Text input is not enabled, but common keyboard behaviors (such as jumping to the first matching option when a letter is typed) are still enabled.
+  * Defaults to `false`
+  * `<select>`-initialized comboboxes have their `<input>` element replaced with a `<div>` element.
+  * `<input>`-initialized comboboxes retain a hidden `<input>` element so that forms can be submitted with the selected value(s), but a `<div>` element is used for the visible input.
+* `selectSearchTimeout` (_Number_): How long to wait before resetting the search query when the user stops typing.
+  * Defaults to `500`
+  * Only relevant if `selectOnly` is `true`
 
 ### Example Combobo call with options
 
