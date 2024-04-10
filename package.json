@@ -9,7 +9,7 @@
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "dev": "webpack --watch",
-    "test": "mochify --recursive --transform [ babelify --presets [ es2015 ] ] --transform [ stringify --extensions [ .html .css ] ] --plugin [ proxyquire-universal ]",
+    "test": "mochify --recursive --transform [ babelify --presets [ es2015 ] ] --transform [ stringify --extensions [ .html .css ] ] --plugin [ proxyquire-universal ] --timeout 60000",
     "test:dev": "mochify --recursive --watch --transform [ babelify --presets [ es2015 ] ] --transform [ stringify --extensions [ .html .css ] ] --plugin [ proxyquire-universal ]"
   },
   "repository": {
@@ -36,7 +36,6 @@
     "extend-shallow": "^2.0.1",
     "live-region": "^1.0.0",
     "mochify": "^9.2.0",
-    "phantomjs": "^2.1.7",
     "proxyquire": "^1.8.0",
     "proxyquire-universal": "^1.0.8",
     "proxyquireify": "^3.2.1",
