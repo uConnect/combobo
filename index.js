@@ -450,6 +450,11 @@ module.exports = class Combobo {
       }
 
       if ( key && [' ', 'tab', 'backspace'].includes(key.toLowerCase()) && this.isOpen ) {
+        // Don't close (+select) the list if the user is typing in the input
+        if (!this.config.selectOnly && key.toLowerCase() === 'backspace') {
+          return;
+        }
+
         e.preventDefault();
         e.stopPropagation();
         this.select();
