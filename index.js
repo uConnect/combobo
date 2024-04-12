@@ -235,7 +235,7 @@ module.exports = class Combobo {
     Emitter(this);
     if (!this.optionsWithKeyEventHandlers.has(this.input)) {
       this.input.addEventListener('click', () => {
-        this.openList().goTo(this.getOptIndex() || 0); // ensure its open
+        this.openList().goTo(this.getOptIndex() || 0); // ensure it's open
       });
 
       this.input.addEventListener('blur', () => {
@@ -252,20 +252,28 @@ module.exports = class Combobo {
       });
 
       if (this.toggleButton) {
-        // handle trigger clicks to toggle state of the 
+        // handle trigger clicks to toggle the open state of the Combobo
         this.toggleButton.addEventListener('click', (e) => {
           e.stopPropagation();
           if (this.isOpen) {
             this.closeList();
           } else {
-            this.openList();
+            this.openList().input.focus();
           }
+        });
+
+        // Add mouse handlers so the blur on the input doesn't close the list prematurely
+        this.toggleButton.addEventListener('mouseover', () => {
+          this.isHovering = true;
+        });
+        this.toggleButton.addEventListener('mouseout', () => {
+          this.isHovering = false;
         });
       }
 
       // listen for clicks outside of combobox
       document.addEventListener('click', (e) => {
-        const isOrWithin = isWithin(e.target, [this.input, this.list], true);
+        const isOrWithin = isWithin(e.target, [this.input, this.list, this.toggleButton], true);
         if (!isOrWithin && this.isOpen) { this.closeList(); }
       });
     }
@@ -327,7 +335,7 @@ module.exports = class Combobo {
         duration: 100
       });
     }
-
+    
     return this;
   }
 
@@ -442,6 +450,11 @@ module.exports = class Combobo {
       }
 
       if ( key && [' ', 'tab', 'backspace'].includes(key.toLowerCase()) && this.isOpen ) {
+        // Don't close (+select) the list if the user is typing in the input
+        if (!this.config.selectOnly && key.toLowerCase() === 'backspace') {
+          return;
+        }
+
         e.preventDefault();
         e.stopPropagation();
         this.select();
@@ -481,7 +494,6 @@ module.exports = class Combobo {
       this.input.addEventListener('blur', () => {
         this.searchString = '';
         if (this.selected.length) {
-          
           this.input.innerText = this.config.selectionValue(this.selected);
         }
       });
