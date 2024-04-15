@@ -1,89 +1,308 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --combobo-max-width: 250px;
+  --combobo-height: 40px;
+  --trigger-button-width: 35px;
+  --primary-color: #005956;
+  --primary-color--light: #d2e2e1;
+  --primary-color--medium: #689c9b;
+  --primary-color--dark: #003e3c;
+  --primary-color--darker: #002726;
+  --neutral-color: #564438;
+  --neutral-color--light: #fcf4ee;
+  --neutral-color--medium: #E6D1C1;
+  --neutral-color--dark: #36261c;
+  --accent-color: #55812c;
+  --border-radius: 4px;
+}
+
+body {
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
 
 body, input {
-  font-family: 'Quicksand', sans-serif;
-  background: #212E59;
-  color: #0BD4B9;
-  font-size: 18px;
-  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background: var(--neutral-color--light);
+  color: var(--neutral-color);
 }
 
-#demo {
-  text-align: center;
+:where(h1, h2, h3) {
+  line-height: 1.2;
+  color: var(--neutral-color--dark);
 }
 
-h1 {
-  font-size: 4em;
+:where(h1, h2, h3):first-child {
+  margin-block-start: 0;
 }
 
-.foo {
-  border: 1px solid;
+*:not(pre) > code {
+  font-size: 0.8em;
+  font-weight: normal;
+  padding: 0.1em 0.2em;
+  margin-inline: 0.1em;
+  background: #ffe6d4;
+  color: #814815;
+  border-radius: 4px;
+  border: 1px solid #ebc5a9;
 }
 
-section {
-  padding: 3em;
-  width: 600px;
-  box-sizing: border-box;
-  background: #0bd4b9;
-  color: #212E59;
-  margin: 50px auto;
-}
-
-label {
-  padding: 5px;
-  font-size: 18px;
-  font-weight: 500;
-  display: block;
+a:has(svg:only-child) {
+  line-height: 1;
 }
 
 button {
   padding: 6px;
   font-size: 18px;
-  background: #212E59;
+  background: var(--primary-color);
   color: #fff;
   border: 0;
   display: block;
   margin: 0 auto;
   margin-top: 15px;
-  width: 250px;
-  box-sizing: border-box;
-  box-shadow: 0 0 5px #000;
-  transition: all 750ms;
+  width: 100%;
+  max-width: var(--combobo-max-width);
+  border-radius: var(--border-radius);
 }
 
-button:hover {
-  background-color: #3E57A8;
-  transition: all 750ms;
-  box-shadow: 0 0 12px #000;
+:is(button, .trigger):hover {
+  background-color: var(--primary-color--dark);
 }
 
-button:active {
-  box-shadow: none;
-  transition: all 750ms;
+:is(button, .trigger):active {
+  background-color: var(--primary-color--darker);
 }
 
-.wrp {
-  width: 250px;
+:where(a, button, input, .option) {
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  transition-property: background-color, color, border-color, box-shadow;
+}
+
+:where(a, button, summary, .option, .trigger) {
+  cursor: pointer;
+}
+
+:where(a, button, summary, .combobox):focus-visible {
+  outline: 2px solid var(--primary-color--medium);
+  outline-offset: 2px;
+  border-radius: var(--border-radius);
+}
+
+:where(header, footer) .gh-link:focus-visible {
+  outline-color: var(--neutral-color--light);
+  outline-offset: 4px;
+  border-radius: 50%;
+}
+
+.container {
+  margin-inline: auto;
+  padding-inline: 20px;
+  max-width: 900px;
+}
+
+header,
+footer {
+  background: var(--primary-color);
+  color: var(--primary-color--light);
+  padding-block: 50px;
+}
+
+:where(header, footer) svg {
+  color: var(--primary-color--medium);
+  background: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  padding: 2px;
+}
+
+:where(header, footer) a:hover svg {
+  color: var(--accent-color);
+}
+
+:where(header, footer) a:active svg {
+  color: var(--primary-color--dark);
+  padding: 4px;
+}
+
+header h1,
+footer h2 {
+  color: #fff;
+  margin: 0;
+}
+
+:where(header, footer) .gh-link svg {
+  display: block;
+}
+
+header .container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+
+header .headline {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+header .text-content {
+  flex: 1;
+  min-width: 66%;
+}
+
+header pre {
+  font-size: 0.8em;
+  align-self: center;
   margin: 0 auto;
-  text-align: left;
+  line-height: 1;
+  color: var(--neutral-color--medium);
+}
+
+header :last-child {
+  margin-block-end: 0;
+}
+
+main a {
+  color: var(--primary-color);
+  text-decoration-skip-ink: none;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--primary-color--medium);
+}
+
+main a:focus-visible {
+  text-decoration: none;
+  background-color: var(--primary-color--light);
+}
+
+main a:hover {
+  background-color: var(--primary-color--light);
+}
+
+main a:active {
+  color: var(--primary-color--dark);
+  text-decoration-color: currentColor;
+}
+
+.examples {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-block-start: 50px;
+  align-items: flex-start;
+}
+
+.example-card {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-card .card-content {
+  padding: 40px 20px;
+}
+
+.example-card h3 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.example-card p {
+  font-size: 0.85em;
+}
+
+.example-card form {
+  max-width: var(--combobo-max-width, 250px);
+  margin-inline: auto;
+}
+
+details {
+  width: 100%;
+}
+
+details summary {
+  padding: 10px;
+  background-color: var(--neutral-color--medium);
+}
+
+details pre {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+details:not([open]) summary,
+details[open] > div {
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  overflow: hidden;
+}
+
+section {
+  padding-block: 50px;
+}
+
+section:not(:first-child) {
+  border-top: 1px solid #e6d1c1;
+}
+
+footer {
+  width: 100%;
+  background-color: var(--primary-color--darker);
+  text-align: center;
+}
+
+footer .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+footer .container > * {
+  margin-block: 0;
+}
+
+label {
+  margin-block-end: 10px;
+  font-size: 0.85em;
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* Custom text matching style for the first Single Select combobox */
+.foo {
+  background: var(--primary-color--light);
+}
+
+.selected .foo {
+  background: none;
 }
 
 .combo-wrap {
   position: relative;
-  display: inline-block;
 }
 
 .combobox {
-  width: 250px;
-  height: 40px;
-  padding: 10px 35px 10px 5px;
-  border: 1px solid #fff;
-  box-sizing: border-box;
+  width: var(--combobo-max-width);
+  height: var(--combobo-height);
+  padding: 10px var(--trigger-button-width) 10px 5px;
+  border: 1px solid var(--primary-color);
+  border-radius: var(--border-radius, 4px);
   position: relative;
-  font-size: 14px;
+  font-size: inherit;
+  line-height: 1;
   text-align: left;
   background-color: #fff;
-  color: #212E59;
-  box-shadow: 0 0 5px #000;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -91,16 +310,27 @@ button:active {
 
 .trigger {
   position: absolute;
-  width: 35px; /* To match padding-right on .combobox */
+  width: var(--trigger-button-width);
   height: 100%;
   top: 0;
   right: 0;
   color: #fff;
-  background-color: #212E59;
+  background-color: var(--primary-color);
   display: flex;
   align-items: center;
   justify-content: center;
   user-select: none;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+
+.combobox[aria-expanded="true"] {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0;
+}
+
+.combobox[aria-expanded="true"] + .trigger {
+  border-bottom-right-radius: 0;
 }
 
 /*
@@ -120,36 +350,42 @@ toggleButtonIcon is not provided in the config or if the toggleButton element is
 .listbox {
   display: none;
   position: absolute;
-  top: 40px; /* the height of the input */
+  top: var(--combobo-height);
   left: 0;
-  width: 250px;
-  box-sizing: border-box;
+  width: var(--combobo-max-width);
   padding: 0;
   background: #fff;
   z-index: 99;
   text-align: left;
-  box-shadow: 0 3px 12px #000;
   max-height: 250px;
   overflow-y: auto;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  border: 1px solid var(--primary-color);
+  border-top: 0;
 }
 
 .listbox.open {
   display: block;
 }
 
-.listbox .option {
-  padding: 4px 6px;
-  cursor: default;
+.listbox :where(.option, .combobo-no-results) {
+  padding: 6px;
+  line-height: 1.2;
+}
+
+.listbox .combobo-no-results {
+  color: #757575;
+  font-style: italic;
+}
+
+.listbox .option.active {
+  background-color: var(--primary-color--light);
 }
 
 .listbox .option.selected {
   color: #fff;
-  background-color: forestgreen;
-}
-
-.listbox .option.active {
-  color: #fff;
-  background-color: #212E59;
+  background-color: var(--accent-color);
 }
 
 .listbox .option:first-child.disabled {
@@ -158,56 +394,59 @@ toggleButtonIcon is not provided in the config or if the toggleButton element is
 
 .listbox .underline {
   text-decoration: underline;
+  font-weight: bold;
 }
 
-.multiselect .option:before,
-.multiselect-with-groups .option:before {
+.multiselect ~ .listbox .option::before {
   content: '';
-  display:inline-block;
-  width: 13px;
-  height: 13px;
-  border: 2px solid #ddd;
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  border: 2px solid currentColor;
+  opacity: 0.5;
+  margin-bottom: -0.1em;
   margin-right: 7px;
+  border-radius: 2px;
 }
 
-.multiselect .option:after,
-.multiselect-with-groups .option:after {
-    /*Add another block-level blank space*/
-    content: '';
-    display: none;
-    margin: 2px auto;
-
-    /*Make it a small rectangle so the border will create an L-shape*/
-    width: 4px;
-    height: 10px;
-
-    /*Add a white border on the bottom and left, creating that 'L' */
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-
-    /*Rotate the L 45 degrees to turn it into a checkmark*/
-    transform: rotate(45deg);
+.multiselect ~ .listbox .option.selected::before {
+  border-color: transparent;
 }
 
-.multiselect .option.selected:after,
-.multiselect-with-groups .option.selected:after {
-  display:inline-block;
-  left: 12px;
+.multiselect ~ .listbox .option::after {
+  /* Add another block-level blank space */
+  content: '';
+  display: none;
+  margin: 0.1em 0 0.1em -0.1em;
+
+  /* Make it a small rectangle so the border will create an L-shape */
+  width: 0.3em;
+  height: 0.7em;
+
+  /* Add a white border on the bottom and left, creating that 'L' */
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+
+  /* Rotate the L 45 degrees to turn it into a checkmark */
+  transform: rotate(45deg);
+}
+
+.multiselect ~ .listbox .option.selected::after {
+  display: inline-block;
+  left: 0.75em;
   position: absolute;
+}
+
+.optgroup:not(:first-child) {
+  border-top: 1px solid var(--primary-color--light);
+  margin-top: 10px;
 }
 
 .optgroup-label {
   font-weight: bold;
-  font-size: 22px;
-  border-bottom: 5px solid;
-}
-
-footer {
-  box-sizing: border-box;
-  width: 100%;
-  background-color: #3E57A8;
-  padding: 25px;
-  min-height: 50px;
-  color: #fff;
-  margin-top: 500px;
+  padding: 10px 5px 5px;
+  font-size: 0.7em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #757575;
 }

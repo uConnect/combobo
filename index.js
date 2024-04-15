@@ -144,6 +144,10 @@ module.exports = class Combobo {
       }
     }
 
+    if (this.config.multiselect) {
+      this.input.classList.add('multiselect');
+    }
+
     if (!this.input || !this.list) {
       throw new Error('Unable to find required elements (list/input)');
     }
