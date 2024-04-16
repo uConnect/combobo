@@ -240,6 +240,10 @@ details pre {
   font-size: 0.85rem;
 }
 
+details pre + pre {
+  border-top: 1px solid var(--neutral-color);
+}
+
 details:not([open]) summary,
 details[open] > div {
   border-radius: 0 0 var(--border-radius) var(--border-radius);

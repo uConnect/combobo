@@ -91,6 +91,25 @@
   noResultsText: 'No results found.',
   optionValue: 'foo'
 }</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-single">Performer(s)&lt;/label>
+&lt;div class="combo-wrap">
+  &lt;input type="text" class="combobox" id="combobox-single">
+  &lt;span aria-hidden="true" class="trigger" data-trigger="single">&lt;/span>
+  &lt;div class="listbox">
+    &lt;div class="option selected disabled" data-value="">Choose a band&lt;/div>
+    &lt;div class="option">Ween&lt;/div>
+    &lt;div class="option">Frank Zappa&lt;/div>
+    &lt;div class="option">Snarky Puppy&lt;/div>
+    &lt;div class="option">Umphrey's McGee&lt;/div>
+    &lt;div class="option">Keller Williams&lt;/div>
+    &lt;div class="option">Greensky Bluegrass&lt;/div>
+    &lt;div class="option">Leftover Salmon&lt;/div>
+    &lt;div class="option">Moe.&lt;/div>
+    &lt;div class="option">Family Groove Company&lt;/div>
+    &lt;div class="option">Mac Demarco&lt;/div>
+    &lt;div class="option">Lettuce&lt;/div>
+  &lt;/div>
+&lt;/div></code></pre>
                 </div>
               </details>
             </div>
@@ -140,6 +159,31 @@
     groupChange: groupChangeHandler
   }
 }</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-single-with-groups">Category&lt;/label>
+&lt;div class="combo-wrap">
+  &lt;input type="text" class="combobox" id="combobox-single-with-groups">
+  &lt;span aria-hidden="true" class="trigger" data-trigger="single-with-groups">&lt;/span>
+  &lt;div class="listbox" aria-labelledby='combobox-single-with-groups'>
+    &lt;div class="optgroup" role="group" aria-labelledby='clothing'>
+      &lt;div class="optgroup-label" id='clothing'>Clothing&lt;/div>
+      &lt;div class="option">Shirts&lt;/div>
+      &lt;div class="option">Shorts&lt;/div>
+      &lt;div class="option">Pants&lt;/div>
+    &lt;/div>
+    &lt;div class="optgroup" role="group" aria-labelledby="electronics">
+      &lt;div class="optgroup-label" id="electronics">Electronics&lt;/div>
+      &lt;div class="option">TVs&lt;/div>
+      &lt;div class="option">Game consoles&lt;/div>
+      &lt;div class="option">Music equipment&lt;/div>
+    &lt;/div>
+    &lt;div class="optgroup" role="group" aria-labelledby="sporting-goods">
+      &lt;div class="optgroup-label" id="sporting-goods">Sporting Goods&lt;/div>
+      &lt;div class="option">Fishing&lt;/div>
+      &lt;div class="option">Kayaking&lt;/div>
+      &lt;div class="option">Rock climbing&lt;/div>
+    &lt;/div>
+  &lt;/div>
+&lt;/div></code></pre>
                 </div>
               </details>
             </div>
@@ -194,6 +238,25 @@
     return wrapNum(option.innerText, inputVal)
   }
 }</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-multi">Favorite Foods&lt;/label>
+&lt;div class="combo-wrap">
+  &lt;input type="text" class="combobox" id="combobox-multi">
+  &lt;span aria-hidden="true" class="trigger" data-trigger="multi">&lt;/span>
+  &lt;div class="listbox">
+    &lt;div class="option">Pizza&lt;/div>
+    &lt;div class="option">Sushi&lt;/div>
+    &lt;div class="option">Tacos&lt;/div>
+    &lt;div class="option">Salmon&lt;/div>
+    &lt;div class="option">Cheeseburger&lt;/div>
+    &lt;div class="option">Bacon Cheeseburger&lt;/div>
+    &lt;div class="option">Steak&lt;/div>
+    &lt;div class="option">Fried Chicken&lt;/div>
+    &lt;div class="option">Tater Tots&lt;/div>
+    &lt;div class="option">French Fries&lt;/div>
+    &lt;div class="option">Ice Cream&lt;/div>
+    &lt;div class="option">Salad&lt;/div>
+  &lt;/div>
+&lt;/div></code></pre>
                 </div>
               </details>
             </div>
@@ -207,30 +270,17 @@
                   <div class="listbox">
                     <div class="optgroup" role="group" aria-labelledby="color">
                       <div class="optgroup-label" id="color">Color</div>
-                      <div class="option">Red</div>
-                      <div class="option">Yellow</div>
+                      <div class="option">Black</div>
+                      <div class="option">Blue</div>
                       <div class="option">Green</div>
-                      <div class="option">Orange</div>
-                    </div>
-                    <div class="optgroup" role="group" aria-labelledby="year">
-                      <div class="optgroup-label" id="year">Year</div>
-                      <div class="option">2007</div>
-                      <div class="option">2001</div>
-                      <div class="option">1999</div>
-                      <div class="option">2005</div>
-                      <div class="option">2016</div>
-                      <div class="option">2006</div>
+                      <div class="option">Red</div>
+                      <div class="option">White</div>
                     </div>
                     <div class="optgroup" role="group" aria-labelledby="make">
                       <div class="optgroup-label" id="make">Make</div>
+                      <div class="option">Chrysler</div>
                       <div class="option">Ford</div>
                       <div class="option">GM</div>
-                      <div class="option">Chrysler</div>
-                    </div>
-                    <div class="optgroup" role="group" aria-labelledby="doors">
-                      <div class="optgroup-label" id="doors">Doors</div>
-                      <div class="option">2 Door</div>
-                      <div class="option">4 Door</div>
                     </div>
                     <div class="optgroup" role="group" aria-labelledby="transmission">
                       <div class="optgroup-label" id="transmission">Transmission</div>
@@ -254,6 +304,29 @@
     groupChange: groupChangeHandler
   }
 }</code></pre>
+<pre><code class="language-html">&lt;input type="text" class="combobox" id="combobox-multiselect-with-groups">
+&lt;span aria-hidden="true" class="trigger" data-trigger="multiselect-with-groups">&lt;/span>
+&lt;div class="listbox">
+  &lt;div class="optgroup" role="group" aria-labelledby="color">
+    &lt;div class="optgroup-label" id="color">Color&lt;/div>
+    &lt;div class="option">Black&lt;/div>
+    &lt;div class="option">Blue&lt;/div>
+    &lt;div class="option">Green&lt;/div>
+    &lt;div class="option">Red&lt;/div>
+    &lt;div class="option">White&lt;/div>
+  &lt;/div>
+  &lt;div class="optgroup" role="group" aria-labelledby="make">
+    &lt;div class="optgroup-label" id="make">Make&lt;/div>
+    &lt;div class="option">Chrysler&lt;/div>
+    &lt;div class="option">Ford&lt;/div>
+    &lt;div class="option">GM&lt;/div>
+  &lt;/div>
+  &lt;div class="optgroup" role="group" aria-labelledby="transmission">
+    &lt;div class="optgroup-label" id="transmission">Transmission&lt;/div>
+    &lt;div class="option">Automatic&lt;/div>
+    &lt;div class="option">Manual&lt;/div>
+  &lt;/div>
+&lt;/div></code></pre>
                 </div>
               </details>
             </div>
@@ -292,6 +365,17 @@
   noResultsText: 'No results found.',
   toggleButtonIcon: '&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14px"&gt;&lt;!-- Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. --&gt;&lt;defs&gt;&lt;linearGradient id="gradient" x1="0" x2="448" gradientUnits="userSpaceOnUse"&gt;&lt;stop offset="0" stop-color="#a6f5f3" /&gt;&lt;stop offset="1" stop-color="#ffee67" /&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" fill="url(#gradient)" /&gt;&lt;/svg&gt;',
 }</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-single-with-svg-icon">Fruit&lt;/label>
+&lt;div class="combo-wrap">
+  &lt;input type="text" class="combobox" id="combobox-single-with-svg-icon">
+  &lt;span aria-hidden="true" class="trigger" data-trigger="single-with-svg-icon">&lt;/span>
+  &lt;div class="listbox">
+    &lt;div class="option">Apple&lt;/div>
+    &lt;div class="option">Banana&lt;/div>
+    &lt;div class="option">Cherry&lt;/div>
+    &lt;div class="option">Durian&lt;/div>
+  &lt;/div>
+&lt;/div></code></pre>
                 </div>
               </details>
             </div>
@@ -336,6 +420,32 @@
   toggleButtonIcon: '🥯',
   noResultsText: 'Flavor not found',
 }</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-single-with-emoji-icon"&gt;Bagel flavor&lt;/label&gt;
+&lt;div class="combo-wrap"&gt;
+  &lt;input type="text" class="combobox" id="combobox-single-with-emoji-icon"&gt;
+  &lt;span aria-hidden="true" class="trigger" data-trigger="single-with-emoji-icon"&gt;&lt;/span&gt;
+  &lt;div class="listbox"&gt;
+    &lt;div class="option"&gt;Plain&lt;/div&gt;
+    &lt;div class="option"&gt;Surprise Me &lt;span aria-hidden="true"&gt;✨&lt;/span&gt;&lt;/div&gt;
+    &lt;div class="optgroup" role="group" aria-labelledby="sweet"&gt;
+      &lt;div class="optgroup-label" id="sweet"&gt;Sweet&lt;/div&gt;
+      &lt;div class="option"&gt;Blueberry&lt;/div&gt;
+      &lt;div class="option"&gt;Chocolate Chip&lt;/div&gt;
+      &lt;div class="option"&gt;Cinnamon Raisin&lt;/div&gt;
+      &lt;div class="option"&gt;Strawberry&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="optgroup" role="group" aria-labelledby="savory"&gt;
+      &lt;div class="optgroup-label" id="savory"&gt;Savory&lt;/div&gt;
+      &lt;div class="option"&gt;Cheddar Jalapeño&lt;/div&gt;
+      &lt;div class="option"&gt;Everything&lt;/div&gt;
+      &lt;div class="option"&gt;Garlic&lt;/div&gt;
+      &lt;div class="option"&gt;Onion&lt;/div&gt;
+      &lt;div class="option"&gt;Poppyseed&lt;/div&gt;
+      &lt;div class="option"&gt;Salt&lt;/div&gt;
+      &lt;div class="option"&gt;Sesame&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
                 </div>
               </details>
             </div>
@@ -373,6 +483,18 @@
   selectOnly: true,
   multiselect: true,
 }</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-select-only"&gt;Pet&lt;/label&gt;
+&lt;select id="combobox-select-only" multiple&gt;
+  &lt;option value="cat"&gt;Cat&lt;/option&gt;
+  &lt;option value="dog"&gt;Dog&lt;/option&gt;
+  &lt;option value="fish"&gt;Fish&lt;/option&gt;
+  &lt;option value="hamster"&gt;Hamster&lt;/option&gt;
+  &lt;option value="iguana"&gt;Iguana&lt;/option&gt;
+  &lt;option value="rabbit"&gt;Rabbit&lt;/option&gt;
+  &lt;option value="rock"&gt;Rock&lt;/option&gt;
+  &lt;option value="roly-poly"&gt;Roly-Poly Bug&lt;/option&gt;
+  &lt;option value="snake"&gt;Snake&lt;/option&gt;
+&lt;/select&gt;</code></pre>
                 </div>
               </details>
             </div>
@@ -408,6 +530,25 @@
   list: '.select-only-as-input .listbox',
   selectOnly: true,
 }</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-select-only-as-input"&gt;Month&lt;/label&gt;
+&lt;div class="combo-wrap"&gt;
+  &lt;input type="text" class="combobox" id="combobox-select-only-as-input"&gt;
+  &lt;span aria-hidden="true" class="trigger" data-trigger="select-only-as-input"&gt;&lt;/span&gt;
+  &lt;div class="listbox"&gt;
+    &lt;div class="option"&gt;January&lt;/div&gt;
+    &lt;div class="option"&gt;February&lt;/div&gt;
+    &lt;div class="option"&gt;March&lt;/div&gt;
+    &lt;div class="option"&gt;April&lt;/div&gt;
+    &lt;div class="option"&gt;May&lt;/div&gt;
+    &lt;div class="option"&gt;June&lt;/div&gt;
+    &lt;div class="option"&gt;July&lt;/div&gt;
+    &lt;div class="option"&gt;August&lt;/div&gt;
+    &lt;div class="option"&gt;September&lt;/div&gt;
+    &lt;div class="option"&gt;October&lt;/div&gt;
+    &lt;div class="option"&gt;November&lt;/div&gt;
+    &lt;div class="option"&gt;December&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
                 </div>
               </details>
             </div>
