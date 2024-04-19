@@ -1,16 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>combination-box fixture</title>
+    <title>Combobo | Accessible combobox fixture</title>
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔽</text></svg>">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/tomorrow-night.min.css"
+      integrity="sha512-RhpnNVOxLt8etr+FHZxS6rugyqr7XelU5OV9wt+Bem7Ua6HRGZOKP/bcuOqOhzEO9b7VrdjLxEz3Yc9FY6xR9g=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
   </head>
   <body id="demo">
-    <h1>Combobo</h1>
-    <h2>Accessible combobox module</h2>
-    <pre role="img" aria-label="Combobo Gorilla">
- ."`".
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" style="display: none;">
+      <symbol id="github-logo">
+        <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+        <path
+          d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3 .3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5 .3-6.2 2.3zm44.2-1.7c-2.9 .7-4.9 2.6-4.6 4.9 .3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3 .7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3 .3 2.9 2.3 3.9 1.6 1 3.6 .7 4.3-.7 .7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3 .7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3 .7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z" fill="currentColor" />
+      </symbol>
+    </svg>
+    <header>
+      <div class="container">
+        <div class="text-content">
+          <div class="headline">
+            <h1>Combobo</h1>
+            <a href="https://github.com/dequelabs/combobo" class="gh-link" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" width="2.5em" height="2.5em"
+                aria-labelledby="header-gh-logo">
+                <title id="header-gh-logo">View on GitHub</title>
+                <use href="#github-logo"></use>
+              </svg>
+            </a>
+          </div>
+          <p>Combobo is an open-source, accessible combobox module. It can be used a single select, multi-select, or select-only dropdown without a text input box.</p>
+        </div>
+        <pre role="img" aria-label="Combobo Gorilla">
+     ."`".
  .-./ _=_ \.-.
 {  (,(oYo),) }}
 {{ |   "   |} }
@@ -19,208 +44,549 @@
 { { }._:_.{  }}
 {{  } -:- { } }
 {_{ }`===`{  _}
-((((\)     (/))))
-    </pre>
-    <section class="bands">
-      <div class="wrp">
-        <h2>Single select</h2>
-        <label for="combobox-single">Choose Band</label>
-        <div class="combo-wrap">
-          <input type="text" class="combobox" id="combobox-single">
-          <span aria-hidden="true" class="trigger" data-trigger="single"></span>
-          <div class="listbox">
-            <div class="option selected disabled" data-value="">select an option</div>
-            <div class="option">Ween</div>
-            <div class="option">Frank Zappa</div>
-            <div class="option">Snarky Puppy</div>
-            <div class="option">Umphrey's McGee</div>
-            <div class="option">Keller Williams</div>
-            <div class="option">Greensky Bluegrass</div>
-            <div class="option">Leftover Salmon</div>
-            <div class="option">Moe.</div>
-            <div class="option">Family Groove Company</div>
-            <div class="option">Mac Demarco</div>
-            <div class="option">Lettuce</div>
+((((\)    (/))))
+        </pre>
+      </div>
+    </header>
+    <main>
+      <section>
+        <div class="container">
+          <h2>Single Select</h2>
+          <p>Single select comboboxes are used when only one option is allowed to be selected at a time.</p>
+          <p>The <code>&lt;input&gt;</code> accepts text input and multiple text matching strategies (<code>'starts-with'</code>, <code>'contains'</code>, <code>'equals'</code>) are available. These examples use different styles for matched text: one uses a background color and the other uses an underline style.</p>
+
+          <div class="examples">
+            <div class="example-card bands">
+              <div class="card-content">
+                <h3>Without Option Groups</h3>
+                <form>
+                  <label for="combobox-single">Performer(s)</label>
+                  <div class="combo-wrap">
+                    <input type="text" class="combobox" id="combobox-single">
+                    <span aria-hidden="true" class="trigger" data-trigger="single"></span>
+                    <div class="listbox">
+                      <div class="option selected disabled" data-value="">Choose a band</div>
+                      <div class="option">Ween</div>
+                      <div class="option">Frank Zappa</div>
+                      <div class="option">Snarky Puppy</div>
+                      <div class="option">Umphrey's McGee</div>
+                      <div class="option">Keller Williams</div>
+                      <div class="option">Greensky Bluegrass</div>
+                      <div class="option">Leftover Salmon</div>
+                      <div class="option">Moe.</div>
+                      <div class="option">Family Groove Company</div>
+                      <div class="option">Mac Demarco</div>
+                      <div class="option">Lettuce</div>
+                    </div>
+                  </div>
+                  <button type="button">Submit</button>
+                </form>
+              </div>
+              <details>
+                <summary>Show Config</summary>
+                <div>
+<pre><code class="language-javascript">{
+  input: '#combobox-single',
+  list: '.bands .listbox',
+  noResultsText: 'No results found.',
+  optionValue: 'foo'
+}</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-single">Performer(s)&lt;/label>
+&lt;div class="combo-wrap">
+  &lt;input type="text" class="combobox" id="combobox-single">
+  &lt;span aria-hidden="true" class="trigger" data-trigger="single">&lt;/span>
+  &lt;div class="listbox">
+    &lt;div class="option selected disabled" data-value="">Choose a band&lt;/div>
+    &lt;div class="option">Ween&lt;/div>
+    &lt;div class="option">Frank Zappa&lt;/div>
+    &lt;div class="option">Snarky Puppy&lt;/div>
+    &lt;div class="option">Umphrey's McGee&lt;/div>
+    &lt;div class="option">Keller Williams&lt;/div>
+    &lt;div class="option">Greensky Bluegrass&lt;/div>
+    &lt;div class="option">Leftover Salmon&lt;/div>
+    &lt;div class="option">Moe.&lt;/div>
+    &lt;div class="option">Family Groove Company&lt;/div>
+    &lt;div class="option">Mac Demarco&lt;/div>
+    &lt;div class="option">Lettuce&lt;/div>
+  &lt;/div>
+&lt;/div></code></pre>
+                </div>
+              </details>
+            </div>
+            <div class="example-card categories">
+              <div class="card-content">
+                <h3>With Option Groups</h3>
+                <label for="combobox-single-with-groups">Category</label>
+                <div class="combo-wrap">
+                  <input type="text" class="combobox" id="combobox-single-with-groups">
+                  <span aria-hidden="true" class="trigger" data-trigger="single-with-groups"></span>
+                  <div class="listbox" aria-labelledby='combobox-single-with-groups'>
+                    <div class="optgroup" role="group" aria-labelledby='clothing'>
+                      <div class="optgroup-label" id='clothing'>Clothing</div>
+                      <div class="option">Shirts</div>
+                      <div class="option">Shorts</div>
+                      <div class="option">Pants</div>
+                    </div>
+                    <div class="optgroup" role="group" aria-labelledby="electronics">
+                      <div class="optgroup-label" id="electronics">Electronics</div>
+                      <div class="option">TVs</div>
+                      <div class="option">Game consoles</div>
+                      <div class="option">Music equipment</div>
+                    </div>
+                    <div class="optgroup" role="group" aria-labelledby="sporting-goods">
+                      <div class="optgroup-label" id="sporting-goods">Sporting Goods</div>
+                      <div class="option">Fishing</div>
+                      <div class="option">Kayaking</div>
+                      <div class="option">Rock climbing</div>
+                    </div>
+                  </div>
+                </div>
+                <button type="button">Submit</button>
+              </div>
+              <details>
+                <summary>Show Config</summary>
+                <div>
+<pre><code class="language-javascript">{
+  input: '#combobox-single-with-groups',
+  list: '.categories .listbox',
+  groups: '.optgroup',
+  noResultsText: 'No results found.',
+  optionValue: function (option) {
+    const inputVal = box['single-with-groups'].input.value;
+    return wrapNum(option.innerText, inputVal);
+  },
+  announcement: {
+    groupChange: groupChangeHandler
+  }
+}</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-single-with-groups">Category&lt;/label>
+&lt;div class="combo-wrap">
+  &lt;input type="text" class="combobox" id="combobox-single-with-groups">
+  &lt;span aria-hidden="true" class="trigger" data-trigger="single-with-groups">&lt;/span>
+  &lt;div class="listbox" aria-labelledby='combobox-single-with-groups'>
+    &lt;div class="optgroup" role="group" aria-labelledby='clothing'>
+      &lt;div class="optgroup-label" id='clothing'>Clothing&lt;/div>
+      &lt;div class="option">Shirts&lt;/div>
+      &lt;div class="option">Shorts&lt;/div>
+      &lt;div class="option">Pants&lt;/div>
+    &lt;/div>
+    &lt;div class="optgroup" role="group" aria-labelledby="electronics">
+      &lt;div class="optgroup-label" id="electronics">Electronics&lt;/div>
+      &lt;div class="option">TVs&lt;/div>
+      &lt;div class="option">Game consoles&lt;/div>
+      &lt;div class="option">Music equipment&lt;/div>
+    &lt;/div>
+    &lt;div class="optgroup" role="group" aria-labelledby="sporting-goods">
+      &lt;div class="optgroup-label" id="sporting-goods">Sporting Goods&lt;/div>
+      &lt;div class="option">Fishing&lt;/div>
+      &lt;div class="option">Kayaking&lt;/div>
+      &lt;div class="option">Rock climbing&lt;/div>
+    &lt;/div>
+  &lt;/div>
+&lt;/div></code></pre>
+                </div>
+              </details>
+            </div>
           </div>
         </div>
-      </div>
-      <button type="button">Submit</button>
-    </section>
-    <section class="categories">
-      <div class="wrp">
-        <h2>Single select with option groups</h2>
-        <label for="combobox-single-with-groups">Choose Category</label>
-        <div class="combo-wrap">
-          <input type="text" class="combobox" id="combobox-single-with-groups">
-          <span aria-hidden="true" class="trigger" data-trigger="single-with-groups"></span>
-          <div class="listbox" aria-labelledby='combobox-single-with-groups'>
-            <div class="optgroup" role="group" aria-labelledby='clothing'>
-              <div class="optgroup-label" id='clothing'>Clothing</div>
-              <div class="option">Shirts</div>
-              <div class="option">Shorts</div>
-              <div class="option">Pants</div>
+      </section>
+      <section>
+        <div class="container">
+          <h2>Multi-Select</h2>
+          <p>Multi-select comboboxes are used when multiple options are allowed to be selected at a time. <code>&lt;input&gt;</code>-initialized comboboxes can enable this in their configs. <code>&lt;select multiple&gt;</code> will override the config settings.</p>
+          <p>These examples use different styles when multiple items are selected. The first shows <code>{ X selected }</code> and the second concatenates the checked items with a dash separator.</p>
+          <div class="examples">
+            <div class="example-card multi">
+              <div class="card-content">
+                <h3>Without Option Groups</h3>
+                <label for="combobox-multi">Favorite Foods</label>
+                <div class="combo-wrap">
+                  <input type="text" class="combobox" id="combobox-multi">
+                  <span aria-hidden="true" class="trigger" data-trigger="multi"></span>
+                  <div class="listbox">
+                    <div class="option">Pizza</div>
+                    <div class="option">Sushi</div>
+                    <div class="option">Tacos</div>
+                    <div class="option">Salmon</div>
+                    <div class="option">Cheeseburger</div>
+                    <div class="option">Bacon Cheeseburger</div>
+                    <div class="option">Steak</div>
+                    <div class="option">Fried Chicken</div>
+                    <div class="option">Tater Tots</div>
+                    <div class="option">French Fries</div>
+                    <div class="option">Ice Cream</div>
+                    <div class="option">Salad</div>
+                  </div>
+                </div>
+                <button type="button">Submit</button>
+              </div>
+              <details>
+                <summary>Show Config</summary>
+                <div>
+<pre><code class="language-javascript">{
+  input: '#combobox-multi',
+  list: '.multi .listbox',
+  multiselect: true,
+  selectionValue: function (selectedOptions) {
+    return selectedOptions.length > 1 ?
+      '{ ' + selectedOptions.length + ' selected }' :
+      selectedOptions[0].innerText.trim();
+  },
+  noResultsText: 'Nothing to see here, folks.',
+  optionValue: function (option) {
+    const inputVal = box.multi.input.value;
+    return wrapNum(option.innerText, inputVal)
+  }
+}</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-multi">Favorite Foods&lt;/label>
+&lt;div class="combo-wrap">
+  &lt;input type="text" class="combobox" id="combobox-multi">
+  &lt;span aria-hidden="true" class="trigger" data-trigger="multi">&lt;/span>
+  &lt;div class="listbox">
+    &lt;div class="option">Pizza&lt;/div>
+    &lt;div class="option">Sushi&lt;/div>
+    &lt;div class="option">Tacos&lt;/div>
+    &lt;div class="option">Salmon&lt;/div>
+    &lt;div class="option">Cheeseburger&lt;/div>
+    &lt;div class="option">Bacon Cheeseburger&lt;/div>
+    &lt;div class="option">Steak&lt;/div>
+    &lt;div class="option">Fried Chicken&lt;/div>
+    &lt;div class="option">Tater Tots&lt;/div>
+    &lt;div class="option">French Fries&lt;/div>
+    &lt;div class="option">Ice Cream&lt;/div>
+    &lt;div class="option">Salad&lt;/div>
+  &lt;/div>
+&lt;/div></code></pre>
+                </div>
+              </details>
             </div>
-            <div class="optgroup" role="group" aria-labelledby="electronics">
-              <div class="optgroup-label" id="electronics">Electronics</div>
-              <div class="option">TVs</div>
-              <div class="option">Game consoles</div>
-              <div class="option">Music equipment</div>
-            </div>
-            <div class="optgroup" role="group" aria-labelledby="sporting-goods">
-              <div class="optgroup-label" id="sporting-goods">Sporting Goods</div>
-              <div class="option">Fishing</div>
-              <div class="option">Kayaking</div>
-              <div class="option">Rock climbing</div>
+            <div class="example-card multiselect-with-groups">
+              <div class="card-content">
+                <h3>With Option Groups</h3>
+                <label for="combobox-multiselect-with-groups">Car Options</label>
+                <div class="combo-wrap">
+                  <input type="text" class="combobox" id="combobox-multiselect-with-groups">
+                  <span aria-hidden="true" class="trigger" data-trigger="multiselect-with-groups"></span>
+                  <div class="listbox">
+                    <div class="optgroup" role="group" aria-labelledby="color">
+                      <div class="optgroup-label" id="color">Color</div>
+                      <div class="option">Black</div>
+                      <div class="option">Blue</div>
+                      <div class="option">Green</div>
+                      <div class="option">Red</div>
+                      <div class="option">White</div>
+                    </div>
+                    <div class="optgroup" role="group" aria-labelledby="make">
+                      <div class="optgroup-label" id="make">Make</div>
+                      <div class="option">Chrysler</div>
+                      <div class="option">Ford</div>
+                      <div class="option">GM</div>
+                    </div>
+                    <div class="optgroup" role="group" aria-labelledby="transmission">
+                      <div class="optgroup-label" id="transmission">Transmission</div>
+                      <div class="option">Automatic</div>
+                      <div class="option">Manual</div>
+                    </div>
+                  </div>
+                </div>
+                <button type="button">Submit</button>
+              </div>
+              <details>
+                <summary>Show Config</summary>
+                <div>
+<pre><code class="language-javascript">{
+  input: '#combobox-multiselect-with-groups',
+  list: '.multiselect-with-groups .listbox',
+  multiselect: true,
+  groups: '.optgroup',
+  noResultsText: 'No results found.',
+  announcement: {
+    groupChange: groupChangeHandler
+  }
+}</code></pre>
+<pre><code class="language-html">&lt;input type="text" class="combobox" id="combobox-multiselect-with-groups">
+&lt;span aria-hidden="true" class="trigger" data-trigger="multiselect-with-groups">&lt;/span>
+&lt;div class="listbox">
+  &lt;div class="optgroup" role="group" aria-labelledby="color">
+    &lt;div class="optgroup-label" id="color">Color&lt;/div>
+    &lt;div class="option">Black&lt;/div>
+    &lt;div class="option">Blue&lt;/div>
+    &lt;div class="option">Green&lt;/div>
+    &lt;div class="option">Red&lt;/div>
+    &lt;div class="option">White&lt;/div>
+  &lt;/div>
+  &lt;div class="optgroup" role="group" aria-labelledby="make">
+    &lt;div class="optgroup-label" id="make">Make&lt;/div>
+    &lt;div class="option">Chrysler&lt;/div>
+    &lt;div class="option">Ford&lt;/div>
+    &lt;div class="option">GM&lt;/div>
+  &lt;/div>
+  &lt;div class="optgroup" role="group" aria-labelledby="transmission">
+    &lt;div class="optgroup-label" id="transmission">Transmission&lt;/div>
+    &lt;div class="option">Automatic&lt;/div>
+    &lt;div class="option">Manual&lt;/div>
+  &lt;/div>
+&lt;/div></code></pre>
+                </div>
+              </details>
             </div>
           </div>
         </div>
-      </div>
-      <button type="button">Submit</button>
-    </section>
-    <section class="multiselect">
-      <div class="wrp">
-        <h2>Multi select</h2>
-        <label for="combobox-multiselect">Choose Favorite Foods</label>
-        <div class="combo-wrap">
-          <input type="text" class="combobox" id="combobox-multiselect">
-          <span aria-hidden="true" class="trigger" data-trigger="multiselect"></span>
-          <div class="listbox">
-            <div class="option">Pizza</div>
-            <div class="option">Sushi</div>
-            <div class="option">Tacos</div>
-            <div class="option">Salmon</div>
-            <div class="option">Cheeseburger</div>
-            <div class="option">Bacon Cheeseburger</div>
-            <div class="option">Steak</div>
-            <div class="option">Fried Chicken</div>
-            <div class="option">Chicken Salad</div>
-            <div class="option">Tatar Tots</div>
-            <div class="option">French Fries</div>
+      </section>
+      <section>
+        <div class="container">
+          <h2>Custom Toggle Icons</h2>
+          <p>Custom toggle icons (such as text, <code>&lt;i class="fas fa-caret-down" /&gt;</code>, or <code>&lt;svg&gt;</code>) can be passed in through the config.</p>
+          <p>For <code>&lt;input&gt;</code>-initialized comboboxes, the icon can also be added manually within the toggle instead. However, if an icon is also specified in the config, it will overwrite anything present inside the toggle button.</p>
+          <p>The demo page uses CSS to create a small triangle icon when the toggle button is empty.</p>
+          <div class="examples">
+            <div class="example-card single-with-svg-icon">
+              <div class="card-content">
+                <h3>Custom SVG</h3>
+                <label for="combobox-single-with-svg-icon">Fruit</label>
+                <div class="combo-wrap">
+                  <input type="text" class="combobox" id="combobox-single-with-svg-icon">
+                  <span aria-hidden="true" class="trigger" data-trigger="single-with-svg-icon"></span>
+                  <div class="listbox">
+                    <div class="option">Apple</div>
+                    <div class="option">Banana</div>
+                    <div class="option">Cherry</div>
+                    <div class="option">Durian</div>
+                  </div>
+                </div>
+                <button type="button">Submit</button>
+              </div>
+              <details>
+                <summary>Show Config</summary>
+                <div>
+<pre><code class="language-javascript">{
+  input: '#combobox-single-with-svg-icon',
+  list: '.single-with-svg-icon .listbox',
+  noResultsText: 'No results found.',
+  toggleButtonIcon: '&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14px"&gt;&lt;!-- Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. --&gt;&lt;defs&gt;&lt;linearGradient id="gradient" x1="0" x2="448" gradientUnits="userSpaceOnUse"&gt;&lt;stop offset="0" stop-color="#a6f5f3" /&gt;&lt;stop offset="1" stop-color="#ffee67" /&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" fill="url(#gradient)" /&gt;&lt;/svg&gt;',
+}</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-single-with-svg-icon">Fruit&lt;/label>
+&lt;div class="combo-wrap">
+  &lt;input type="text" class="combobox" id="combobox-single-with-svg-icon">
+  &lt;span aria-hidden="true" class="trigger" data-trigger="single-with-svg-icon">&lt;/span>
+  &lt;div class="listbox">
+    &lt;div class="option">Apple&lt;/div>
+    &lt;div class="option">Banana&lt;/div>
+    &lt;div class="option">Cherry&lt;/div>
+    &lt;div class="option">Durian&lt;/div>
+  &lt;/div>
+&lt;/div></code></pre>
+                </div>
+              </details>
+            </div>
+            <div class="example-card single-with-emoji-icon">
+              <div class="card-content">
+                <h3>Emoji Icon</h3>
+                <label for="combobox-single-with-emoji-icon">Bagel flavor</label>
+                <div class="combo-wrap">
+                  <input type="text" class="combobox" id="combobox-single-with-emoji-icon">
+                  <span aria-hidden="true" class="trigger" data-trigger="single-with-emoji-icon"></span>
+                  <div class="listbox">
+                    <div class="option">Plain</div>
+                    <div class="option">Surprise Me <span aria-hidden="true">✨</span></div>
+                    <div class="optgroup" role="group" aria-labelledby="sweet">
+                      <div class="optgroup-label" id="sweet">Sweet</div>
+                      <div class="option">Blueberry</div>
+                      <div class="option">Chocolate Chip</div>
+                      <div class="option">Cinnamon Raisin</div>
+                      <div class="option">Strawberry</div>
+                    </div>
+                    <div class="optgroup" role="group" aria-labelledby="savory">
+                      <div class="optgroup-label" id="savory">Savory</div>
+                      <div class="option">Cheddar Jalapeño</div>
+                      <div class="option">Everything</div>
+                      <div class="option">Garlic</div>
+                      <div class="option">Onion</div>
+                      <div class="option">Poppyseed</div>
+                      <div class="option">Salt</div>
+                      <div class="option">Sesame</div>
+                    </div>
+                  </div>
+                </div>
+                <button type="button">Submit</button>
+              </div>
+              <details>
+                <summary>Show Config</summary>
+                <div>
+<pre><code class="language-javascript">{
+  input: '#combobox-single-with-emoji-icon',
+  list: '.single-with-emoji-icon .listbox',
+  groups: '.optgroup',
+  toggleButtonIcon: '🥯',
+  noResultsText: 'Flavor not found',
+}</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-single-with-emoji-icon"&gt;Bagel flavor&lt;/label&gt;
+&lt;div class="combo-wrap"&gt;
+  &lt;input type="text" class="combobox" id="combobox-single-with-emoji-icon"&gt;
+  &lt;span aria-hidden="true" class="trigger" data-trigger="single-with-emoji-icon"&gt;&lt;/span&gt;
+  &lt;div class="listbox"&gt;
+    &lt;div class="option"&gt;Plain&lt;/div&gt;
+    &lt;div class="option"&gt;Surprise Me &lt;span aria-hidden="true"&gt;✨&lt;/span&gt;&lt;/div&gt;
+    &lt;div class="optgroup" role="group" aria-labelledby="sweet"&gt;
+      &lt;div class="optgroup-label" id="sweet"&gt;Sweet&lt;/div&gt;
+      &lt;div class="option"&gt;Blueberry&lt;/div&gt;
+      &lt;div class="option"&gt;Chocolate Chip&lt;/div&gt;
+      &lt;div class="option"&gt;Cinnamon Raisin&lt;/div&gt;
+      &lt;div class="option"&gt;Strawberry&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="optgroup" role="group" aria-labelledby="savory"&gt;
+      &lt;div class="optgroup-label" id="savory"&gt;Savory&lt;/div&gt;
+      &lt;div class="option"&gt;Cheddar Jalapeño&lt;/div&gt;
+      &lt;div class="option"&gt;Everything&lt;/div&gt;
+      &lt;div class="option"&gt;Garlic&lt;/div&gt;
+      &lt;div class="option"&gt;Onion&lt;/div&gt;
+      &lt;div class="option"&gt;Poppyseed&lt;/div&gt;
+      &lt;div class="option"&gt;Salt&lt;/div&gt;
+      &lt;div class="option"&gt;Sesame&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+              </details>
+            </div>
+          </div>
+      </section>
+      <section>
+        <div class="container">
+          <h2>Select-Only</h2>
+          <p>Combobo can also be used as a select-only dropdown (without a text input box). This is useful when you'd like to use the same styling as your Combobo elements or to add more functionality than a traditional <code>&lt;select&gt;</code> allows. Though there is no visible text input, common keyboard behaviors (such as Arrow, Printable Characters, Enter, and Space behaviors from the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-select-only/#kbd_label" target="_blank" rel="noopener noreferrer">W3C select-only combobox demo</a>) are present.</p>
+          <p>The <code>selectOnly</code> setting works on comboboxes initiated from both <code>&lt;input&gt;</code> and <code>&lt;select&gt;</code> elements.</p>
+          <div class="examples">
+            <div class="example-card select-only">
+              <div class="card-content">
+                <h3>Initiated on <code>&lt;select&gt;</code></h3>
+                <label for="combobox-select-only">Pet</label>
+                <select id="combobox-select-only" multiple>
+                  <option value="cat">Cat</option>
+                  <option value="dog">Dog</option>
+                  <option value="fish">Fish</option>
+                  <option value="hamster">Hamster</option>
+                  <option value="iguana">Iguana</option>
+                  <option value="rabbit">Rabbit</option>
+                  <option value="rock">Rock</option>
+                  <option value="roly-poly">Roly-Poly Bug</option>
+                  <option value="snake">Snake</option>
+                </select>
+                <button type="button">Submit</button>
+              </div>
+              <details>
+                <summary>Show Config</summary>
+                <div>
+<pre><code class="language-javascript">{
+  select: '#combobox-select-only',
+  list: '.select-only .listbox',
+  selectOnly: true,
+  multiselect: true,
+}</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-select-only"&gt;Pet&lt;/label&gt;
+&lt;select id="combobox-select-only" multiple&gt;
+  &lt;option value="cat"&gt;Cat&lt;/option&gt;
+  &lt;option value="dog"&gt;Dog&lt;/option&gt;
+  &lt;option value="fish"&gt;Fish&lt;/option&gt;
+  &lt;option value="hamster"&gt;Hamster&lt;/option&gt;
+  &lt;option value="iguana"&gt;Iguana&lt;/option&gt;
+  &lt;option value="rabbit"&gt;Rabbit&lt;/option&gt;
+  &lt;option value="rock"&gt;Rock&lt;/option&gt;
+  &lt;option value="roly-poly"&gt;Roly-Poly Bug&lt;/option&gt;
+  &lt;option value="snake"&gt;Snake&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+                </div>
+              </details>
+            </div>
+            <div class="example-card select-only-as-input">
+              <div class="card-content">
+                <h3>Initiated on <code>&lt;input&gt;</code></h3>
+                <label for="combobox-select-only-as-input">Month</label>
+                <div class="combo-wrap">
+                  <input type="text" class="combobox" id="combobox-select-only-as-input">
+                  <span aria-hidden="true" class="trigger" data-trigger="select-only-as-input"></span>
+                  <div class="listbox">
+                    <div class="option">January</div>
+                    <div class="option">February</div>
+                    <div class="option">March</div>
+                    <div class="option">April</div>
+                    <div class="option">May</div>
+                    <div class="option">June</div>
+                    <div class="option">July</div>
+                    <div class="option">August</div>
+                    <div class="option">September</div>
+                    <div class="option">October</div>
+                    <div class="option">November</div>
+                    <div class="option">December</div>
+                  </div>
+                </div>
+                <button type="button">Submit</button>
+              </div>
+              <details>
+                <summary>Show Config</summary>
+                <div>
+<pre><code class="language-javascript">{
+  input: '#combobox-select-only-as-input',
+  list: '.select-only-as-input .listbox',
+  selectOnly: true,
+}</code></pre>
+<pre><code class="language-html">&lt;label for="combobox-select-only-as-input"&gt;Month&lt;/label&gt;
+&lt;div class="combo-wrap"&gt;
+  &lt;input type="text" class="combobox" id="combobox-select-only-as-input"&gt;
+  &lt;span aria-hidden="true" class="trigger" data-trigger="select-only-as-input"&gt;&lt;/span&gt;
+  &lt;div class="listbox"&gt;
+    &lt;div class="option"&gt;January&lt;/div&gt;
+    &lt;div class="option"&gt;February&lt;/div&gt;
+    &lt;div class="option"&gt;March&lt;/div&gt;
+    &lt;div class="option"&gt;April&lt;/div&gt;
+    &lt;div class="option"&gt;May&lt;/div&gt;
+    &lt;div class="option"&gt;June&lt;/div&gt;
+    &lt;div class="option"&gt;July&lt;/div&gt;
+    &lt;div class="option"&gt;August&lt;/div&gt;
+    &lt;div class="option"&gt;September&lt;/div&gt;
+    &lt;div class="option"&gt;October&lt;/div&gt;
+    &lt;div class="option"&gt;November&lt;/div&gt;
+    &lt;div class="option"&gt;December&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+              </details>
+            </div>
           </div>
         </div>
+      </section>
+    </main>
+    <footer>
+      <div class="container">
+        <h2>Combobo</h2>
+        <p>Accessible combobox module</p>
+        <a href="https://github.com/dequelabs/combobo" class="gh-link" target="_blank" rel="noopener noreferrer">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" width="2em" height="2em"
+            aria-labelledby="footer-gh-logo">
+            <title id="footer-gh-logo">View on GitHub</title>
+            <use href="#github-logo"></use>
+          </svg>
+        </a>
       </div>
-      <button type="button">Submit</button>
-    </section>
-    <section class="multiselect-with-groups">
-      <div class="wrp">
-        <h2>Multi select with option groups</h2>
-        <label for="combobox-multiselect-with-groups">Choose car options</label>
-        <div class="combo-wrap">
-          <input type="text" class="combobox" id="combobox-multiselect-with-groups">
-          <span aria-hidden="true" class="trigger" data-trigger="multiselect-with-groups"></span>
-          <div class="listbox">
-            <div class="optgroup" role="group" aria-labelledby="color">
-              <div class="optgroup-label" id="color">Color</div>
-              <div class="option">Red</div>
-              <div class="option">Yellow</div>
-              <div class="option">Green</div>
-              <div class="option">Orange</div>
-            </div>
-            <div class="optgroup" role="group" aria-labelledby="year">
-              <div class="optgroup-label" id="year">Year</div>
-              <div class="option">2007</div>
-              <div class="option">2001</div>
-              <div class="option">1999</div>
-              <div class="option">2005</div>
-              <div class="option">2016</div>
-              <div class="option">2006</div>
-            </div>
-            <div class="optgroup" role="group" aria-labelledby="make">
-              <div class="optgroup-label" id="make">Make</div>
-              <div class="option">Ford</div>
-              <div class="option">GM</div>
-              <div class="option">Chrysler</div>
-            </div>
-            <div class="optgroup" role="group" aria-labelledby="doors">
-              <div class="optgroup-label" id="doors">Doors</div>
-              <div class="option">2 Door</div>
-              <div class="option">4 Door</div>
-            </div>
-            <div class="optgroup" role="group" aria-labelledby="transmission">
-              <div class="optgroup-label" id="transmission">Transmission</div>
-              <div class="option">Automatic</div>
-              <div class="option">Manual</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button type="button">Submit</button>
-    </section>
-    <section class="single-with-svg-icon">
-      <div class="wrp">
-        <h2>Single select with custom toggle button icon</h2>
-        <p>The custom icon is passed in through the config, though elements can also be added manually within the toggle instead.</p>
-        <label for="combobox-single-with-svg-icon">Pick a fruit</label>
-        <div class="combo-wrap">
-          <input type="text" class="combobox" id="combobox-single-with-svg-icon">
-          <span aria-hidden="true" class="trigger" data-trigger="single-with-svg-icon"></span>
-          <div class="listbox">
-            <div class="option">Apple</div>
-            <div class="option">Banana</div>
-            <div class="option">Cherry</div>
-            <div class="option">Durian</div>
-          </div>
-        </div>
-      </div>
-      <button type="button">Submit</button>
-    </section>
-    <section class="select-only">
-      <div class="wrp">
-        <h2>Select-Only</h2>
-        <label for="combobox-select-only">Pet</label>
-        <select id="combobox-select-only">
-          <option value="cat">Cat</option>
-          <option value="dog">Dog</option>
-          <option value="fish">Fish</option>
-          <option value="hamster">Hamster</option>
-          <option value="iguana">Iguana</option>
-          <option value="rabbit">Rabbit</option>
-          <option value="rock">Rock</option>
-          <option value="roly-poly">Roly-Poly Bug</option>
-          <option value="snake">Snake</option>
-        </select>
-      </div>
-      <button type="button">Submit</button>
-    </section>
-    <section class="select-only-as-input">
-      <div class="wrp">
-        <h2>Select-Only as &lt;input&gt;</h2>
-        <label for="combobox-select-only-as-input">Pet</label>
-        <div class="combo-wrap">
-          <input type="text" class="combobox" id="combobox-select-only-as-input">
-          <span aria-hidden="true" class="trigger" data-trigger="select-only-as-input"></span>
-          <div class="listbox">
-            <div class="option">Cat</div>
-            <div class="option">Dog</div>
-            <div class="option">Fish</div>
-            <div class="option">Hamster</div>
-            <div class="option">Iguana</div>
-            <div class="option">Rabbit</div>
-            <div class="option">Rock</div>
-            <div class="option">Roly-Poly Bug</div>
-            <div class="option">Snake</div>
-          </div>
-        </div>
-      </div>
-      <button type="button">Submit</button>
-    </section>
-    <footer></footer>
+    </footer>
     <script src="../dist/combobo.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>
+      hljs.highlightAll();
+
       (function () {
         function wrapNum(str, val) {
           if (!val || str.toLowerCase().indexOf(val.toLowerCase()) === -1) {
             return str;
           }
           const regex = new RegExp(val, 'i');
-          return str.replace(regex, '<span class="underline">$&</span>');
+          return str.replace(regex, '<u class="underline">$&</u>');
         }
 
         const box = {
           'single': new Combobo({
             input: '#combobox-single',
             list: '.bands .listbox',
-            activeClass: 'active',
             noResultsText: 'No results found.',
             optionValue: 'foo'
           }),
@@ -228,7 +594,6 @@
             input: '#combobox-single-with-groups',
             list: '.categories .listbox',
             groups: '.optgroup',
-            activeClass: 'active',
             noResultsText: 'No results found.',
             optionValue: function (option) {
               const inputVal = box['single-with-groups'].input.value;
@@ -238,26 +603,24 @@
               groupChange: groupChangeHandler
             }
           }),
-          'multiselect': new Combobo({
-            input: '#combobox-multiselect',
-            list: '.multiselect .listbox',
-            activeClass: 'active',
+          'multi': new Combobo({
+            input: '#combobox-multi',
+            list: '.multi .listbox',
             multiselect: true,
             selectionValue: function (selectedOptions) {
               return selectedOptions.length > 1 ?
-                '{ ' + selectedOptions.length +  ' selected }' :
+                '{ ' + selectedOptions.length + ' selected }' :
                 selectedOptions[0].innerText.trim();
             },
-            noResultsText: 'Nothing to see here folks.',
+            noResultsText: 'Nothing to see here, folks.',
             optionValue: function (option) {
-              const inputVal = box.multiselect.input.value;
+              const inputVal = box.multi.input.value;
               return wrapNum(option.innerText, inputVal)
             }
           }),
           'multiselect-with-groups': new Combobo({
             input: '#combobox-multiselect-with-groups',
             list: '.multiselect-with-groups .listbox',
-            activeClass: 'active',
             multiselect: true,
             groups: '.optgroup',
             noResultsText: 'No results found.',
@@ -268,20 +631,25 @@
           'single-with-svg-icon': new Combobo({
             input: '#combobox-single-with-svg-icon',
             list: '.single-with-svg-icon .listbox',
-            activeClass: 'active',
             noResultsText: 'No results found.',
-            toggleButtonIcon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14px"><!-- Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. --><defs><linearGradient id="gradient" x1="0" x2="448" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="yellow" /><stop offset="1" stop-color="cyan" /></linearGradient></defs><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" fill="url(#gradient)" /></svg>',
+            toggleButtonIcon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14px"><!-- Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. --><defs><linearGradient id="gradient" x1="0" x2="448" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#a6f5f3" /><stop offset="1" stop-color="#ffee67" /></linearGradient></defs><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" fill="url(#gradient)" /></svg>',
+          }),
+          'single-with-emoji-icon': new Combobo({
+            input: '#combobox-single-with-emoji-icon',
+            list: '.single-with-emoji-icon .listbox',
+            groups: '.optgroup',
+            toggleButtonIcon: '🥯',
+            noResultsText: 'Flavor not found',
           }),
           'select-only': new Combobo({
             select: '#combobox-select-only',
             list: '.select-only .listbox',
-            activeClass: 'active',
             selectOnly: true,
+            multiselect: true,
           }),
           'select-only-as-input': new Combobo({
             input: '#combobox-select-only-as-input',
             list: '.select-only-as-input .listbox',
-            activeClass: 'active',
             selectOnly: true,
           }),
         };

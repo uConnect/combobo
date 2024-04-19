@@ -89,7 +89,7 @@ module.exports = class Combobo {
               inputDivEl.id = `${input.id}-combobo`; // Prevent duplicate IDs with hidden <input>
 
               // Rewrite the label's `for` attribute to match the new combobox <div>'s ID
-              this.reassignLabel(input, inputDivEl.id);
+              this.reassignLabel(input, inputDivEl);
 
               input = inputDivEl;
             }
@@ -142,6 +142,10 @@ module.exports = class Combobo {
       if (this.config.toggleButtonIcon) {
         this.toggleButton.innerHTML = this.config.toggleButtonIcon;
       }
+    }
+
+    if (this.config.multiselect) {
+      this.input.classList.add('multiselect');
     }
 
     if (!this.input || !this.list) {
@@ -216,18 +220,25 @@ module.exports = class Combobo {
    * previous sibling of the original input element, the `for` attribute will be added and
    * referenced to the new combobox element.
    *
+   * To be extra-safe, the `aria-labelledby` attribute will be added to the new combobox element.
+   * A randomized `id` attribute will be added to the <label> if it doesn't already have one.
+   *
    * @param {*} el The <input> or <select> element
-   * @param {*} id The ID of the newly-created or transformed combobox
+   * @param {*} newEl The newly-created or transformed combobox
    */
-  reassignLabel(el, id) {
-    if (el.labels.length) {
-      const label = el.labels[0];
-      label.htmlFor = id;
-    } else {
-      const prevEl = el.previousElementSibling;
-      if (prevEl && prevEl.tagName.toLowerCase() === 'label') {
-        prevEl.htmlFor = id;
+  reassignLabel(el, newEl) {
+    const newElId = newEl.id;
+    const label = el.labels[0] || el.previousElementSibling.tagName.toLowerCase() === 'label';
+    if (label) {
+      label.htmlFor = newElId;
+
+      const labelId = label.id || rndid();
+
+      if (!label.id) {
+        label.id = labelId;
       }
+
+      newEl.setAttribute('aria-labelledby', labelId);
     }
   }
 
@@ -881,10 +892,6 @@ module.exports = class Combobo {
     input.id = `${selectElement.id}-input`;
     comboElement.appendChild(input);
 
-    // Rewrite the label's `for` attribute to match the new input's ID (necessary because the
-    // <select> element gets hidden).
-    this.reassignLabel(selectElement, input.id);
-
     // Create the toggle button
     const toggleButton = document.createElement('span');
     toggleButton.setAttribute('aria-hidden', 'true');
@@ -939,7 +946,11 @@ module.exports = class Combobo {
     if (hasOptgroup) {
       comboElement.classList.add('has-groups');
     }
-      
+
+    // Rewrite the label's `for` attribute to match the new input's ID (necessary because the
+    // <select> element gets hidden).
+    this.reassignLabel(selectElement, input);
+
     return {comboElement, input};
   }
 
