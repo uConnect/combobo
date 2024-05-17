@@ -944,7 +944,7 @@ module.exports = class Combobo {
           selected: child.hasAttribute('selected'),
           disabled: child.hasAttribute('disabled')
         }
-        listbox.appendChild(this.createOptionElement(data.text, data.value, data.selected, data.disabled));
+        listbox.appendChild(this.createOptionElement(data.text, data.value, data.selected, data.disabled, data.origClass));
       }
     });
 
