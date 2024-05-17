@@ -912,17 +912,7 @@ module.exports = class Combobo {
       if (origOptgroup) {
         hasOptgroup = true;
         const origOptgroupClass = child.className;
-        const optgroup = document.createElement('div');
-        optgroup.className = [this.config.optgroupClass, origOptgroupClass].filter(Boolean).join(' ');
-        optgroup.setAttribute('role', 'group');
-        const groupId = rndid();
-        optgroup.setAttribute('aria-labelledby', groupId);
-
-        const label = document.createElement('div');
-        label.className = this.config.optgroupLabelClass;
-        label.id = groupId;
-        label.textContent = child.label;
-        optgroup.appendChild(label);
+        const optgroup = this.createOptgroupElement(child.label, origOptgroupClass);
   
         Array.from(child.children).forEach(option => {
           const data = {
@@ -973,9 +963,9 @@ module.exports = class Combobo {
     return opt;
   }
 
-  createOptgroupElement(text) {
+  createOptgroupElement(text, origClass) {
     const optgroup = document.createElement('div');
-    optgroup.className = this.config.optgroupClass;
+    optgroup.className = [this.config.optgroupClass, origClass].filter(Boolean).join(' ');
     optgroup.setAttribute('role', 'group');
     const groupId = rndid();
     optgroup.setAttribute('aria-labelledby', groupId);
