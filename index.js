@@ -949,7 +949,7 @@ module.exports = class Combobo {
     return {comboElement, input};
   }
 
-  createOptionElement(text, value, selected, disabled, origClass) {
+  createOptionElement(text, value, selected, disabled, origClass = '') {
     const opt = document.createElement('div');
     opt.className = [this.config.optionsClass, origClass].filter(Boolean).join(' ');
     opt.textContent = text;
@@ -963,7 +963,7 @@ module.exports = class Combobo {
     return opt;
   }
 
-  createOptgroupElement(text, origClass) {
+  createOptgroupElement(text, origClass = '') {
     const optgroup = document.createElement('div');
     optgroup.className = [this.config.optgroupClass, origClass].filter(Boolean).join(' ');
     optgroup.setAttribute('role', 'group');
