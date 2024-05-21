@@ -555,6 +555,76 @@
           </div>
         </div>
       </section>
+      <section>
+        <div class="container">
+          <h2>Maintain classes</h2>
+          <p>Classes are maintained on <code>&lt;select&gt;</code>, <code>&lt;optgroup&gt;</code>, and <code>&lt;option&gt;</code> elements:</p>
+          <ul>
+            <li><code>&lt;select&gt;</code> classes are applied to the outermost combobox wrapper element (default: <code>.combo-wrap</code>).</li>
+            <li><code>&lt;optgroup&gt;</code> classes are applied to the optgroup wrapper element (default: <code>.optgroup</code>).
+              <ul>
+                <li>To directly style the label, target the <code>.optgroup-label</code> inside of this wrapper.</li>
+              </ul>
+            </li>
+            <li><code>&lt;option&gt;</code> classes are applied to the option element (default: <code>.option</code>).</li>
+          </ul>
+          <div class="examples">
+            <div class="example-card select-option-classes">
+              <div class="card-content">
+                <h3>Icon Classes</h3>
+                <label for="combobox-select-option-classes">Planet</label>
+                <select id="combobox-select-option-classes" class="planets">
+                  <optgroup label="Real" class="real">
+                    <option value="mercury">Mercury</option>
+                    <option value="venus">Venus</option>
+                    <option value="earth" class="icon-star">Earth</option>
+                    <option value="mars">Mars</option>
+                    <option value="jupiter">Jupiter</option>
+                    <option value="saturn">Saturn</option>
+                    <option value="uranus">Uranus</option>
+                    <option value="neptune">Neptune</option>
+                  </optgroup>
+                  <optgroup label="Fictional" class="fictional">
+                    <option value="b612">Asteroid B-612</option>
+                    <option value="krypton">Krypton</option>
+                    <option value="spectra">Spectra</option>
+                    <option value="tatooine">Tatooine</option>
+                  </optgroup>
+                </select>
+                <button type="button">Submit</button>
+              </div>
+              <details>
+                <summary>Show Config</summary>
+                <div>
+                  <pre><code class="language-javascript">{
+  select: '#combobox-select-option-classes',
+  list: '.select-option-classes .listbox',
+  multiselect: false,
+}</code></pre>
+                  <pre><code class="language-html">&lt;select id="combobox-select-option-classes" class="planets"&gt;
+  &lt;optgroup label="Real" class="real"&gt;
+    &lt;option value="mercury"&gt;Mercury&lt;/option&gt;
+    &lt;option value="venus"&gt;Venus&lt;/option&gt;
+    &lt;option value="earth" class="icon-star"&gt;Earth&lt;/option&gt;
+    &lt;option value="mars"&gt;Mars&lt;/option&gt;
+    &lt;option value="jupiter"&gt;Jupiter&lt;/option&gt;
+    &lt;option value="saturn"&gt;Saturn&lt;/option&gt;
+    &lt;option value="uranus"&gt;Uranus&lt;/option&gt;
+    &lt;option value="neptune"&gt;Neptune&lt;/option&gt;
+  &lt;/optgroup&gt;
+  &lt;optgroup label="Fictional" class="fictional"&gt;
+    &lt;option value="b612"&gt;Asteroid B-612&lt;/option&gt;
+    &lt;option value="krypton"&gt;Krypton&lt;/option&gt;
+    &lt;option value="spectra"&gt;Spectra&lt;/option&gt;
+    &lt;option value="tatooine"&gt;Tatooine&lt;/option&gt;
+  &lt;/optgroup&gt;
+&lt;/select&gt;</code></pre>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
     <footer>
       <div class="container">
@@ -651,6 +721,11 @@
             input: '#combobox-select-only-as-input',
             list: '.select-only-as-input .listbox',
             selectOnly: true,
+          }),
+          'select-option-classes': new Combobo({
+            select: '#combobox-select-option-classes',
+            list: '.select-option-classes .listbox',
+            multiselect: false,
           }),
         };
 

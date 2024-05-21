@@ -873,10 +873,12 @@ module.exports = class Combobo {
   }
 
   transformSelectElement(selectElement) {
-  
+    // Get the class name on the original element
+    const origClass = selectElement.className;
+
     // Create the wrapping div element
     const comboElement = document.createElement('div');
-    comboElement.className = this.config.wrapClass;
+    comboElement.className = [this.config.wrapClass, origClass].filter(Boolean).join(' ');
     comboElement.id = `${selectElement.id}-combobo`;
 
     if (selectElement.multiple) {
@@ -906,28 +908,21 @@ module.exports = class Combobo {
     let hasOptgroup = false;
     // Process groups and options
     Array.from(selectElement.children).forEach(child => {
-      if (child.tagName.toLowerCase() === 'optgroup') {
+      const origOptgroup = child.tagName.toLowerCase() === 'optgroup';
+      if (origOptgroup) {
         hasOptgroup = true;
-        const optgroup = document.createElement('div');
-        optgroup.className = this.config.optgroupClass;
-        optgroup.setAttribute('role', 'group');
-        const groupId = rndid();
-        optgroup.setAttribute('aria-labelledby', groupId);
-  
-        const label = document.createElement('div');
-        label.className = this.config.optgroupLabelClass;
-        label.id = groupId;
-        label.textContent = child.label;
-        optgroup.appendChild(label);
+        const origOptgroupClass = child.className;
+        const optgroup = this.createOptgroupElement(child.label, origOptgroupClass);
   
         Array.from(child.children).forEach(option => {
           const data = {
             text: option.textContent,
             value: option.value,
             selected: option.hasAttribute('selected'),
-            disabled: option.hasAttribute('disabled')
+            disabled: option.hasAttribute('disabled'),
+            origClass: option.className
           }
-          optgroup.appendChild(this.createOptionElement(data.text, data.value, data.selected, data.disabled));
+          optgroup.appendChild(this.createOptionElement(data.text, data.value, data.selected, data.disabled, data.origClass));
         });
   
         listbox.appendChild(optgroup);
@@ -939,7 +934,7 @@ module.exports = class Combobo {
           selected: child.hasAttribute('selected'),
           disabled: child.hasAttribute('disabled')
         }
-        listbox.appendChild(this.createOptionElement(data.text, data.value, data.selected, data.disabled));
+        listbox.appendChild(this.createOptionElement(data.text, data.value, data.selected, data.disabled, data.origClass));
       }
     });
 
@@ -954,9 +949,9 @@ module.exports = class Combobo {
     return {comboElement, input};
   }
 
-  createOptionElement(text, value, selected, disabled) {
+  createOptionElement(text, value, selected, disabled, origClass = '') {
     const opt = document.createElement('div');
-    opt.className = this.config.optionsClass;
+    opt.className = [this.config.optionsClass, origClass].filter(Boolean).join(' ');
     opt.textContent = text;
     opt.dataset.value = value;
     if (selected) {
@@ -968,9 +963,9 @@ module.exports = class Combobo {
     return opt;
   }
 
-  createOptgroupElement(text) {
+  createOptgroupElement(text, origClass = '') {
     const optgroup = document.createElement('div');
-    optgroup.className = this.config.optgroupClass;
+    optgroup.className = [this.config.optgroupClass, origClass].filter(Boolean).join(' ');
     optgroup.setAttribute('role', 'group');
     const groupId = rndid();
     optgroup.setAttribute('aria-labelledby', groupId);
