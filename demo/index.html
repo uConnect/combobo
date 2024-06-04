@@ -625,6 +625,55 @@
           </div>
         </div>
       </section>
+      <section>
+        <div class="container">
+          <h2>Interactive States</h2>
+          <p>Comboboxes can be disabled, which prevents interaction.</p>
+          <div class="examples">
+            <div class="example-card select-disabled">
+              <div class="card-content">
+                <h3>Disabled <code>&lt;select&gt;</code></h3>
+                <label for="combobox-select-disabled">Venue</label>
+                <select id="combobox-select-disabled" class="venue">
+                  <option value="" selected>You can't change me</option>
+                  <option value="aragon">Aragon Ballroom</option>
+                  <option value="auditorium">Auditorium Theatre</option>
+                  <option value="chicago">The Chicago Theatre</option>
+                  <option value="metro">Metro</option>
+                  <option value="riviera">Riviera Theatre</option>
+                  <option value="salt-shed">The Salt Shed</option>
+                  <option value="thalia">Thalia Hall</option>
+                  <option value="vic">The Vic Theatre</option>
+                </select>
+                <button type="button">Submit</button>
+              </div>
+              <details>
+                <summary>Show Config</summary>
+                <div>
+<pre><code class="language-javascript">{
+  select: '#combobox-select-disabled',
+  list: '.select-disabled .listbox',
+  multiselect: false,
+  // This can either be set as an attribute on the &ltselect&gt element or as a config option
+  disabled: true,
+}</code></pre>
+<pre><code class="language-html">&lt;select id="combobox-select-disabled" class="venue"&gt;
+  &lt;option value="" selected&gt;You can't change me&lt;/option&gt;
+  &lt;option value="aragon"&gt;Aragon Ballroom&lt;/option&gt;
+  &lt;option value="auditorium"&gt;Auditorium Theatre&lt;/option&gt;
+  &lt;option value="chicago"&gt;The Chicago Theatre&lt;/option&gt;
+  &lt;option value="metro"&gt;Metro&lt;/option&gt;
+  &lt;option value="riviera"&gt;Riviera Theatre&lt;/option&gt;
+  &lt;option value="salt-shed"&gt;The Salt Shed&lt;/option&gt;
+  &lt;option value="thalia"&gt;Thalia Hall&lt;/option&gt;
+  &lt;option value="vic"&gt;The Vic Theatre&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
     <footer>
       <div class="container">
@@ -726,6 +775,13 @@
             select: '#combobox-select-option-classes',
             list: '.select-option-classes .listbox',
             multiselect: false,
+          }),
+          'select-disabled': new Combobo({
+            select: '#combobox-select-disabled',
+            list: '.select-disabled .listbox',
+            multiselect: false,
+            disabled: true,
+            selectOnly: true,
           }),
         };
 
