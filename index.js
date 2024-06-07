@@ -249,6 +249,10 @@ module.exports = class Combobo {
       this.cachedOpts = this.currentOpts = elHandler((this.config.options), true, this.list);
     }
 
+    if (this.config.placeholderText) {
+      this.addPlaceholder();
+    }
+
     // option groups
     if (this.config.groups) {
       const groupEls = elHandler(this.config.groups, true, this.list);
@@ -961,6 +965,187 @@ module.exports = class Combobo {
     return this;
   }
 
+  /**
+   * Clear all options from the Combobo. This will remove all options from the Combobo and
+   * reset the Combobo to its initial state.
+   * 
+   * @param {Object} args
+   * @param {String} [args.placeholder] The placeholder text to be added back to the Combobo.
+   * @param {Boolean} [args.usePlaceholder] If true, the placeholder option that's added back will be selected.
+   */
+  clearOptions(args = {}) {
+    args = extendShallow({ usePlaceholder: true }, args);
+
+    this.emptyDropdownList().reset();
+
+    if (this.list) {
+      const listChildNodes = Array.from(this.list.childNodes)
+
+      listChildNodes.forEach((child) => {
+        this.list.removeChild(child);
+      });
+    }
+
+    if (this.selectElm) {
+      const selectChildNodes = Array.from(this.selectElm.childNodes);
+      
+      selectChildNodes.forEach((child) => {
+        this.selectElm.removeChild(child);
+      });
+    }
+
+    this.currentOpts = [];
+    this.cachedOpts = [];
+    this.groups = [];
+
+    if ((this.config.placeholderText || args.placeholder ) && args.usePlaceholder) {
+      this.addPlaceholder({ label: (this.config.placeholderText || args.placeholder) });
+    }
+
+    return this;
+  }
+
+  /**
+   * Adds a placeholder option to the Combobo. This option will be the first option in the Combobo and will be disabled.
+   * 
+   * @param {Option} args
+   */
+  addPlaceholder(args = {}) {
+    const placeholder = extendShallow({ label: this.config.placeholderText, value: '', disabled: true, selected: true}, args);
+    if (placeholder.label) {
+      this.addOption(placeholder, 'top');
+    }
+
+    return this;
+  }
+
+  /**
+   * Add multiple options to the Combobo
+   * The options provided can be either an array of objects representing individual options
+   * or an array of objects representing optgroups and their options.
+   *
+   * @example
+   * combobo.addOptions( [
+   *  { label: 'Option 1', value: 'option1', selected: true, disabled: true },
+   *  { label: 'Option 2', value: 'option2', selected: false },
+   * ] );
+   *
+   * combobo.addOptions( [
+   *  {
+   *    label: 'Group 1', options: [
+   *     { label: 'Option 1', value: 'option1', selected: true },
+   *     { label: 'Option 2', value: 'option2', selected: false },
+   *    ],
+   *  },
+   * ] );
+   *
+   * @param {OptGroup[]|Option[]} options The options to be added to the combobo
+   */
+  addOptions(options) {
+    if (Array.isArray(options) && options.length > 0) {
+      options.forEach(option => {
+        if (option.label && option.options) {
+          this.addOptGroup(option)
+        } else {
+          this.addOption(option);
+        }
+      });
+    }
+    return this;
+  }
+
+  /**
+   * Add an optgroup to the Combobo
+   *
+   * @typedef {Object} OptGroup
+   * @property {String} label The label of the optgroup
+   * @property {Option[]} options The options of the optgroup
+   * 
+   * @param {OptGroup} optGroup The optgroup to be added to the Combobo
+   */
+  addOptGroup({ label, options } = {}) {
+    if (this.selectElm) {
+      const group = document.createElement('optgroup');
+      group.label = label;
+
+      options.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.value;
+        option.selected = opt.selected;
+        option.disabled = opt.disabled;
+        option.innerHTML = opt.label;
+        group.appendChild(option);
+      });
+
+      this.selectElm.append(group);
+    }
+
+    const optgroupElm = this.createOptgroupElement(label);
+
+    let optionElms = [];
+
+    options.forEach(opt => {
+      const optionElm = this.createOptionElement(opt.label, opt.value, opt.selected, opt.disabled);
+      optgroupElm.appendChild(optionElm);
+      optionElms.push(optionElm);
+      this.cachedOpts.push(optionElm);
+      this.currentOpts.push(optionElm);
+    });
+
+    this.list.append(optgroupElm);
+
+    this.groups.push({
+      label,
+      element: optgroupElm,
+      options: optionElms
+    });
+  }
+
+  /**
+   * Add a new option to the Combobo
+   *
+   * @typedef {Object} Option
+   * @property {String} label The text label of the option
+   * @property {String} value The value of the option
+   * @property {Boolean} [selected] Whether the option is selected
+   * @property {Boolean} [disabled] Whether the option is disabled
+   * @property {String} [className] The original class of the option
+   *
+   * @param {Option} option The option to be added to the Combobo
+   * @param {'top'|'bottom'} placement The placement of the option in the Combobo
+   */
+  addOption({ label, value, selected, disabled, className } = {}, placement = 'bottom') {
+    if (label) {
+      if (this.selectElm) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.selected = selected;
+        option.disabled = disabled;
+        option.innerHTML = label;
+        this.selectElm.append(option);
+      }
+
+      const optionElm = this.createOptionElement(label, value, selected, disabled, className);
+
+      if (placement === 'top') {
+        this.list.prepend(optionElm);
+        this.cachedOpts.unshift(optionElm);
+        this.currentOpts.unshift(optionElm);
+      } else {
+        this.list.append(optionElm);
+        this.cachedOpts.push(optionElm);
+        this.currentOpts.push(optionElm);
+      }
+
+      this.addEventsToOptionEl(optionElm);
+
+      if (selected) {
+        this.goTo(this.currentOpts.indexOf(optionElm), true).select();
+      }
+    }
+    return this;
+  }
+
   setCurrentOptions() {
     this.currentOption = this.currentOpts[0]; // Sets the current option index
     return this;
@@ -1147,6 +1332,10 @@ module.exports = class Combobo {
         listbox.appendChild(this.createOptionElement(data.text, data.value, data.selected, data.disabled, data.origClass));
       }
     });
+
+    if (this.config.placeholderText) {
+      this.addPlaceholder();
+    }
 
     if (hasOptgroup) {
       comboElement.classList.add('has-groups');
