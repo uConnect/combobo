@@ -107,13 +107,13 @@ To initialize from Required HTML Elements
   #### Sample Data Options
   ```javascript
   const dataSource = [
-    { text: 'Select an Option', value: '', selected: true , disabled: true  },
-    { text: 'Option 1', value: '1' },
+    { label: 'Select an Option', value: '', selected: true , disabled: true  },
+    { label: 'Option 1', value: '1', className: 'custom-class' },
     {
       label: 'Group',
       options: [
-        { text: 'Option 2', value: '2' },
-        { text: 'Option 3', value: '3'}
+        { label: 'Option 2', value: '2' },
+        { label: 'Option 3', value: '3'}
       ]
     }
   ];

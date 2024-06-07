@@ -826,10 +826,10 @@ module.exports = class Combobo {
 
     if (wasSelected) {
       currentOpt.classList.remove(this.config.selectedClass);
-      this.emit('deselection', { value: currentOpt.dataset.value, text: value, option: currentOpt });
+      this.emit('deselection', { value: currentOpt.dataset.value, label: value, text: value, option: currentOpt });
     } else {
       currentOpt.classList.add(this.config.selectedClass)
-      this.emit('selection', { value: currentOpt.dataset.value, text: value, option: currentOpt });
+      this.emit('selection', { value: currentOpt.dataset.value, label: value, text: value, option: currentOpt });
     }
 
     this.freshSelection = true;
@@ -1114,18 +1114,10 @@ module.exports = class Combobo {
    * @param {Option} option The option to be added to the Combobo
    * @param {'top'|'bottom'} placement The placement of the option in the Combobo
    */
-  addOption({ label, value, selected, disabled, className } = {}, placement = 'bottom') {
-    if (label) {
-      if (this.selectElm) {
-        const option = document.createElement('option');
-        option.value = value;
-        option.selected = selected;
-        option.disabled = disabled;
-        option.innerHTML = label;
+      option.innerHTML = label || text;
         this.selectElm.append(option);
       }
-
-      const optionElm = this.createOptionElement(label, value, selected, disabled, className);
+    const optionElm = this.createOptionElement({ label: label || text, value, selected, disabled, className });
 
       if (placement === 'top') {
         this.list.prepend(optionElm);
@@ -1307,11 +1299,7 @@ module.exports = class Combobo {
       if (origOptgroup) {
         hasOptgroup = true;
         const origOptgroupClass = child.className;
-        const optgroup = this.createOptgroupElement(child.label, origOptgroupClass);
-  
-        Array.from(child.children).forEach(option => {
-          const data = {
-            text: option.textContent,
+            label: option.textContent,
             value: option.value,
             selected: option.hasAttribute('selected'),
             disabled: option.hasAttribute('disabled'),
@@ -1323,13 +1311,7 @@ module.exports = class Combobo {
         listbox.appendChild(optgroup);
       } else {
         // In case there are direct options without a group
-        const data = {
-          text: child.textContent,
-          value: child.value,
-          selected: child.hasAttribute('selected'),
-          disabled: child.hasAttribute('disabled')
-        }
-        listbox.appendChild(this.createOptionElement(data.text, data.value, data.selected, data.disabled, data.origClass));
+            label: child.textContent,
       }
     });
 
@@ -1351,20 +1333,23 @@ module.exports = class Combobo {
   /**
    * Returns a new option element for the listbox.
    * 
-   * @param {string} text The label/text of the option
-   * @param {string} value The value of the option
-   * @param {boolean} selected If the option is selected
-   * @param {boolean} disabled If the option is disabled
-   * @param {string} [origClass] The original class of the option
+   * @param {string} label The label/text of the option
+   * @param {string} [text] The label/text of the option (Deprecated; use `label` instead)
    *
    * @returns {HTMLDivElement}
    */
-  createOptionElement(text, value, selected, disabled, origClass = '') {
+  createOptionElement({ label, text, value, selected, disabled, className } = {}) {
+    const optArgs = Object.assign({
+      selected: false,
+      disabled: false,
+    },
+    { label, text, value, selected, disabled, className }
+    );
     const optId = rndid();
     const opt = document.createElement('div');
 
     opt.className = [this.config.optionsClass, origClass].filter(Boolean).join(' ');
-    opt.innerHTML = text;
+    opt.innerHTML = optArgs.label || optArgs.text;
     opt.dataset.value = value;
     opt.id = optId;
 
@@ -1385,24 +1370,24 @@ module.exports = class Combobo {
   /**
    * Returns a new optgroup element for the listbox.
    * 
-   * @param {string} text The label/text of the optgroup
+   * @param {string} label The label/text of the optgroup
    * @param {string} origClass The original class of the optgroup
    * 
    * @returns {HTMLDivElement}
    */
-  createOptgroupElement(text, origClass = '') {
+  createOptgroupElement(label, origClass = '') {
     const groupId = rndid();
     const optgroup = document.createElement('div');
     optgroup.className = [this.config.optgroupClass, origClass].filter(Boolean).join(' ');
     optgroup.setAttribute('role', 'group');
     optgroup.setAttribute('aria-labelledby', groupId);
 
-    const label = document.createElement('div');
-    label.className = this.config.optgroupLabelClass;
-    label.id = groupId;
-    label.innerHTML = text;
+    const labelEl = document.createElement('div');
+    labelEl.className = this.config.optgroupLabelClass;
+    labelEl.id = groupId;
+    labelEl.innerHTML = label;
 
-    optgroup.append(label);
+    optgroup.append(labelEl);
 
     return optgroup;
   }
