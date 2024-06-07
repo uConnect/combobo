@@ -277,10 +277,12 @@ footer .container > * {
 }
 
 label {
+  display: block;
   margin-block-end: 10px;
+  margin-inline: auto;
+  max-width: var(--combobo-max-width, 250px);
   font-size: 0.85em;
   font-weight: 500;
-  display: inline-block;
 }
 
 /* Custom text matching style for the first Single Select combobox */
@@ -294,6 +296,8 @@ label {
 
 .combo-wrap {
   position: relative;
+  max-width: var(--combobo-max-width, 250px);
+  margin-inline: auto;
 }
 
 .combobox {
@@ -484,4 +488,38 @@ This is applied to the wrapper, `input.combobox`, and `button.trigger` elements.
   margin-right: 5px;
   width: 0.85em;
   display: inline-block;
+}
+
+/* Sample styles for dynamic form demo */
+
+.dynamic-options-input-form {
+  margin-block-start: 20px;
+}
+
+.dynamic-options-input-form input[type="text"] {
+  max-width: 100%;
+  height: var(--combobo-height);
+  padding: 10px 5px;
+  border: 1px solid var(--primary-color);
+  border-radius: var(--border-radius, 4px);
+  position: relative;
+  font-size: inherit;
+  line-height: 1;
+  text-align: left;
+  background-color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-block-end: 10px;
+}
+
+.form-row label {
+  flex-shrink: 0;
+  margin-block-end: 0;
 }
