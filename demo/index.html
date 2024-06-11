@@ -674,6 +674,66 @@
           </div>
         </div>
       </section>
+      <section>
+        <div class="container">
+          <h2>Combobo API Examples</h2>
+          <div class="examples">
+            <div class="example-card dynamic-options">
+              <div class="card-content">
+                <h3>Dynamically adding options</h3>
+                <label for="combobox-dynamic-options">Flavors</label>
+                <select id="combobox-dynamic-options" class="">
+                  <option value="" selected disabled>I am a placeholder</option>
+                </select>
+                <form action="#" class="dynamic-options-input-form">
+                  <div class="form-row">
+                    <label for="flavor">Add a flavor</label>
+                    <input type="text" id="input-flavor" name="flavor" placeholder="Enter a flavor">
+                  </div>
+                  <label class="form-row" for="selected">
+                    <span>Select the flavor?</span>
+                    <input type="checkbox" id="input-selected" name="selected" value="selected">
+                  </label>
+                  <button type="submit" id="add-flavor">Add</button>
+                </form>
+              </div>
+              <details>
+                <summary>Show Sample Function</summary>
+                <div>
+<pre><code class="language-javascript">const flavorChanger = () => {
+  const form = document.querySelector('.dynamic-options-input-form');
+  if (!form) {
+    console.debug('No form found', form);
+    return;
+  }
+  const combobo = new Combobo({
+    select: '#combobox-dynamic-options',
+  });
+
+  box['dynamic-options'] = combobo;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const flavor = form.querySelector('[name="flavor"]')
+    if (!flavor.value) {
+      return;
+    }
+
+    const selected = form.querySelector('[name="selected"]');
+    combobo.addOption({label: flavor.value, value: flavor.value, selected: !!selected.checked });
+    flavor.value = '';
+    selected.checked = false;
+  });
+}
+
+flavorChanger();</code></pre>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
     <footer>
       <div class="container">
@@ -782,8 +842,38 @@
             multiselect: false,
             disabled: true,
             selectOnly: true,
-          }),
+          })
         };
+
+        // Sample function to demonstrate adding options dynamically
+        const flavorChanger = () => {
+          const form = document.querySelector('.dynamic-options-input-form');
+          if (!form) {
+            console.debug('No form found', form);
+            return;
+          }
+          const combobo = new Combobo({
+            select: '#combobox-dynamic-options',
+          });
+
+          box['dynamic-options'] = combobo;
+
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const flavor = form.querySelector('[name="flavor"]')
+            if (!flavor.value) {
+              return;
+            }
+
+            const selected = form.querySelector('[name="selected"]');
+            combobo.addOption({label: flavor.value, value: flavor.value, selected: !!selected.checked });
+            flavor.value = '';
+            selected.checked = false;
+          });
+        }
+
+        flavorChanger();
 
         function groupChangeHandler(newGroup) {
           const groupLabel = newGroup.querySelector('.optgroup-label').innerText;
