@@ -9,8 +9,9 @@
     "quotes": [1, "single"]
   },
   "env": {
-    "es6": "true",
-    "node": "true"
+    "browser": true,
+    "es6": true,
+    "node": true
   },
   "globals": {
     "window": true,

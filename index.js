@@ -17,6 +17,7 @@ import wrapMatch from './lib/utils/wrap-match';
 import configuration from './lib/config';
 import announceActive from './lib/announce-active';
 import rndid from './lib/utils/rndid';
+import extendShallow from 'extend-shallow';
 
 /**
  * /////////////////////////
@@ -36,23 +37,95 @@ import rndid from './lib/utils/rndid';
  */
 
 module.exports = class Combobo {
+
+  /**
+   * Combobo constructor
+   *
+   * @param {import('./lib/config').ComboboConfig} Config
+   * @returns {Combobo|Object}
+   */
   constructor(config) {
+    Emitter(this);
     config = config || {};
 
-    // merge user config with default config
+    /**
+     * Merge user's config with defaults
+     *
+     * @type {import('./lib/config').ComboboConfig}
+     */
     this.config = configuration(config);
 
-    // initial state
+    /**
+     * The current open state of the Combobo
+     *
+     * @default false
+     * @type {Boolean}
+     */
     this.isOpen = false;
+    /**
+     * @type {HTMLDivElement|null}
+     */
     this.currentOption = null;
+    /**
+     * @type {HTMLDivElement[]|[]}
+     * @default []
+     */
+    this.currentOpts = [];
+    /**
+     * @type {HTMLDivElement[]|[]}
+     * @default []
+     */
+    this.cachedOpts = [];
+    /**
+     * @type {HTMLSelectElement|null}
+     */
     this.selectElm = null;
+    /**
+     * @type {HTMLDivElement[]|[]}
+     */
     this.selected = [];
-    this.inputElm = null;
+    /**
+     * @type {HTMLDivElement|HTMLInputElement|null}
+     */
+    this.input = null;
+    /**
+     * @type {Object[]|[]}
+     * @property {HTMLDivElement} element
+     * @property {HTMLDivElement[]} options
+     */
     this.groups = [];
+    /**
+     * @type {Boolean}
+     */
     this.isHovering = false;
+    /**
+     * @type {Boolean}
+     */
     this.autoFilter = this.config.autoFilter;
+    /**
+     * @type {Set<number>}
+     */
     this.optionsWithEventHandlers = new Set();
+    /**
+     * @type {Set<number>}
+     */
     this.optionsWithKeyEventHandlers = new Set();
+
+    /**
+     * @type {HTMLSpanElement|null}
+     */
+    this.toggleButton = null;
+
+    /**
+     * @type {Boolean}
+     * @default false
+     */
+    this.disabled = this.config.disabled;
+
+    /**
+     * @type {HTMLDivElement}
+     */
+    this.list;
 
     if (!this.config.internalCall) {
       let combobos = {};
@@ -118,7 +191,8 @@ module.exports = class Combobo {
           config.multiselect = selectElement.multiple;
           config.internalCall = true;
           selectElement.style.display = "none";
-          combobos[selectElement.id] = new Combobo(config); 
+          config.placeholderText = selectElement.getAttribute('placeholder') || config.placeholderText;
+          combobos[selectElement.id] = new Combobo(config);
         });
       }
 
@@ -160,25 +234,29 @@ module.exports = class Combobo {
       }
 
       this.currentOpts = [];
-      this.config.source.forEach(option=>{
+      this.config.source.forEach(option => {
         if (option.label && option.options) { // If option is an optgroup
-          const optgroupElm = this.createOptgroupElement(option.label);
-          option.options.forEach(opt => {
-              const optionElm = this.createOptionElement(opt.text, opt.value, opt.selected, opt.disabled);
-              optgroupElm.appendChild(optionElm); // Add option to optgroup
-              this.currentOpts.push(optionElm);
-          });
-          this.list.appendChild(optgroupElm); // Add optgroup to the list
-        } else { // If option is a standalone option
-            const optionElm = this.createOptionElement(option.text, option.value, option.selected, option.disabled);
-            this.list.appendChild(optionElm);
-            this.currentOpts.push(optionElm);
+          /**
+           * @type {OptGroup}
+           */
+          const optGroup = {
+            label: option.label,
+            className: option.className,
+            option: option.options
+          };
+          this.addOptGroup(optGroup);
+        } else {
+          this.addOption(option);
         }
       });
       
       this.cachedOpts = this.currentOpts;
     } else {
       this.cachedOpts = this.currentOpts = elHandler((this.config.options), true, this.list);
+    }
+
+    if (this.config.placeholderText) {
+      this.addPlaceholder();
     }
 
     // option groups
@@ -199,6 +277,10 @@ module.exports = class Combobo {
     }
 
     this.initEvents();
+
+    if (this.config.disabled || (this.selectElm && this.selectElm.disabled)) {
+      this.disable();
+    }
 
     // Initialize the selected based on the selected options.
     for (const option of this.currentOpts) {
@@ -228,7 +310,8 @@ module.exports = class Combobo {
    */
   reassignLabel(el, newEl) {
     const newElId = newEl.id;
-    const label = el.labels[0] || el.previousElementSibling.tagName.toLowerCase() === 'label';
+    const label = el.labels[0] || ((el.previousElementSibling && el.previousElementSibling.tagName.toLowerCase() === 'label') ? el.previousElementSibling : undefined);
+
     if (label) {
       label.htmlFor = newElId;
 
@@ -243,43 +326,17 @@ module.exports = class Combobo {
   }
 
   initEvents() {
-    Emitter(this);
     if (!this.optionsWithKeyEventHandlers.has(this.input)) {
-      this.input.addEventListener('click', () => {
-        this.openList().goTo(this.getOptIndex() || 0); // ensure it's open
-      });
-
-      this.input.addEventListener('blur', () => {
-        if (!this.isHovering) { this.closeList(); }
-      });
-
-      this.input.addEventListener('focus', () => {
-        if (this.selected.length) {
-          this.input.value = this.selected.length >= 2 ? '' : this.config.selectionValue(this.selected);
-        }
-        if (!this.config.selectOnly) {
-          this.input.select();
-        }
-      });
+      this.addEvent('click', this.input, this.handleInputClick);
+      this.addEvent('blur', this.input, this.handleInputBlur);
+      this.addEvent('focus', this.input, this.handleInputFocus);
 
       if (this.toggleButton) {
-        // handle trigger clicks to toggle the open state of the Combobo
-        this.toggleButton.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (this.isOpen) {
-            this.closeList();
-          } else {
-            this.openList().input.focus();
-          }
-        });
-
+        // Handle trigger clicks to toggle the open state of the Combobo
+        this.addEvent('click', this.toggleButton, this.handleToggleButtonClick);
         // Add mouse handlers so the blur on the input doesn't close the list prematurely
-        this.toggleButton.addEventListener('mouseover', () => {
-          this.isHovering = true;
-        });
-        this.toggleButton.addEventListener('mouseout', () => {
-          this.isHovering = false;
-        });
+        this.addEvent('mouseover', this.toggleButton, this.setHovering);
+        this.addEvent('mouseout', this.toggleButton, this.setNotHovering);
       }
 
       // listen for clicks outside of combobox
@@ -291,6 +348,77 @@ module.exports = class Combobo {
 
     this.optionEvents();
     this.initKeys();
+
+    return this;
+  }
+
+  addEvent(event, element, cb = () => { }) {
+    if (element) {
+      element.addEventListener(event, (...args) => {
+        this.eventWrapper(cb, ...args);
+      });
+    }
+  }
+
+  /**
+   * 
+   * @param {Function} cb 
+   * @param {any[]} binds
+   */
+  eventWrapper(cb, ...args) {
+    if (this.disabled) {
+      return;
+    }
+    return cb.bind(this)(...args);
+  }
+
+  setHovering() {
+    this.isHovering = true;
+  }
+
+  setNotHovering() {
+    this.isHovering = false;
+  }
+
+  /**
+   * Toggles the open state of the combobo when the toggle button is clicked.
+   * 
+   * @param {MouseEvent} e 
+   */
+  handleToggleButtonClick(e) {
+    if (this.disabled) {
+      return;
+    }
+
+    e.stopPropagation();
+    if (this.isOpen) {
+      this.closeList();
+    } else {
+      this.openList().input.focus();
+    }
+  }
+
+  handleInputClick() {
+    if (this.disabled) {
+      return;
+    }
+    this.openList().goTo(this.getOptIndex() || 0); // ensure it's open
+  }
+
+  handleInputBlur() {
+    if (!this.isHovering) { this.closeList(); }
+  }
+
+  handleInputFocus() {
+    if (this.disabled) {
+      return;
+    }
+    if (this.selected.length) {
+      this.input.value = this.selected.length >= 2 ? '' : this.config.selectionValue(this.selected);
+    }
+    if (!this.config.selectOnly) {
+      this.input.select();
+    }
   }
 
   getOptIndex() {
@@ -299,29 +427,59 @@ module.exports = class Combobo {
 
   optionEvents() {
     this.cachedOpts.forEach((option) => {
-      // The event should not be added again for already selected options and existing options
-      if (!this.optionsWithEventHandlers.has(option.id) && !this.selected.includes(option)) {
-        option.addEventListener('click', () => {
-          this
-            .goTo(this.currentOpts.indexOf(option))
-            .select();
-        });
-
-        option.addEventListener('mouseover', () => {
-          // clean up
-          const prev = this.currentOption;
-          if (prev) { Classlist(prev).remove(this.config.activeClass); }
-          Classlist(option).add(this.config.activeClass);
-          this.isHovering = true;
-        });
-
-        option.addEventListener('mouseout', () => {
-          Classlist(option).remove(this.config.activeClass);
-          this.isHovering = false;
-        });
-        this.optionsWithEventHandlers.add(option.id);
-      }
+      this.addEventsToOptionEl(option);
     });
+    return this;
+  }
+
+  /**
+   * Adds event handlers to the option element
+   * 
+   * @param {HTMLDivElement} option 
+   */
+  addEventsToOptionEl(option) {
+    if (!this.config.internalCall) {
+      // Add event listeners to the option element later?
+      return;
+    }
+    if (!this.optionsWithEventHandlers.has(option.id) && !this.selected.includes(option)) {
+      option.addEventListener('click', this.handleOptionClick.bind(this, option));
+      option.addEventListener('mouseover', this.handleOptionMouseOver.bind(this, option));
+      option.addEventListener('mouseout', this.handleOptionMouseOut.bind(this, option));
+
+      this.optionsWithEventHandlers.add(option.id);
+    }
+  }
+
+  /**
+   * @param {HTMLDivElement} option 
+   */
+  handleOptionClick(option) {
+    this
+      .goTo(this.currentOpts.indexOf(option))
+      .select();
+  }
+
+  /**
+   * @param {HTMLDivElement} option 
+   */
+  handleOptionMouseOver(option) {
+    // clean up
+    const prev = this.currentOption;
+
+    if (prev) {
+      prev.classList.remove(this.config.activeClass);
+    }
+    option.classList.add(this.config.activeClass);
+    this.isHovering = true;
+  }
+
+  /**
+   * @param {HTMLDivElement} option 
+   */
+  handleOptionMouseOut(option) {
+    option.classList.remove(this.config.activeClass);
+    this.isHovering = false;
   }
 
   openList() {
@@ -569,7 +727,7 @@ module.exports = class Combobo {
 
     // If the query string is a repeated letter, pick the next match in the list
     // If that option doesn't exist, pick the first match again
-    if ( isRepeatedLetter && matches.length > 1) {
+    if (isRepeatedLetter && matches.length > 1) {
       return this.currentOpts.indexOf(matches[matchIndex + 1] || matches[0]);
     }
 
@@ -677,10 +835,10 @@ module.exports = class Combobo {
 
     if (wasSelected) {
       currentOpt.classList.remove(this.config.selectedClass);
-      this.emit('deselection', { text: value, option: currentOpt });
+      this.emit('deselection', { value: currentOpt.dataset.value, label: value, text: value, option: currentOpt });
     } else {
       currentOpt.classList.add(this.config.selectedClass)
-      this.emit('selection', { text: value, option: currentOpt });
+      this.emit('selection', { value: currentOpt.dataset.value, label: value, text: value, option: currentOpt });
     }
 
     this.freshSelection = true;
@@ -723,7 +881,7 @@ module.exports = class Combobo {
 
   reset() {
     this.clearFilters();
-    this.input.value = '';
+    this.input[this.input.tagName.toLowerCase() === 'input' ? 'value' : 'innerText'] = '';
     this.updateOpts();
     this.input.removeAttribute('aria-activedescendant');
     this.input.removeAttribute('data-active-option');
@@ -762,7 +920,7 @@ module.exports = class Combobo {
     // show pseudo focus styles
     this.pseudoFocus(groupChange);
     // Detecting if element is inView and scroll to it.
-    this.currentOpts.forEach((opt) => {
+    this.currentOpts.filter(Boolean).forEach((opt) => {
       if (opt.classList.contains(this.config.activeClass) && !inView(this.list, opt)) {
         scrollToElement(opt);
       }
@@ -774,7 +932,7 @@ module.exports = class Combobo {
   pseudoFocus(groupChanged) {
     const option = this.currentOption;
     const activeClass = this.config.activeClass;
-    const prevId = this.input.getAttribute('data-active-option');
+    const prevId = this.input ? this.input.getAttribute('data-active-option') : null;
     const prev = prevId && document.getElementById(prevId);
 
     // clean up
@@ -783,7 +941,7 @@ module.exports = class Combobo {
     }
 
     if (option) {
-      this.input.setAttribute('data-active-option', option.id);
+      this.input && this.input.setAttribute('data-active-option', option.id);
       if (activeClass) { Classlist(option).add(activeClass); }
 
       if (this.liveRegion) {
@@ -796,9 +954,9 @@ module.exports = class Combobo {
         );
       }
 
-      this.input.setAttribute('aria-activedescendant', option.id);
+      this.input && this.input.setAttribute('aria-activedescendant', option.id);
       this.currentOption = option;
-      this.emit('change');
+      this.addEventListener && this.emit('change');
     }
     return this;
   }
@@ -813,6 +971,233 @@ module.exports = class Combobo {
     if (this.currentOpts.indexOf(option) === -1) {
       this.currentOpts.push(option);
     }
+    return this;
+  }
+
+  /**
+   * Clear all options from the Combobo. This will remove all options from the Combobo and
+   * reset the Combobo to its initial state.
+   * 
+   * @param {Object} args
+   * @param {String} [args.placeholder] The placeholder text to be added back to the Combobo.
+   * @param {Boolean} [args.usePlaceholder] If true, the placeholder option that's added back will be selected.
+   */
+  clearOptions(args = {}) {
+    args = extendShallow({ usePlaceholder: true }, args);
+
+    this.emptyDropdownList().reset();
+
+    if (this.list) {
+      const listChildNodes = Array.from(this.list.childNodes)
+
+      listChildNodes.forEach((child) => {
+        this.list.removeChild(child);
+      });
+    }
+
+    if (this.selectElm) {
+      const selectChildNodes = Array.from(this.selectElm.childNodes);
+      
+      selectChildNodes.forEach((child) => {
+        this.selectElm.removeChild(child);
+      });
+    }
+
+    this.currentOpts = [];
+    this.cachedOpts = [];
+    this.groups = [];
+
+    if ((this.config.placeholderText || args.placeholder ) && args.usePlaceholder) {
+      this.addPlaceholder({ label: (this.config.placeholderText || args.placeholder) });
+    }
+
+    return this;
+  }
+
+  /**
+   * Adds a placeholder option to the Combobo. This option will be the first option in the Combobo and will be disabled.
+   * 
+   * @param {Option} args
+   */
+  addPlaceholder(args = {}) {
+    const placeholder = extendShallow({ label: this.config.placeholderText, value: '', disabled: true, selected: true}, args);
+    if (placeholder.label) {
+      this.addOption(placeholder, 'top');
+    }
+
+    return this;
+  }
+
+  /**
+   * Add multiple options to the Combobo
+   * The options provided can be either an array of objects representing individual options
+   * or an array of objects representing optgroups and their options.
+   * 
+   * @note This is largely a convenience method for adding multiple options at once and
+   * is equivalent to calling {@link addOption()} and/or {@link addOptGroup()} multiple times.
+   *
+   * @example
+   * // A simple example with two options
+   * combobo.addOptions( [
+   *  { label: 'Option 1', value: 'option1', selected: true, disabled: true },
+   *  { label: 'Option 2', value: 'option2', selected: false },
+   * ] );
+   * // An example with an optgroup
+   * combobo.addOptions( [
+   *  {
+   *    label: 'Group 1', options: [
+   *     { label: 'Option 1', value: 'option1', selected: true },
+   *     { label: 'Option 2', value: 'option2', selected: false },
+   *    ],
+   *  },
+   * ] );
+   *
+   * @param {OptGroup[]|Option[]} options The options to be added to the combobo
+   */
+  addOptions(options) {
+    if (Array.isArray(options) && options.length > 0) {
+      options.forEach(option => {
+        if (option.label && option.options) {
+          this.addOptGroup(option)
+        } else {
+          this.addOption(option);
+        }
+      });
+    }
+    return this;
+  }
+
+  /**
+   * Add an optgroup to the Combobo.
+   *
+   * @typedef {Object} OptGroup
+   * @property {String} label The label of the optgroup
+   * @property {string} [className] The original class of the optgroup
+   * @property {Option[]} options The options of the optgroup
+   * 
+   * @param {OptGroup} optGroup The optgroup to be added to the Combobo
+   * @param {'top'|'bottom'} placement The placement of the optgroup in the Combobo
+   * @param {HTMLElement} [parentEl] The parent element of the optgroup. Will default to the list if not provided
+   */
+  addOptGroup({ label, className, options } = {}, placement = 'bottom', parentEl = null) {
+    if (this.selectElm) {
+      const group = document.createElement('optgroup');
+      group.label = label;
+      group.classList.add(className);
+
+      options.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.value;
+        option.selected = opt.selected;
+        option.disabled = opt.disabled;
+        option.innerHTML = opt.label;
+        option.classList.add(opt.className);
+
+        group.appendChild(option);
+      });
+
+      if (placement === 'top') {
+        this.selectElm.prepend(group);
+      } else {
+        this.selectElm.append(group);
+      }
+    }
+
+    const parent = parentEl || this.list;
+
+    if (!parent) {
+      return;
+    }
+
+    const optgroupElm = this.createOptgroupElement(label, className);
+
+    let optionElms = [];
+
+    options.forEach(opt => {
+      const optionElm = this.createOptionElement(opt);
+      optgroupElm.appendChild(optionElm);
+      optionElms.push(optionElm);
+      this.cachedOpts.push(optionElm);
+      this.currentOpts.push(optionElm);
+    });
+
+    if (placement === 'top') {
+      parent.prepend(optgroupElm);
+    } else {
+      parent.append(optgroupElm);
+    }
+
+    this.groups.push({
+      label,
+      element: optgroupElm,
+      options: optionElms
+    });
+
+    return optgroupElm;
+  }
+
+  /**
+   * Add a new option to the Combobo
+   *
+   * @typedef {Object} Option
+   * @property {String} label The text label of the option
+   * @property {String} [text] The value of the option (Deprecated; use `label` instead)
+   * @property {String} value The value of the option
+   * @property {Boolean} [selected] Whether the option is selected
+   * @property {Boolean} [disabled] Whether the option is disabled
+   * @property {String} [className] The original class of the option
+   *
+   * @param {Option} option The option to be added to the Combobo
+   * @param {'top'|'bottom'} placement The placement of the option in the Combobo
+   * @param {HTMLDivElement} parentEl The parent element of the option. Will default to the list if not provided
+   */
+  addOption({ label, text, value, selected, disabled, className } = {}, placement = 'bottom', parentEl = null) {
+    if (!label) {
+      return this;
+    }
+
+    if (this.selectElm) {
+      const option = document.createElement('option');
+      option.value = value;
+      option.selected = selected;
+      option.disabled = disabled;
+      option.innerHTML = label || text;
+      option.classList.add(className);
+
+      if (placement === 'top') {
+        this.selectElm.prepend(option);
+      } else {
+        this.selectElm.append(option);
+      }
+    }
+
+    const optionElm = this.createOptionElement({ label: label || text, value, selected, disabled, className });
+
+    const parent = parentEl || this.list;
+
+    if (!parent) {
+      return this;
+    }
+
+    if (placement === 'top') {
+      parent.prepend(optionElm);
+      this.cachedOpts.unshift(optionElm);
+      this.currentOpts.unshift(optionElm);
+    } else {
+      parent.append(optionElm);
+      this.cachedOpts.push(optionElm);
+      this.currentOpts.push(optionElm);
+    }
+
+    this.addEventsToOptionEl(optionElm);
+
+    if (selected) {
+      // This function may be called before this.list/this.input are initialized. If they aren't, skip it; it gets added later.
+      if (this.config.internalCall) {
+        this.goTo(this.currentOpts.indexOf(optionElm), true).select();
+      }
+    }
+
     return this;
   }
 
@@ -838,7 +1223,6 @@ module.exports = class Combobo {
     }
     return this;
   }
-
 
   emptyDropdownList() {
     // empty the cachedOpts and currentOpts of dropdown list
@@ -872,19 +1256,85 @@ module.exports = class Combobo {
     return selected;
   }
 
+  /**
+   * Disables the Combobo by blocking all user interactions with the Combobo.
+   *
+   * Some elements will be "disabled" manually as the `disabled` attribute cannot be
+   * applied to non-form/button elements (e.g. select-only `<div>` elements).
+   *
+   * @returns {Combobo}
+   */
+  disable() {
+    this.disabled = true;
+
+    this.input.setAttribute(this.input.tagName.toLowerCase() === 'input' ? 'disabled' : 'aria-disabled', 'true');
+    this.input.removeAttribute('tabindex');
+
+    if (this.toggleButton) {
+      this.toggleButton.setAttribute('aria-disabled', 'true');
+    }
+
+    if (this.selectElm) {
+      this.selectElm.setAttribute('disabled', 'disabled');
+    }
+
+    this.input.parentElement.setAttribute('aria-disabled', 'true');
+    this.input.parentElement.classList.add('disabled');
+
+    return this;
+  }
+
+
+  /**
+   * Enables the Combobo by restoring all user interactions with the Combobo.
+   *
+   * @returns {Combobo}
+   */
+  enable() {
+    this.disabled = false;
+
+    this.input.removeAttribute('disabled');
+    this.input.removeAttribute('aria-disabled');
+    this.input.setAttribute('tabindex', '0');
+
+    if (this.toggleButton) {
+      this.toggleButton.removeAttribute('aria-disabled');
+    }
+
+    if (this.selectElm) {
+      this.selectElm.removeAttribute('disabled');
+    }
+
+    this.input.parentElement.removeAttribute('aria-disabled');
+    this.input.parentElement.classList.remove('disabled');
+
+    this.initEvents();
+
+    return this;
+  }
+
+  /**
+   * Transform a <select> element into a Combobo.
+   *
+   * @param {HTMLSelectElement} selectElement
+   * @returns {Object}
+   */
   transformSelectElement(selectElement) {
     // Get the class name on the original element
-    const origClass = selectElement.className;
+    const className = selectElement.className;
 
     // Create the wrapping div element
     const comboElement = document.createElement('div');
-    comboElement.className = [this.config.wrapClass, origClass].filter(Boolean).join(' ');
+    comboElement.className = [this.config.wrapClass, className].filter(Boolean).join(' ');
     comboElement.id = `${selectElement.id}-combobo`;
+    if (selectElement.hasAttribute('placeholder')) {
+      this.config.placeholderText = selectElement.getAttribute('placeholder');
+    }
 
     if (selectElement.multiple) {
       comboElement.classList.add('multiselect');
     }
-  
+
     // Create the input element
     const inputEl = this.config.selectOnly ? 'div' : 'input';
     const input = document.createElement(inputEl);
@@ -912,31 +1362,47 @@ module.exports = class Combobo {
       if (origOptgroup) {
         hasOptgroup = true;
         const origOptgroupClass = child.className;
-        const optgroup = this.createOptgroupElement(child.label, origOptgroupClass);
-  
-        Array.from(child.children).forEach(option => {
-          const data = {
-            text: option.textContent,
+        /**
+         * @type {OptGroup}
+         */
+        const optGroup = {
+          label: child.label,
+          className: origOptgroupClass,
+          options: []
+        };
+
+        /**
+         * @type {Option[]}
+         */
+        optGroup.options = Array.from(child.children).map(option => {
+          return {
+            label: option.textContent,
             value: option.value,
             selected: option.hasAttribute('selected'),
             disabled: option.hasAttribute('disabled'),
-            origClass: option.className
-          }
-          optgroup.appendChild(this.createOptionElement(data.text, data.value, data.selected, data.disabled, data.origClass));
+            className: option.className
+          };
         });
-  
-        listbox.appendChild(optgroup);
+
+        this.addOptGroup(optGroup, 'bottom', listbox);
       } else {
         // In case there are direct options without a group
-        const data = {
-          text: child.textContent,
-          value: child.value,
-          selected: child.hasAttribute('selected'),
-          disabled: child.hasAttribute('disabled')
-        }
-        listbox.appendChild(this.createOptionElement(data.text, data.value, data.selected, data.disabled, data.origClass));
+        this.addOption(
+          {
+            label: child.textContent,
+            value: child.value,
+            selected: child.hasAttribute('selected'),
+            disabled: child.hasAttribute('disabled'),
+            class: child.className,
+          },
+          'bottom',
+          listbox);
       }
     });
+
+    if (this.config.placeholderText) {
+      this.addPlaceholder();
+    }
 
     if (hasOptgroup) {
       comboElement.classList.add('has-groups');
@@ -946,35 +1412,73 @@ module.exports = class Combobo {
     // <select> element gets hidden).
     this.reassignLabel(selectElement, input);
 
-    return {comboElement, input};
+    return { comboElement, input };
   }
 
-  createOptionElement(text, value, selected, disabled, origClass = '') {
+  /**
+   * Returns a new option element for the listbox.
+   * 
+   * @param {string} label The label/text of the option
+   * @param {string} [text] The label/text of the option (Deprecated; use `label` instead)
+   * @param {string} [value] The value of the option
+   * @param {boolean} [selected] If the option is selected
+   * @param {boolean} [disabled] If the option is disabled
+   * @param {string} [className] The original class of the option
+   *
+   * @returns {HTMLDivElement}
+   */
+  createOptionElement({ label, text, value, selected, disabled, className } = {}) {
+    const optArgs = Object.assign({
+      selected: false,
+      disabled: false,
+    },
+    { label, text, value, selected, disabled, className }
+    );
+    const optId = rndid();
     const opt = document.createElement('div');
-    opt.className = [this.config.optionsClass, origClass].filter(Boolean).join(' ');
-    opt.textContent = text;
-    opt.dataset.value = value;
-    if (selected) {
+
+    opt.className = [this.config.optionsClass, optArgs.className].filter(Boolean).join(' ');
+    opt.innerHTML = optArgs.label || optArgs.text;
+    opt.dataset.value = optArgs.value;
+    opt.id = optId;
+
+    opt.setAttribute('role', 'option');
+    opt.setAttribute('aria-selected', optArgs.selected ? 'true' : 'false');
+
+    if (optArgs.selected) {
       opt.classList.add(this.config.selectedClass);
     }
-    if (disabled) {
+
+    if (optArgs.disabled) {
       opt.classList.add('disabled');
     }
+
     return opt;
   }
 
-  createOptgroupElement(text, origClass = '') {
-    const optgroup = document.createElement('div');
-    optgroup.className = [this.config.optgroupClass, origClass].filter(Boolean).join(' ');
-    optgroup.setAttribute('role', 'group');
+  /**
+   * Returns a new optgroup element for the listbox.
+   * 
+   * @param {string} label The label/text of the optgroup
+   * @param {string} className The original class of the optgroup
+   * 
+   * @returns {HTMLDivElement}
+   */
+  createOptgroupElement(label, className = '') {
     const groupId = rndid();
+
+    const optgroup = document.createElement('div');
+    optgroup.classList.add(...[this.config.optgroupClass, className].filter(Boolean))
+    optgroup.setAttribute('role', 'group');
     optgroup.setAttribute('aria-labelledby', groupId);
 
-    const label = document.createElement('div');
-    label.className = this.config.optgroupLabelClass;
-    label.id = groupId;
-    label.textContent = text;
-    optgroup.appendChild(label);
+    const labelEl = document.createElement('div');
+    labelEl.className = this.config.optgroupLabelClass;
+    labelEl.id = groupId;
+    labelEl.innerHTML = label;
+
+    optgroup.append(labelEl);
+
     return optgroup;
   }
 };

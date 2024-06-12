@@ -107,13 +107,13 @@ To initialize from Required HTML Elements
   #### Sample Data Options
   ```javascript
   const dataSource = [
-    { text: 'Select an Option', value: '', selected: true , disabled: true  },
-    { text: 'Option 1', value: '1' },
+    { label: 'Select an Option', value: '', selected: true , disabled: true  },
+    { label: 'Option 1', value: '1', className: 'custom-class' },
     {
       label: 'Group',
       options: [
-        { text: 'Option 2', value: '2' },
-        { text: 'Option 3', value: '3'}
+        { label: 'Option 2', value: '2' },
+        { label: 'Option 3', value: '3'}
       ]
     }
   ];
@@ -270,6 +270,11 @@ combobo
 * `emptyDropdownList`: Empty the options in the dropdown list
 * `updateSelectedOptions`: Empty all the options and update with selected options in the list
 * `setCurrentOptions`: Sets the current Option from the current options list
+* `addPlaceholder`: Adds a disabled option to the top of the Combobo
+* `clearOptions`: Remove all options from the Combobo and reset the Combobo to its initial state
+* `addOptions`: Add multiple options/optgroups to the Combobo; see `addOption`, `addOptGroup`
+* `addOptGroup`: Add an optgroup to the Combobo
+* `addOption`: Add an option to the Combobo
 
 ### Example usage
 
