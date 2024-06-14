@@ -10,7 +10,10 @@
     "build": "NODE_ENV=production webpack",
     "dev": "webpack --watch",
     "test": "mochify --recursive --transform [ babelify --presets [ es2015 ] ] --transform [ stringify --extensions [ .html .css ] ] --plugin [ proxyquire-universal ] --timeout 60000",
-    "test:dev": "mochify --recursive --watch --transform [ babelify --presets [ es2015 ] ] --transform [ stringify --extensions [ .html .css ] ] --plugin [ proxyquire-universal ]"
+    "test:dev": "mochify --recursive --watch --transform [ babelify --presets [ es2015 ] ] --transform [ stringify --extensions [ .html .css ] ] --plugin [ proxyquire-universal ]",
+    "test:vi": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
@@ -23,6 +26,8 @@
   },
   "homepage": "https://github.com/dequelabs/combobo#readme",
   "devDependencies": {
+    "@vitest/coverage-v8": "^1.6.0",
+    "@vitest/ui": "^1.6.0",
     "babel-loader": "^7.1.5",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
@@ -43,6 +48,7 @@
     "simulant": "^0.2.2",
     "stringify": "^5.1.0",
     "uglifyjs-webpack-plugin": "^1.3.0",
+    "vitest": "^1.6.0",
     "webpack": "^3.11.0"
   }
 }
