@@ -9,12 +9,12 @@ const Combobo = require('../../index');
 describe('lib/announce-active', () => {
   let fixture, simpleBox;
 
-  before(() => fixture = new Fixture());
+  before(() => (fixture = new Fixture()));
   beforeEach(() => {
     fixture.create(`${simpleSnippet}`);
     simpleBox = new Combobo({
       input: '#combobox-single',
-      list: '#simple-listbox'
+      list: '#simple-listbox',
     });
   });
   afterEach(() => fixture.destroy());
@@ -29,15 +29,20 @@ describe('lib/announce-active', () => {
       let msg, time;
       const opt = simpleBox.cachedOpts[0];
       const text = opt.innerText;
-      aa(simpleBox.cachedOpts[0], simpleBox.config, (text, m) => {
-        msg = text;
-        time = m;
-      }, false);
+      aa(
+        simpleBox.cachedOpts[0],
+        simpleBox.config,
+        (text, m) => {
+          msg = text;
+          time = m;
+        },
+        false
+      );
 
       assert.equal(msg, text);
       assert.equal(time, 500);
     });
-  })
+  });
 
   describe('given a truthy groupChanged, config announcement groupChange', () => {
     it('should properly prepend the groupChange text to the announcement', () => {
@@ -45,14 +50,19 @@ describe('lib/announce-active', () => {
       const opt = simpleBox.cachedOpts[0];
       const text = opt.innerText;
       const groupChangeText = 'group change';
-      aa(simpleBox.cachedOpts[0], {
-        announcement: {
-          selected: '',
-          groupChange: () => groupChangeText
-        }
-      }, (text) => {
-        msg = text;
-      }, true);
+      aa(
+        simpleBox.cachedOpts[0],
+        {
+          announcement: {
+            selected: '',
+            groupChange: () => groupChangeText,
+          },
+        },
+        (text) => {
+          msg = text;
+        },
+        true
+      );
 
       assert.equal(msg, `${groupChangeText} ${text}`);
     });
@@ -67,11 +77,16 @@ describe('lib/announce-active', () => {
 
       opt.setAttribute('aria-selected', 'true');
 
-      aa(simpleBox.cachedOpts[0], {
-        announcement: { selected: selectedText }
-      }, (text) => {
-        msg = text;
-      }, false);
+      aa(
+        simpleBox.cachedOpts[0],
+        {
+          announcement: { selected: selectedText },
+        },
+        (text) => {
+          msg = text;
+        },
+        false
+      );
 
       assert.equal(msg, `${text} ${selectedText}`);
     });
