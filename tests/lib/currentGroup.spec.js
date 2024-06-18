@@ -1,11 +1,9 @@
-'use strict';
-
-const assert = require('chai').assert;
-const currentGroup = require('../../lib/current-group');
+import { describe, it, expect } from 'vitest';
+import currentGroup from '../../lib/current-group';
 
 describe('lib/current-group', () => {
   it('should be a function', () => {
-    assert.equal(typeof currentGroup, 'function');
+    expect(typeof currentGroup).toBe('function');
   });
 
   it('should return the proper group', () => {
@@ -14,11 +12,11 @@ describe('lib/current-group', () => {
     g.appendChild(opt);
     const groups = [
       { options: [document.createElement('div')] },
-      { element: g, options: [opt] }
+      { element: g, options: [opt] },
     ];
     const current = currentGroup(groups, opt);
-    assert.equal(current.element, g);
-    assert.equal(current.options.length, 1);
-    assert.equal(current.options[0], opt);
+    expect(current.element).toBe(g);
+    expect(current.options.length).toBe(1);
+    expect(current.options[0]).toBe(opt);
   });
 });
