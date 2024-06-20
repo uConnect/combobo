@@ -1,27 +1,67 @@
-'use strict';
+import { describe, it, beforeEach, afterEach, expect } from 'vitest';
+import Fixture from '../fixture';
+import Combobo from '../../index';
+import aa from '../../lib/announce-active';
 
-const assert = require('chai').assert;
-const aa = require('../../lib/announce-active');
-const Fixture = require('../fixture');
-const simpleSnippet = require('../snippets/simple.html');
-const Combobo = require('../../index');
+const simpleSnippet = `
+<section class="bands">
+  <div class="wrp">
+    <h2>Single select</h2>
+    <label for="combobox-single">Choose Band</label>
+    <div class="combo-wrap">
+      <input
+        type="text"
+        class="combobox"
+        id="combobox-single"
+      />
+      <span
+        aria-hidden="true"
+        class="trigger"
+        data-trigger="single"
+      ></span>
+      <div
+        class="listbox"
+        id="simple-listbox"
+      >
+        <div class="option">Ween</div>
+        <div class="option">Frank Zappa</div>
+        <div class="option">Snarky Puppy</div>
+        <div class="option">Umphrey's McGee</div>
+        <div class="option">Keller Williams</div>
+        <div class="option">Greensky Bluegrass</div>
+        <div class="option">Leftover Salmon</div>
+        <div class="option">Moe.</div>
+        <div class="option">Family Groove Company</div>
+        <div class="option">Mac Demarco</div>
+        <div class="option">Lettuce</div>
+      </div>
+    </div>
+  </div>
+  <button type="button">Submit</button>
+</section>
+`;
 
 describe('lib/announce-active', () => {
   let fixture, simpleBox;
 
-  before(() => (fixture = new Fixture()));
   beforeEach(() => {
-    fixture.create(`${simpleSnippet}`);
+    fixture = new Fixture();
+    fixture.create(simpleSnippet);
     simpleBox = new Combobo({
       input: '#combobox-single',
       list: '#simple-listbox',
     });
   });
-  afterEach(() => fixture.destroy());
-  after(() => fixture.cleanUp());
+
+  afterEach(() => {
+    if (fixture) {
+      fixture.cleanUp();
+      fixture.destroy();
+    }
+  });
 
   it('should be a function', () => {
-    assert.equal('function', typeof aa);
+    expect(typeof aa).toBe('function');
   });
 
   describe('given a falsey groupChanged', () => {
@@ -29,6 +69,7 @@ describe('lib/announce-active', () => {
       let msg, time;
       const opt = simpleBox.cachedOpts[0];
       const text = opt.innerText;
+
       aa(
         simpleBox.cachedOpts[0],
         simpleBox.config,
@@ -39,8 +80,8 @@ describe('lib/announce-active', () => {
         false
       );
 
-      assert.equal(msg, text);
-      assert.equal(time, 500);
+      expect(msg).toBe(text);
+      expect(time).toBe(500);
     });
   });
 
@@ -50,6 +91,7 @@ describe('lib/announce-active', () => {
       const opt = simpleBox.cachedOpts[0];
       const text = opt.innerText;
       const groupChangeText = 'group change';
+
       aa(
         simpleBox.cachedOpts[0],
         {
@@ -64,7 +106,7 @@ describe('lib/announce-active', () => {
         true
       );
 
-      assert.equal(msg, `${groupChangeText} ${text}`);
+      expect(msg).toBe(`${groupChangeText} ${text}`);
     });
   });
 
@@ -88,7 +130,7 @@ describe('lib/announce-active', () => {
         false
       );
 
-      assert.equal(msg, `${text} ${selectedText}`);
+      expect(msg).toBe(`${text} ${selectedText}`);
     });
   });
 });
