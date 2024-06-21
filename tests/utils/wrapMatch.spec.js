@@ -1,7 +1,5 @@
-'use strict';
-
-const assert = require('chai').assert;
-const wrapMatch = require('../../../lib/utils/wrap-match');
+import { describe, it, expect } from 'vitest';
+import wrapMatch from '../../lib/utils/wrap-match';
 
 describe('lib/utils/wrap-match', () => {
   it('should properly wrap the match', () => {
@@ -11,6 +9,6 @@ describe('lib/utils/wrap-match', () => {
     opt.innerHTML = 'boognish';
     const html = wrapMatch(opt, input.value, 'accent');
 
-    assert.equal(html, 'b<span class="accent">oog</span>nish');
+    expect(html).toBe('b<span class="accent">oog</span>nish');
   });
 });
