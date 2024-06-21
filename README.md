@@ -288,3 +288,48 @@ combobo
 combobo
   .setOptions(`<li>Some Option</li>`);
 ```
+
+
+# Unit Tests
+
+This project utilizes Vitest for running tests. Vitest is a fast and efficient test runner built on top of Vite. Below are the scripts used for testing in this project.
+
+## Scripts
+
+### `test`
+
+This script runs all the tests in the project using Vitest.
+
+**Usage:**
+```
+npm run test
+```
+
+### `test:ui`
+
+This script runs the tests and provides a user interface to view the test results. The UI allows for an interactive and visually enhanced experience for inspecting test outcomes.
+
+**Usage:**
+```
+npm run test:ui
+```
+
+## Running Tests
+
+### Command Line
+
+To run the tests in the command line without the UI, use:
+```bash
+npm run test
+```
+
+### UI Mode
+
+To run the tests and view the results in an interactive UI, use:
+```bash
+npm run test:ui
+```
+
+## Additional Resources
+
+- [Vitest Documentation](https://vitest.dev/guide/)

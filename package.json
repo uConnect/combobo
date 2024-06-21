@@ -9,9 +9,7 @@
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "dev": "webpack --watch",
-    "test": "mochify --recursive --transform [ babelify --presets [ es2015 ] ] --transform [ stringify --extensions [ .html .css ] ] --plugin [ proxyquire-universal ] --timeout 60000",
-    "test:dev": "mochify --recursive --watch --transform [ babelify --presets [ es2015 ] ] --transform [ stringify --extensions [ .html .css ] ] --plugin [ proxyquire-universal ]",
-    "test:vi": "vitest",
+    "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage"
   },
@@ -42,7 +40,6 @@
     "extend-shallow": "^2.0.1",
     "happy-dom": "^14.12.0",
     "live-region": "^1.0.0",
-    "mochify": "^9.2.0",
     "proxyquire": "^1.8.0",
     "proxyquire-universal": "^1.0.8",
     "proxyquireify": "^3.2.1",
