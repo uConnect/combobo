@@ -801,16 +801,23 @@ module.exports = class Combobo {
     return this;
   }
 
+  /**
+   * Selects the current option
+   */
   select() {
     const currentOpt = this.currentOption;
+
     if (!currentOpt) { return; }
+
+    const idx = this.selected.indexOf(currentOpt);
+    const wasSelected = idx > -1;
+
+    const cb = wasSelected ? this.config.onDeselection : this.config.onSelection;
 
     if (!this.config.multiselect && this.selected.length) { // clean up previously selected
       Classlist(this.selected[0]).remove(this.config.selectedClass)
     }
 
-    const idx = this.selected.indexOf(currentOpt);
-    const wasSelected = idx > -1;
 
     // Multiselect option
     if (this.config.multiselect) {
@@ -826,10 +833,14 @@ module.exports = class Combobo {
         : [currentOpt]
     }
 
-    // manage aria-selected
-    this.cachedOpts.forEach((o) => {
-      o.setAttribute('aria-selected', this.selected.indexOf(o) > -1 ? 'true' : 'false');
-    });
+    if (cb && typeof cb === 'function') {
+      const res = cb({ currentOpt, selected: this.selected, instance: this});
+
+      // If the callback returns false, prevent the (de)selection(s).
+      if (res === false) {
+        return this;
+      }
+    }
 
     const value = this.selected.length
       ? this.config.selectionValue(this.selected)
@@ -842,6 +853,17 @@ module.exports = class Combobo {
       currentOpt.classList.add(this.config.selectedClass)
       this.emit('selection', { value: currentOpt.dataset.value, label: value, text: value, option: currentOpt });
     }
+
+    // Clean up stale selected options
+    this.currentOpts.forEach((opt) => {
+      if (this.selected.includes(opt)) {
+        opt.classList.add(this.config.selectedClass);
+        opt.setAttribute('aria-selected', 'true');
+      } else {
+        opt.classList.remove(this.config.selectedClass);
+        opt.setAttribute('aria-selected', 'false');
+      }
+    });
 
     this.freshSelection = true;
 
