@@ -326,7 +326,7 @@ module.exports = class Combobo {
   }
 
   initEvents() {
-    if (!this.optionsWithKeyEventHandlers.has(this.input)) {
+    if (!this.optionsWithKeyEventHandlers.has(this.input) && this.config.internalCall) {
       this.addEvent('click', this.input, this.handleInputClick);
       this.addEvent('blur', this.input, this.handleInputBlur);
       this.addEvent('focus', this.input, this.handleInputFocus);
@@ -344,6 +344,8 @@ module.exports = class Combobo {
         const isOrWithin = isWithin(e.target, [this.input, this.list, this.toggleButton], true);
         if (!isOrWithin && this.isOpen) { this.closeList(); }
       });
+
+      this.optionsWithKeyEventHandlers.add(this.input);
     }
 
     this.optionEvents();
@@ -1148,10 +1150,11 @@ module.exports = class Combobo {
    * @property {String} [className] The original class of the option
    *
    * @param {Option} option The option to be added to the Combobo
-   * @param {'top'|'bottom'} placement The placement of the option in the Combobo
-   * @param {HTMLDivElement} parentEl The parent element of the option. Will default to the list if not provided
+   * @param {'top'|'bottom'} [placement] The placement of the option in the Combobo
+   * @param {HTMLDivElement} [parentEl] The parent element of the option. Will default to the list if not provided
+   * @param {Boolean} [eventHandlers] Whether to add event handlers to the option
    */
-  addOption({ label, text, value, selected, disabled, className } = {}, placement = 'bottom', parentEl = null) {
+  addOption({ label, text, value, selected = false, disabled = false, className } = {}, placement = 'bottom', parentEl = null, eventHandlers = true) {
     if (!label) {
       return this;
     }
@@ -1189,11 +1192,10 @@ module.exports = class Combobo {
       this.currentOpts.push(optionElm);
     }
 
-    this.addEventsToOptionEl(optionElm);
-
-    if (selected) {
-      // This function may be called before this.list/this.input are initialized. If they aren't, skip it; it gets added later.
-      if (this.config.internalCall) {
+    if (eventHandlers) {
+      this.addEventsToOptionEl(optionElm);
+      if (selected && this.config.internalCall) {
+        // This function may be called before this.list/this.input are initialized. If they aren't, skip it; it gets added later.
         this.goTo(this.currentOpts.indexOf(optionElm), true).select();
       }
     }
@@ -1396,7 +1398,9 @@ module.exports = class Combobo {
             class: child.className,
           },
           'bottom',
-          listbox);
+          listbox,
+          false
+        );
       }
     });
 
