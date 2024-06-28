@@ -734,6 +734,66 @@ flavorChanger();</code></pre>
           </div>
         </div>
       </section>
+      <section>
+        <div class="container">
+          <h2>Callbacks</h2>
+          <p>Add a callback before selection/deselection to change (or interrupt) the resulting action.</p>
+          <p>In this example, the first option "All Years" has no value and is selected by default. Custom callbacks to <code>onSelection</code> and <code>onDeselection</code> were added to deselect "All Years" when a year is selected, but re-select it if all of the years are deselected.</p>
+          <div class="examples">
+            <div class="example-card select-callbacks">
+              <div class="card-content">
+                <h3>(De/Re)select First Option</h3>
+                <label for="combobox-select-callbacks">Year</label>
+                <select id="combobox-select-callbacks" class="year" multiple>
+                  <option selected>All Years</option>
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option>
+                </select>
+                <button type="button">Submit</button>
+              </div>
+              <details>
+                <summary>Show Config</summary>
+                <div>
+<pre><code class="language-javascript">{
+  select: '#combobox-select-callbacks',
+  list: '.select-callbacks .listbox',
+  multiselect: true,
+  onSelection: ({ currentOpt, selected, instance }) => {
+    const currentOptIndex = instance.currentOpts.indexOf(currentOpt);
+    const firstOpt = instance.currentOpts[0];
+    const firstOptSelected = selected.includes(firstOpt);
+
+    if (currentOptIndex >= 1 && firstOptSelected && selected.length > 1) {
+      instance.selected = selected.filter((s) => s !== firstOpt);
+    } else if (currentOptIndex === 0 && selected.length > 1) {
+      instance.selected = [currentOpt];
+    }
+  },
+  onDeselection: ({ currentOpt, selected, instance }) => {
+    const firstOpt = instance.currentOpts[0];
+
+    if (selected.length === 0) {
+      instance.selected = [firstOpt];
+    }
+  }
+}</code></pre>
+<pre><code class="language-html">&lt;select id="combobox-select-callbacks" class="year" multiple&gt;
+  &lt;option selected&gt;All Years&lt;/option&gt;
+  &lt;option value="2024"&gt;2024&lt;/option&gt;
+  &lt;option value="2023"&gt;2023&lt;/option&gt;
+  &lt;option value="2022"&gt;2022&lt;/option&gt;
+  &lt;option value="2021"&gt;2021&lt;/option&gt;
+  &lt;option value="2020"&gt;2020&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
     <footer>
       <div class="container">
@@ -842,6 +902,29 @@ flavorChanger();</code></pre>
             multiselect: false,
             disabled: true,
             selectOnly: true,
+          }),
+          'select-callbacks': new Combobo({
+            select: '#combobox-select-callbacks',
+            list: '.select-callbacks .listbox',
+            multiselect: true,
+            onSelection: ({ currentOpt, selected, instance }) => {
+              const currentOptIndex = instance.currentOpts.indexOf(currentOpt);
+              const firstOpt = instance.currentOpts[0];
+              const firstOptSelected = selected.includes(firstOpt);
+
+              if (currentOptIndex >= 1 && firstOptSelected && selected.length > 1) {
+                instance.selected = selected.filter((s) => s !== firstOpt);
+              } else if (currentOptIndex === 0 && selected.length > 1) {
+                instance.selected = [currentOpt];
+              }
+            },
+            onDeselection: ({ currentOpt, selected, instance }) => {
+              const firstOpt = instance.currentOpts[0];
+          
+              if (selected.length === 0) {
+                instance.selected = [firstOpt];
+              }
+            }
           })
         };
 

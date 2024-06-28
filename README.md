@@ -225,6 +225,8 @@ The class added below will be applied to the corresponding elements during the t
 - `selectSearchTimeout` (_Number_): How long to wait before resetting the search query when the user stops typing.
   - Defaults to `500`
   - Only relevant if `selectOnly` is `true`
+- `onSelection` (_Function_): The function to call when an option is selected. If the callback returns false or throws an error, the selection will be prevented and the option will remain unselected.
+- `onDeselection` (_Function_): The function to call when an option is deselected. If the callback returns false or throws an error, the deselection will be prevented and the option will remain selected.
 
 ### Example Combobo call with options
 
