@@ -7,7 +7,7 @@ import scrollToElement from 'scrollto-element';
 import inView from './lib/utils/is-scrolled-in-view';
 import viewportStatus from './lib/utils/viewport-status';
 import filters from './lib/filters';
-import keyvent from './lib/utils/keyvent';
+import * as keyvent from './lib/utils/keyvent';
 import isWithin from './lib/utils/is-within';
 import elHandler from './lib/utils/element-handler';
 import getCurrentGroup from './lib/current-group';
@@ -36,7 +36,7 @@ import extendShallow from 'extend-shallow';
  *     ((((\)     (/))))
  */
 
-module.exports = class Combobo {
+export class Combobo {
 
   /**
    * Combobo constructor
@@ -250,9 +250,10 @@ module.exports = class Combobo {
         }
       });
       
-      this.cachedOpts = this.currentOpts;
+      this.cachedOpts = [...this.currentOpts];
     } else {
-      this.cachedOpts = this.currentOpts = elHandler((this.config.options), true, this.list);
+      this.currentOpts = elHandler(this.config.options, true, this.list);
+      this.cachedOpts = [...this.currentOpts];
     }
 
     if (this.config.placeholderText) {
@@ -741,6 +742,7 @@ module.exports = class Combobo {
   }
 
   clearFilters() {
+    if (this.config.selectOnly) { return; }
     this.cachedOpts.forEach((o) => o.style.display = '');
     this.groups.forEach((g) => g.element.style.display = '');
     // show all opts
@@ -753,6 +755,11 @@ module.exports = class Combobo {
       value = this.config.selectOnly ? this.input.innerText : this.input.value;
     }
     const filter = this.config.filter;
+
+    if (this.config.selectOnly && typeof filter !== 'function') {
+      return this;
+    }
+
     const befores = this.currentOpts;
     this.currentOpts = typeof filter === 'function' ?
       filter(value.trim(), this.cachedOpts) :
@@ -1103,10 +1110,11 @@ module.exports = class Combobo {
    * @param {'top'|'bottom'} placement The placement of the optgroup in the Combobo
    * @param {HTMLElement} [parentEl] The parent element of the optgroup. Will default to the list if not provided
    */
-  addOptGroup({ label, className, options } = {}, placement = 'bottom', parentEl = null) {
+  addOptGroup({ label, className, dataset, options } = {}, placement = 'bottom', parentEl = null) {
     if (this.selectElm) {
       const group = document.createElement('optgroup');
       group.label = label;
+      group.dataset = dataset;
       group.classList.add(className);
 
       options.forEach(opt => {
@@ -1114,6 +1122,11 @@ module.exports = class Combobo {
         option.value = opt.value;
         option.selected = opt.selected;
         option.disabled = opt.disabled;
+        if (opt.dataset) {
+          Object.keys(opt.dataset).forEach(key => {
+            option.dataset[key] = opt.dataset[key];
+          });
+        }
         option.innerHTML = opt.label;
         option.classList.add(opt.className);
 
@@ -1176,7 +1189,7 @@ module.exports = class Combobo {
    * @param {HTMLDivElement} [parentEl] The parent element of the option. Will default to the list if not provided
    * @param {Boolean} [eventHandlers] Whether to add event handlers to the option
    */
-  addOption({ label, text, value, selected = false, disabled = false, className } = {}, placement = 'bottom', parentEl = null, eventHandlers = true) {
+  addOption({ label, text, value, selected = false, disabled = false, dataset, className } = {}, placement = 'bottom', parentEl = null, eventHandlers = true) {
     if (!label) {
       return this;
     }
@@ -1188,6 +1201,11 @@ module.exports = class Combobo {
       option.disabled = disabled;
       option.innerHTML = label || text;
       option.classList.add(className);
+      if (dataset) {
+        Object.keys(dataset).forEach(key => {
+          option.dataset[key] = dataset[key];
+        });
+      }
 
       if (placement === 'top') {
         this.selectElm.prepend(option);
@@ -1196,7 +1214,7 @@ module.exports = class Combobo {
       }
     }
 
-    const optionElm = this.createOptionElement({ label: label || text, value, selected, disabled, className });
+    const optionElm = this.createOptionElement({ label: label || text, value, selected, disabled, dataset, className });
 
     const parent = parentEl || this.list;
 
@@ -1206,12 +1224,12 @@ module.exports = class Combobo {
 
     if (placement === 'top') {
       parent.prepend(optionElm);
-      this.cachedOpts.unshift(optionElm);
       this.currentOpts.unshift(optionElm);
+      this.cachedOpts.unshift(optionElm);
     } else {
       parent.append(optionElm);
-      this.cachedOpts.push(optionElm);
-      this.currentOpts.push(optionElm);
+      this.currentOpts = [...this.currentOpts, optionElm];
+      this.cachedOpts = [...this.cachedOpts, optionElm];
     }
 
     if (eventHandlers) {
@@ -1392,6 +1410,7 @@ module.exports = class Combobo {
         const optGroup = {
           label: child.label,
           className: origOptgroupClass,
+          dataset: child.dataset,
           options: []
         };
 
@@ -1404,6 +1423,7 @@ module.exports = class Combobo {
             value: option.value,
             selected: option.hasAttribute('selected'),
             disabled: option.hasAttribute('disabled'),
+            dataset: option.dataset,
             className: option.className
           };
         });
@@ -1417,6 +1437,7 @@ module.exports = class Combobo {
             value: child.value,
             selected: child.hasAttribute('selected'),
             disabled: child.hasAttribute('disabled'),
+            dataset: child.dataset,
             class: child.className,
           },
           'bottom',
@@ -1453,7 +1474,7 @@ module.exports = class Combobo {
    *
    * @returns {HTMLDivElement}
    */
-  createOptionElement({ label, text, value, selected, disabled, className } = {}) {
+  createOptionElement({ label, text, value, selected, disabled, dataset, className } = {}) {
     const optArgs = Object.assign({
       selected: false,
       disabled: false,
@@ -1470,6 +1491,15 @@ module.exports = class Combobo {
 
     opt.setAttribute('role', 'option');
     opt.setAttribute('aria-selected', optArgs.selected ? 'true' : 'false');
+
+    if (dataset) {
+      Object.keys(dataset).forEach(key => {
+        if (key === 'value') {
+          return;
+        }
+        opt.dataset[key] = dataset[key];
+      });
+    }
 
     if (optArgs.selected) {
       opt.classList.add(this.config.selectedClass);
@@ -1490,13 +1520,18 @@ module.exports = class Combobo {
    * 
    * @returns {HTMLDivElement}
    */
-  createOptgroupElement(label, className = '') {
+  createOptgroupElement(label, className = '', dataset = {}) {
     const groupId = rndid();
 
     const optgroup = document.createElement('div');
     optgroup.classList.add(...[this.config.optgroupClass, className].filter(Boolean))
     optgroup.setAttribute('role', 'group');
     optgroup.setAttribute('aria-labelledby', groupId);
+    if (dataset) {
+      Object.keys(dataset).forEach(key => {
+        optgroup.dataset[key] = dataset[key];
+      });
+    }
 
     const labelEl = document.createElement('div');
     labelEl.className = this.config.optgroupLabelClass;
@@ -1507,7 +1542,9 @@ module.exports = class Combobo {
 
     return optgroup;
   }
-};
+}
+
+export default Combobo;
 
 /**
  * NOTE:
