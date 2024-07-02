@@ -18,17 +18,16 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'combobo.js',
-    library: 'Combobo',
     libraryTarget: 'umd'
   },
   module: {
-   rules: [
-     {
-       test: /\.js$/,
-       exclude: /node_modules/,
-       loader: 'babel-loader'
-     }
-   ]
- },
- plugins: plugins
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'swc-loader',
+      }
+    ]
+  },
+  plugins: plugins
 };
