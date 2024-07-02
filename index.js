@@ -7,7 +7,7 @@ import scrollToElement from 'scrollto-element';
 import inView from './lib/utils/is-scrolled-in-view';
 import viewportStatus from './lib/utils/viewport-status';
 import filters from './lib/filters';
-import keyvent from './lib/utils/keyvent';
+import * as keyvent from './lib/utils/keyvent';
 import isWithin from './lib/utils/is-within';
 import elHandler from './lib/utils/element-handler';
 import getCurrentGroup from './lib/current-group';
@@ -36,7 +36,7 @@ import extendShallow from 'extend-shallow';
  *     ((((\)     (/))))
  */
 
-module.exports = class Combobo {
+export class Combobo {
 
   /**
    * Combobo constructor
@@ -250,9 +250,10 @@ module.exports = class Combobo {
         }
       });
       
-      this.cachedOpts = this.currentOpts;
+      this.cachedOpts = [...this.currentOpts];
     } else {
-      this.cachedOpts = this.currentOpts = elHandler((this.config.options), true, this.list);
+      this.currentOpts = elHandler(this.config.options, true, this.list);
+      this.cachedOpts = [...this.currentOpts];
     }
 
     if (this.config.placeholderText) {
@@ -741,6 +742,7 @@ module.exports = class Combobo {
   }
 
   clearFilters() {
+    if (this.config.selectOnly) { return; }
     this.cachedOpts.forEach((o) => o.style.display = '');
     this.groups.forEach((g) => g.element.style.display = '');
     // show all opts
@@ -753,6 +755,11 @@ module.exports = class Combobo {
       value = this.config.selectOnly ? this.input.innerText : this.input.value;
     }
     const filter = this.config.filter;
+
+    if (this.config.selectOnly && typeof filter !== 'function') {
+      return this;
+    }
+
     const befores = this.currentOpts;
     this.currentOpts = typeof filter === 'function' ?
       filter(value.trim(), this.cachedOpts) :
@@ -1217,12 +1224,12 @@ module.exports = class Combobo {
 
     if (placement === 'top') {
       parent.prepend(optionElm);
-      this.cachedOpts.unshift(optionElm);
       this.currentOpts.unshift(optionElm);
+      this.cachedOpts.unshift(optionElm);
     } else {
       parent.append(optionElm);
-      this.cachedOpts.push(optionElm);
-      this.currentOpts.push(optionElm);
+      this.currentOpts = [...this.currentOpts, optionElm];
+      this.cachedOpts = [...this.cachedOpts, optionElm];
     }
 
     if (eventHandlers) {
@@ -1535,7 +1542,9 @@ module.exports = class Combobo {
 
     return optgroup;
   }
-};
+}
+
+export default Combobo;
 
 /**
  * NOTE:
