@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/dequelabs/combobo#readme",
   "devDependencies": {
+    "@swc/core": "^1.6.6",
     "@vitest/coverage-v8": "^1.6.0",
     "@vitest/ui": "^1.6.0",
     "babel-loader": "^7.1.5",
@@ -46,6 +47,7 @@
     "scrollto-element": "^1.0.4",
     "simulant": "^0.2.2",
     "stringify": "^5.1.0",
+    "swc-loader": "^0.2.6",
     "uglifyjs-webpack-plugin": "^1.3.0",
     "vitest": "^1.6.0",
     "webpack": "^3.11.0"

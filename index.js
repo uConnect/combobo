@@ -7,7 +7,7 @@ import scrollToElement from 'scrollto-element';
 import inView from './lib/utils/is-scrolled-in-view';
 import viewportStatus from './lib/utils/viewport-status';
 import filters from './lib/filters';
-import keyvent from './lib/utils/keyvent';
+import * as keyvent from './lib/utils/keyvent';
 import isWithin from './lib/utils/is-within';
 import elHandler from './lib/utils/element-handler';
 import getCurrentGroup from './lib/current-group';
@@ -36,7 +36,7 @@ import extendShallow from 'extend-shallow';
  *     ((((\)     (/))))
  */
 
-module.exports = class Combobo {
+export class Combobo {
 
   /**
    * Combobo constructor
@@ -1535,7 +1535,9 @@ module.exports = class Combobo {
 
     return optgroup;
   }
-};
+}
+
+export default Combobo;
 
 /**
  * NOTE:
