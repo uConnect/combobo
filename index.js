@@ -1114,7 +1114,11 @@ export class Combobo {
     if (this.selectElm) {
       const group = document.createElement('optgroup');
       group.label = label;
-      group.dataset = dataset;
+      if (dataset) {
+        Object.keys(dataset).forEach(key => {
+          group.dataset[key] = dataset[key];
+        });
+      }
       group.classList.add(className);
 
       options.forEach(opt => {
