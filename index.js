@@ -345,8 +345,6 @@ export class Combobo {
         const isOrWithin = isWithin(e.target, [this.input, this.list, this.toggleButton], true);
         if (!isOrWithin && this.isOpen) { this.closeList(); }
       });
-
-      this.optionsWithKeyEventHandlers.add(this.input);
     }
 
     this.optionEvents();
