@@ -40,7 +40,7 @@ const selectOnlySnippetHTML = `
 </div>
 `;
 
-describe('group', () => {
+describe('select-only', () => {
   let fixture;
   let selectOnly;
   let opts;
