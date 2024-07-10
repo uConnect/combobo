@@ -16,6 +16,7 @@ describe('Combobo', () => {
   before(() => fixture = new Fixture());
   beforeEach(() => {
     fixture.create(`${simpleSnippet}${groupSnippet}`);
+    
     simpleBox = new Combobo({
       input: '#combobox-single',
       list: '#simple-listbox',
