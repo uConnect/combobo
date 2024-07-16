@@ -18,7 +18,7 @@ const selectOnlySnippetHTML = `
     <h3>Initiated on <code>&lt;input&gt;</code></h3>
     <label for="combobox-select-only-as-input">Month</label>
     <div class="combo-wrap">
-      <input type="text" class="combobox" id="combobox-select-only-as-input">
+      <input type="text" class="combobox" id="combobox-select-only-as-input" aria-expanded="false">
       <span aria-hidden="true" class="trigger" data-trigger="select-only-as-input"></span>
       <div class="listbox">
         <div class="option">January</div>
