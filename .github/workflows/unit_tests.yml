@@ -3,8 +3,7 @@ name: Combobo Unit Tests
 on:
   push:
     branches:
-      #   - master
-      - varaya/INF-527
+      - master
 
 jobs:
   build:
