@@ -1103,7 +1103,8 @@ export class Combobo {
    * @property {String} label The label of the optgroup
    * @property {string} [className] The original class of the optgroup
    * @property {Option[]} options The options of the optgroup
-   * 
+   * @property {Object} [dataset] The dataset of the optgroup
+   *
    * @param {OptGroup} optGroup The optgroup to be added to the Combobo
    * @param {'top'|'bottom'} placement The placement of the optgroup in the Combobo
    * @param {HTMLElement} [parentEl] The parent element of the optgroup. Will default to the list if not provided
@@ -1117,7 +1118,10 @@ export class Combobo {
           group.dataset[key] = dataset[key];
         });
       }
-      group.classList.add(className);
+
+      if (className) {
+        group.classList.add(className);
+      }
 
       options.forEach(opt => {
         const option = document.createElement('option');
@@ -1130,7 +1134,10 @@ export class Combobo {
           });
         }
         option.innerHTML = opt.label;
-        option.classList.add(opt.className);
+
+        if (opt.className) {
+          option.classList.add(opt.className);
+        }
 
         group.appendChild(option);
       });
@@ -1148,7 +1155,7 @@ export class Combobo {
       return;
     }
 
-    const optgroupElm = this.createOptgroupElement(label, className);
+    const optgroupElm = this.createOptgroupElement(label, className, dataset);
 
     let optionElms = [];
 
@@ -1169,7 +1176,8 @@ export class Combobo {
     this.groups.push({
       label,
       element: optgroupElm,
-      options: optionElms
+      options: optionElms,
+      dataset: dataset,
     });
 
     return optgroupElm;
@@ -1185,6 +1193,7 @@ export class Combobo {
    * @property {Boolean} [selected] Whether the option is selected
    * @property {Boolean} [disabled] Whether the option is disabled
    * @property {String} [className] The original class of the option
+   * @property {Object} [dataset] The dataset of the option
    *
    * @param {Option} option The option to be added to the Combobo
    * @param {'top'|'bottom'} [placement] The placement of the option in the Combobo
@@ -1202,7 +1211,11 @@ export class Combobo {
       option.selected = selected;
       option.disabled = disabled;
       option.innerHTML = label || text;
-      option.classList.add(className);
+
+      if (className) {
+        option.classList.add(className);
+      }
+
       if (dataset) {
         Object.keys(dataset).forEach(key => {
           option.dataset[key] = dataset[key];
@@ -1473,6 +1486,7 @@ export class Combobo {
    * @param {boolean} [selected] If the option is selected
    * @param {boolean} [disabled] If the option is disabled
    * @param {string} [className] The original class of the option
+   * @param {Object} [dataset] The dataset of the option
    *
    * @returns {HTMLDivElement}
    */
@@ -1516,10 +1530,10 @@ export class Combobo {
 
   /**
    * Returns a new optgroup element for the listbox.
-   * 
+   *
+   * @property {Object} [dataset] The dataset of the optgroup
    * @param {string} label The label/text of the optgroup
    * @param {string} className The original class of the optgroup
-   * 
    * @returns {HTMLDivElement}
    */
   createOptgroupElement(label, className = '', dataset = {}) {
