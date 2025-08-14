@@ -283,14 +283,27 @@ export class Combobo {
       this.disable();
     }
 
-    // Initialize the selected based on the selected options.
+    // A Combobo may be initialized with options pre-selected (e.g. from a <select> element with `option[selected]`)
+    // This ensures that ALL of the pre-selected options are selected; not just the first one
+    const preSelected = [];
     for (const option of this.currentOpts) {
       if (option.classList.contains(this.config.selectedClass)) {
-        this.currentOption = option;
+        preSelected.push(option);
+      }
+    }
+    if (preSelected.length) {
+      if (this.config.multiselect) {
+        // Multiselects can support multiple pre-selected options
+        preSelected.forEach(opt => {
+          this.currentOption = opt;
+          this.select();
+        });
+      } else {
+        // Single selects only support one selection, even if multiple options are pre-selected
+        this.currentOption = preSelected[0];
         this.select();
       }
     }
-    
   }
 
   /**
