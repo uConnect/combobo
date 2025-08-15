@@ -1,3 +1,4 @@
 node_modules/
 .publish
 coverage/
+.DS_Store
